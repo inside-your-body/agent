@@ -10,6 +10,12 @@
   "status": "next"
  },
  {
+  "id": 61,
+  "title": "How to Quit Smoking: What Actually Works (Science-Backed)",
+  "status": "todo",
+  "source": "user"
+ },
+ {
   "id": 3,
   "title": "Taking Antibiotics Without a Prescription",
   "status": "todo"
@@ -20,6 +26,12 @@
   "status": "todo"
  },
  {
+  "id": 62,
+  "title": "Your Body After You Quit Smoking: Day by Day",
+  "status": "todo",
+  "source": "user"
+ },
+ {
   "id": 5,
   "title": "Sitting All Day Is Slowly Hurting You",
   "status": "todo"
@@ -28,6 +40,12 @@
   "id": 6,
   "title": "What Happens If You Drink Too Little Water",
   "status": "todo"
+ },
+ {
+  "id": 63,
+  "title": "Smoking Inside the Body: A Full-Body Tour, Organ by Organ",
+  "status": "todo",
+  "source": "user"
  },
  {
   "id": 7,
