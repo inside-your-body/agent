@@ -81,6 +81,10 @@ def main():
     sdesc = pkg['short_description'].replace('{FULL_URL}', 'https://youtu.be/' + vid)
     svid = youtube.upload(yt, short_final, pkg['short_title'], sdesc, pkg['tags'][:10],
                           publish_at=youtube.publish_time(CFG['schedule']['publish_short_utc']))
+    try:
+        youtube.pin_comment_text(yt, vid, pkg['pinned_comment'])
+    except Exception as e:
+        print('comment not posted (will work once public):', e)
     mark_done(topic['id'], {'topic': topic['title'], 'video_id': vid, 'short_id': svid,
                             'style': style['id'], 'short_style': short_style['id'], 'publish_at': at,
                             'built_at': dt.datetime.utcnow().isoformat(timespec='seconds')})

@@ -4,10 +4,11 @@ from .common import CFG, ROOT
 
 API = 'https://api.anthropic.com/v1/messages'
 
-def ask(prompt, system='', max_tokens=16000, web_search=False, retries=4):
+def ask(prompt, system='', max_tokens=16000, web_search=False, retries=4, image_url=None):
     headers = {'x-api-key': os.environ['ANTHROPIC_API_KEY'], 'anthropic-version': '2023-06-01', 'content-type': 'application/json'}
     body = {'model': CFG['models']['claude'], 'max_tokens': max_tokens, 'system': system,
-            'messages': [{'role': 'user', 'content': prompt}]}
+            'messages': [{'role': 'user', 'content': prompt if not image_url else
+                          [{'type': 'image', 'source': {'type': 'url', 'url': image_url}}, {'type': 'text', 'text': prompt}]}]}
     if web_search:
         body['tools'] = [{'type': 'web_search_20250305', 'name': 'web_search', 'max_uses': 8}]
     for a in range(retries):
@@ -28,6 +29,9 @@ def ask_json(prompt, **kw):
             except Exception as e: print('json parse error', e)
     raise RuntimeError('no JSON from Claude')
 
+def ask_json_image(url, prompt):
+    return ask_json(prompt, image_url=url, max_tokens=600)
+
 RULES = (ROOT / 'config/rules.md').read_text()
 
 def research(topic):
@@ -38,13 +42,14 @@ recognises, and safe practical solutions. Output as a compact bullet list with U
 
 EPISODE_SCHEMA = """{
  "title": str, "angle": str,
- "scenes": [ {"id": "s1", "part": "hook|problem|explain|solution|wrap",
+ "scenes": [ {"id": "s1", "part": "hook|problem|explain|solution|wrap", "title": str,   // chapter title, 2-5 words
    "narration": [str, ...],                       // short spoken sentences
    "beats": [ {"at": int,                         // index of the narration sentence this visual starts on
-      "kind": "kinetic|illustration|stickman|icon|counter|timeline|chart|split|checklist|quote",
+      "kind": "kinetic|illustration|stickman|body|icon|counter|timeline|chart|split|checklist|quote",
       "text": str,                                // on-screen words (max 6), keyword UPPERCASE allowed
-      "value": str|null,                          // number for counter/chart e.g. "7000"
-      "items": [str]|null,                        // for timeline/checklist/split
+      "value": str|null,                          // counter: number with unit e.g. "7,000+" "50%"; body: organ name;
+                                                  // stickman: pose idle|walk|run|happy|sad|point|think|tired|drink; quote: source
+      "items": [str]|null,                        // timeline steps (max 6) / checklist (max 5) / split [left,right] / chart ["Label:123", ...]
       "illustration": str|null                    // short prompt for a flat 2D illustration (transparent bg) if needed
    } ] } ],
  "short": {"narration": [str, ...], "beats": [same as above]},
@@ -64,7 +69,10 @@ Research notes (only use facts from here):
 {notes}
 
 Write the full episode. Narration must total 1250–1350 words (≈ 8:15 at our narrator speed).
-Use 9–13 scenes. Every scene needs 3–8 beats so the visuals change every 6–12 seconds.
+Use 9–13 scenes. Every scene needs 3–8 beats so the visuals change every 6–12 seconds; the first beat of every scene has "at": 0.
+Mix beat kinds (no kind more than 30% of beats). Use "illustration" for 8–12 key moments (characters, organs, objects, situations);
+"body" when an organ is discussed; "stickman" for everyday human situations; numbers from research go in "counter" or "chart".
+On-screen "text" is short (max 7 words) and never just repeats the whole sentence. Mark 1 key word per text in CAPS.
 Then write the Short (95–120 words, loops back to its first line) and the upload package.
 The description must include a "Chapters" section using the placeholder {{CHAPTERS}} which the system fills in.
 Schema:

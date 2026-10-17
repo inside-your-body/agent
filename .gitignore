@@ -1,5 +1,6 @@
 work/
-node_modules/
+node_modules
 render/out/
+render/public/ep/
 __pycache__/
 *.pyc

@@ -1,0 +1,11 @@
+import {bundle} from '@remotion/bundler';
+import {renderStill, selectComposition} from '@remotion/renderer';
+import path from 'path'; import fs from 'fs';
+const [,, comp, propsFile, outDir, ...frames] = process.argv;
+const inputProps = JSON.parse(fs.readFileSync(propsFile, 'utf8'));
+const serveUrl = await bundle({entryPoint: path.resolve('src/index.ts')});
+const B = process.env.REMOTION_BROWSER || undefined;
+const c = await selectComposition({serveUrl, id: comp, inputProps, browserExecutable: B});
+fs.mkdirSync(outDir, {recursive: true});
+for (const fr of frames) await renderStill({composition: c, serveUrl, inputProps, output: `${outDir}/${comp}_${fr}.png`, frame: +fr, browserExecutable: B, scale: 0.4});
+console.log('done');
