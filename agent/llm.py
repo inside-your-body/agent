@@ -4,9 +4,25 @@ from .common import CFG, ROOT
 
 API = 'https://api.anthropic.com/v1/messages'
 
+_MODEL = None
+def model():
+    """Use the configured model if it exists, else the newest Sonnet available to this key."""
+    global _MODEL
+    if _MODEL: return _MODEL
+    want = CFG['models']['claude']
+    try:
+        r = requests.get('https://api.anthropic.com/v1/models?limit=100', headers={'x-api-key': os.environ['ANTHROPIC_API_KEY'],
+                         'anthropic-version': '2023-06-01'}, timeout=30).json()
+        ids = [m['id'] for m in r.get('data', [])]
+        _MODEL = want if want in ids else next((i for i in ids if 'sonnet' in i), ids[0] if ids else want)
+    except Exception as e:
+        print('model list failed', e); _MODEL = want
+    print('claude model:', _MODEL)
+    return _MODEL
+
 def ask(prompt, system='', max_tokens=16000, web_search=False, retries=4, image_url=None):
     headers = {'x-api-key': os.environ['ANTHROPIC_API_KEY'], 'anthropic-version': '2023-06-01', 'content-type': 'application/json'}
-    body = {'model': CFG['models']['claude'], 'max_tokens': max_tokens, 'system': system,
+    body = {'model': model(), 'max_tokens': max_tokens, 'system': system,
             'messages': [{'role': 'user', 'content': prompt if not image_url else
                           [{'type': 'image', 'source': {'type': 'url', 'url': image_url}}, {'type': 'text', 'text': prompt}]}]}
     if web_search:

@@ -42,7 +42,7 @@
     "max_seconds": 50
   },
   "models": {
-    "claude": "claude-sonnet-4-5",
+    "claude": "claude-sonnet-5-5",
     "openai_image": "gpt-image-1"
   },
   "audio": {
