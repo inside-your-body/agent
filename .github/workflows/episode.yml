@@ -57,6 +57,9 @@ jobs:
             work/*/episode.json
             work/*/package.json
             work/*/qa/*.jpg
+            work/*/research.md
+            work/raw_fail_*.txt
+            work/*/style_*.json
           retention-days: 14
       - name: Commit topic/history updates
         if: success()

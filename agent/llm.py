@@ -31,18 +31,33 @@ def ask(prompt, system='', max_tokens=16000, web_search=False, retries=4, image_
         try:
             r = requests.post(API, headers=headers, json=body, timeout=600)
             r.raise_for_status()
-            return ''.join(b.get('text', '') for b in r.json()['content'] if b.get('type') == 'text')
+            j = r.json()
+            txt = ''.join(b.get('text', '') for b in j.get('content', []) if b.get('type') == 'text')
+            print(f"claude: stop={j.get('stop_reason')} usage={j.get('usage')} blocks={[b.get('type') for b in j.get('content', [])]} chars={len(txt)}", flush=True)
+            return txt
         except Exception as e:
             print('claude error', e, getattr(e, 'response', None) and e.response.text[:300]); time.sleep(10 * (a + 1))
     raise RuntimeError('Claude API failed')
 
+def _repair(txt):
+    txt = re.sub(r'^```(?:json)?|```$', '', txt.strip(), flags=re.M)
+    i, j = txt.find('{'), txt.rfind('}')
+    if i < 0 or j < 0: return None
+    t = txt[i:j + 1]
+    for cand in (t, re.sub(r',\s*([}\]])', r'\1', re.sub(r'(?m)^\s*//.*$|(?<=[,\[{])\s*//[^\n]*', '', t))):
+        try: return json.loads(cand)
+        except Exception as e: err = e
+    print('json parse error', err)
+    return None
+
 def ask_json(prompt, **kw):
+    from .common import WORK
     for a in range(3):
-        txt = ask(prompt + '\n\nReturn ONLY one valid JSON object, no markdown fences.', **kw)
-        m = re.search(r'\{.*\}', txt, re.S)
-        if m:
-            try: return json.loads(m.group(0))
-            except Exception as e: print('json parse error', e)
+        txt = ask(prompt + '\n\nReturn ONLY one valid JSON object (no comments, no markdown fences, no text before or after).', **kw)
+        obj = _repair(txt)
+        if obj is not None: return obj
+        (WORK / f'raw_fail_{a}.txt').write_text(txt or '<empty>')
+        print('bad JSON, first chars:', (txt or '')[:300].replace('\n', ' '))
     raise RuntimeError('no JSON from Claude')
 
 def ask_json_image(url, prompt):
@@ -91,5 +106,5 @@ Mix beat kinds (no kind more than 30% of beats). Use "illustration" for 8–12 k
 On-screen "text" is short (max 7 words) and never just repeats the whole sentence. Mark 1 key word per text in CAPS.
 Then write the Short (95–120 words, loops back to its first line) and the upload package.
 The description must include a "Chapters" section using the placeholder {{CHAPTERS}} which the system fills in.
-Schema:
-{EPISODE_SCHEMA}""", max_tokens=16000)
+Schema (comments after // are explanations, do not output them):
+{EPISODE_SCHEMA}""", max_tokens=32000)
