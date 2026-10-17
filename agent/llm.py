@@ -27,22 +27,26 @@ def ask(prompt, system='', max_tokens=16000, web_search=False, retries=4, image_
                           [{'type': 'image', 'source': {'type': 'url', 'url': image_url}}, {'type': 'text', 'text': prompt}]}]}
     if web_search:
         body['tools'] = [{'type': 'web_search_20250305', 'name': 'web_search', 'max_uses': 8}]
-    # keep extended thinking off/small: it otherwise eats the whole output budget and truncates the JSON
-    body['thinking'] = {'type': 'disabled'}
+    # Sonnet 5.5 thinks by default and thinking counts toward max_tokens -> keep it minimal.
+    # Try the lowest setting first; fall back for models that don't know these fields.
+    variants = [{'thinking': {'type': 'between_tools'}, 'output_config': {'effort': 'medium'}},
+                {'output_config': {'effort': 'low'}}, {}]
     for a in range(retries):
         try:
-            r = requests.post(API, headers=headers, json=body, timeout=900)
-            if r.status_code == 400 and 'thinking' in r.text and body.get('thinking', {}).get('type') == 'disabled':
-                print('thinking:disabled not accepted, using a small thinking budget'); body['thinking'] = {'type': 'enabled', 'budget_tokens': 2048}
-                if body['max_tokens'] <= 2048: body['max_tokens'] = 4096
-                r = requests.post(API, headers=headers, json=body, timeout=900)
+            for v in variants:
+                b = {**body, **v}
+                r = requests.post(API, headers=headers, json=b, timeout=900)
+                if r.status_code == 400 and any(k in r.text for k in ('thinking', 'output_config', 'effort')):
+                    print('param not accepted:', r.text[:200]); continue
+                break
             r.raise_for_status()
             j = r.json()
             txt = ''.join(b.get('text', '') for b in j.get('content', []) if b.get('type') == 'text')
             print(f"claude: stop={j.get('stop_reason')} usage={j.get('usage')} blocks={[b.get('type') for b in j.get('content', [])]} chars={len(txt)}", flush=True)
             return txt
         except Exception as e:
-            print('claude error', e, getattr(e, 'response', None) and e.response.text[:300]); time.sleep(10 * (a + 1))
+            resp = getattr(e, 'response', None)
+            print('claude error', e, resp.text[:300] if resp is not None else ''); time.sleep(10 * (a + 1))
     raise RuntimeError('Claude API failed')
 
 def _repair(txt):
