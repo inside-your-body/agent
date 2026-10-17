@@ -8,9 +8,12 @@
   },
   "schedule": {
     "every_days": 2,
-    "publish_hour_utc": 15,
-    "upload_as": "scheduled",
-    "review_window_hours": 24
+    "build_cron_utc": "0 6 * * *",
+    "publish_long_utc": "18:00",
+    "publish_short_utc": "21:00",
+    "audience": "English-speaking (US/UK). 18:00 UTC = 2 PM US Eastern (summer) / 7 PM UK / 21:00 Istanbul; Short 3 h later.",
+    "mode": "auto_public",
+    "min_hours_between_episodes": 40
   },
   "voice": {
     "engine": "kokoro-onnx",

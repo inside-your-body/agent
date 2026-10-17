@@ -14,12 +14,12 @@ def client():
     if not creds.valid: creds.refresh(Request())
     return build('youtube', 'v3', credentials=creds, cache_discovery=False)
 
-def next_publish_time(hours_from_now=None):
-    h = CFG['schedule']['review_window_hours'] if hours_from_now is None else hours_from_now
-    t = dt.datetime.utcnow() + dt.timedelta(hours=h)
-    t = t.replace(hour=CFG['schedule']['publish_hour_utc'], minute=0, second=0, microsecond=0)
-    if t < dt.datetime.utcnow() + dt.timedelta(hours=h): t += dt.timedelta(days=1)
-    return t.isoformat() + 'Z'
+def publish_time(hhmm):
+    """Today at hh:mm UTC; if that moment is already past (or <15 min away), publish now (None)."""
+    h, m = map(int, hhmm.split(':'))
+    now = dt.datetime.utcnow()
+    t = now.replace(hour=h, minute=m, second=0, microsecond=0)
+    return None if t < now + dt.timedelta(minutes=15) else t.isoformat() + 'Z'
 
 def upload(yt, video, title, description, tags, thumb=None, publish_at=None, synthetic=False):
     from googleapiclient.http import MediaFileUpload

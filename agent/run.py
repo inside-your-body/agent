@@ -25,6 +25,13 @@ def main():
     ap.add_argument('--topic', default=None)
     a = ap.parse_args()
 
+    # run daily via cron, but only make an episode every ~2 days
+    h = load(ROOT / 'data/history.json')
+    last = max((e.get('built_at') for e in h['episodes'] if e.get('built_at')), default=None)
+    if last and not a.topic and not a.dry_run:
+        gap = (dt.datetime.utcnow() - dt.datetime.fromisoformat(last)).total_seconds() / 3600
+        if gap < CFG['schedule']['min_hours_between_episodes']:
+            print(f'last episode {gap:.0f} h ago -> skip today'); return
     topic = {'id': None, 'title': a.topic} if a.topic else pick_topic()
     ep_dir = WORK / dt.datetime.utcnow().strftime('%Y%m%d'); ep_dir.mkdir(parents=True, exist_ok=True)
     print('== topic:', topic['title'])
@@ -68,13 +75,15 @@ def main():
 
     from . import youtube
     yt = youtube.client()
-    at = youtube.next_publish_time()
+    at = youtube.publish_time(CFG['schedule']['publish_long_utc'])
     vid = youtube.upload(yt, long_final, pkg['title'], pkg['description'], pkg['tags'], thumb, publish_at=at)
     youtube.add_to_playlist(yt, vid)
     sdesc = pkg['short_description'].replace('{FULL_URL}', 'https://youtu.be/' + vid)
-    svid = youtube.upload(yt, short_final, pkg['short_title'], sdesc, pkg['tags'][:10], publish_at=at)
+    svid = youtube.upload(yt, short_final, pkg['short_title'], sdesc, pkg['tags'][:10],
+                          publish_at=youtube.publish_time(CFG['schedule']['publish_short_utc']))
     mark_done(topic['id'], {'topic': topic['title'], 'video_id': vid, 'short_id': svid,
-                            'style': style['id'], 'short_style': short_style['id'], 'publish_at': at})
+                            'style': style['id'], 'short_style': short_style['id'], 'publish_at': at,
+                            'built_at': dt.datetime.utcnow().isoformat(timespec='seconds')})
     save(ep_dir / 'result.json', {'video': vid, 'short': svid, 'publish_at': at, 'pinned_comment': pkg['pinned_comment']})
     print('DONE', vid, svid, at)
 

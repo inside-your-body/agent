@@ -1,8 +1,9 @@
 name: Make episode
 
 on:
-  schedule:
-    - cron: '0 3 */2 * *'     # every 2 days, 03:00 UTC (publish is scheduled ~24 h later)
+  # schedule is OFF until the engine is finished and the test episode is approved
+  # schedule:
+  #   - cron: '0 6 * * *'       # daily 06:00 UTC; run.py makes an episode only every ~2 days (min 40 h gap)
   workflow_dispatch:
     inputs:
       dry_run:
