@@ -27,9 +27,15 @@ def ask(prompt, system='', max_tokens=16000, web_search=False, retries=4, image_
                           [{'type': 'image', 'source': {'type': 'url', 'url': image_url}}, {'type': 'text', 'text': prompt}]}]}
     if web_search:
         body['tools'] = [{'type': 'web_search_20250305', 'name': 'web_search', 'max_uses': 8}]
+    # keep extended thinking off/small: it otherwise eats the whole output budget and truncates the JSON
+    body['thinking'] = {'type': 'disabled'}
     for a in range(retries):
         try:
-            r = requests.post(API, headers=headers, json=body, timeout=600)
+            r = requests.post(API, headers=headers, json=body, timeout=900)
+            if r.status_code == 400 and 'thinking' in r.text and body.get('thinking', {}).get('type') == 'disabled':
+                print('thinking:disabled not accepted, using a small thinking budget'); body['thinking'] = {'type': 'enabled', 'budget_tokens': 2048}
+                if body['max_tokens'] <= 2048: body['max_tokens'] = 4096
+                r = requests.post(API, headers=headers, json=body, timeout=900)
             r.raise_for_status()
             j = r.json()
             txt = ''.join(b.get('text', '') for b in j.get('content', []) if b.get('type') == 'text')
@@ -56,6 +62,7 @@ def ask_json(prompt, **kw):
         txt = ask(prompt + '\n\nReturn ONLY one valid JSON object (no comments, no markdown fences, no text before or after).', **kw)
         obj = _repair(txt)
         if obj is not None: return obj
+        kw['max_tokens'] = min(64000, int(kw.get('max_tokens', 16000) * 1.5))
         (WORK / f'raw_fail_{a}.txt').write_text(txt or '<empty>')
         print('bad JSON, first chars:', (txt or '')[:300].replace('\n', ' '))
     raise RuntimeError('no JSON from Claude')
