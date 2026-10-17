@@ -1,0 +1,71 @@
+"""Claude API: research + episode writing (structured JSON)."""
+import json, os, re, time, requests
+from .common import CFG, ROOT
+
+API = 'https://api.anthropic.com/v1/messages'
+
+def ask(prompt, system='', max_tokens=16000, web_search=False, retries=4):
+    headers = {'x-api-key': os.environ['ANTHROPIC_API_KEY'], 'anthropic-version': '2023-06-01', 'content-type': 'application/json'}
+    body = {'model': CFG['models']['claude'], 'max_tokens': max_tokens, 'system': system,
+            'messages': [{'role': 'user', 'content': prompt}]}
+    if web_search:
+        body['tools'] = [{'type': 'web_search_20250305', 'name': 'web_search', 'max_uses': 8}]
+    for a in range(retries):
+        try:
+            r = requests.post(API, headers=headers, json=body, timeout=600)
+            r.raise_for_status()
+            return ''.join(b.get('text', '') for b in r.json()['content'] if b.get('type') == 'text')
+        except Exception as e:
+            print('claude error', e, getattr(e, 'response', None) and e.response.text[:300]); time.sleep(10 * (a + 1))
+    raise RuntimeError('Claude API failed')
+
+def ask_json(prompt, **kw):
+    for a in range(3):
+        txt = ask(prompt + '\n\nReturn ONLY one valid JSON object, no markdown fences.', **kw)
+        m = re.search(r'\{.*\}', txt, re.S)
+        if m:
+            try: return json.loads(m.group(0))
+            except Exception as e: print('json parse error', e)
+    raise RuntimeError('no JSON from Claude')
+
+RULES = (ROOT / 'config/rules.md').read_text()
+
+def research(topic):
+    return ask(f"""Research the YouTube health topic: "{topic}".
+Use web search. Collect 12–20 accurate, specific, surprising facts with numbers and timelines, each with its source
+(WHO, CDC, NHS, NIH/PubMed, Mayo Clinic, major journals). Also list common myths, everyday situations the viewer
+recognises, and safe practical solutions. Output as a compact bullet list with URLs.""", web_search=True, max_tokens=6000)
+
+EPISODE_SCHEMA = """{
+ "title": str, "angle": str,
+ "scenes": [ {"id": "s1", "part": "hook|problem|explain|solution|wrap",
+   "narration": [str, ...],                       // short spoken sentences
+   "beats": [ {"at": int,                         // index of the narration sentence this visual starts on
+      "kind": "kinetic|illustration|stickman|icon|counter|timeline|chart|split|checklist|quote",
+      "text": str,                                // on-screen words (max 6), keyword UPPERCASE allowed
+      "value": str|null,                          // number for counter/chart e.g. "7000"
+      "items": [str]|null,                        // for timeline/checklist/split
+      "illustration": str|null                    // short prompt for a flat 2D illustration (transparent bg) if needed
+   } ] } ],
+ "short": {"narration": [str, ...], "beats": [same as above]},
+ "upload": {"title": str, "description": str, "tags": [str], "hashtags": [str], "pinned_comment": str,
+            "short_title": str, "short_description": str},
+ "thumbnail": {"image_prompt": str, "big_text": str, "small_text": str},
+ "sources": [{"title": str, "url": str}]
+}"""
+
+def write_episode(topic, notes):
+    return ask_json(f"""You are the head writer of the YouTube channel "Inside Your Body".
+Follow these channel rules exactly:
+{RULES}
+
+Topic: "{topic}"
+Research notes (only use facts from here):
+{notes}
+
+Write the full episode. Narration must total 1250–1350 words (≈ 8:15 at our narrator speed).
+Use 9–13 scenes. Every scene needs 3–8 beats so the visuals change every 6–12 seconds.
+Then write the Short (95–120 words, loops back to its first line) and the upload package.
+The description must include a "Chapters" section using the placeholder {{CHAPTERS}} which the system fills in.
+Schema:
+{EPISODE_SCHEMA}""", max_tokens=16000)
