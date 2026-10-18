@@ -25,7 +25,7 @@ export const cueOf = (b: Beat, word: string | undefined | null, dflt: number) =>
 const useLayout = (vertical: boolean) => {
   const {width, height} = useVideoConfig();
   // square graphic box + text anchor
-  return vertical ? {W: width, H: height, gs: 980, gx: 50, gy: 330, ty: 200, by: 1600} : {W: width, H: height, gs: 900, gx: (width - 900) / 2, gy: 40, ty: 120, by: height - 110};
+  return vertical ? {W: width, H: 1520, gs: 900, gx: 90, gy: 300, ty: 190, by: 1400} : {W: width, H: height, gs: 900, gx: (width - 900) / 2, gy: 40, ty: 120, by: height - 110};
 };
 
 // ---------------------------------------------------------------- typography

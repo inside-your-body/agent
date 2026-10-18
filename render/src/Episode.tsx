@@ -30,7 +30,7 @@ const Captions: React.FC<{words: Word[]; t: Theme; fps: number}> = ({words, t, f
   const c = chunks[ci];
   const pop = interpolate(time - c[0].s, [-0.05, 0.1], [0.85, 1], {...cl, easing: Easing.out(Easing.back(2))});
   return (
-    <AbsoluteFill style={{top: 1290, height: 260, alignItems: 'center'}}>
+    <AbsoluteFill style={{top: 1580, height: 300, alignItems: 'center'}}>
       <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0 20px', width: 960, transform: `scale(${pop})`}}>
         {c.map((w, i) => {
           const on = time >= w.s - 0.03;
@@ -54,11 +54,15 @@ export const Episode: React.FC<Props> = (p) => {
   return (
     <AbsoluteFill style={{overflow: 'hidden'}}>
       <Background t={p.theme} />
-      {p.beats.map((b, i) => (
-        <Sequence key={i} from={b.from} durationInFrames={Math.max(1, b.to - b.from)}>
-          <BeatView b={b} t={p.theme} len={b.to - b.from} vertical={vertical} />
-        </Sequence>
-      ))}
+      {/* Shorts: visuals live in the top 1520 px; the bottom band is reserved for captions so they never overlap */}
+      <AbsoluteFill style={vertical ? {height: 1520, overflow: 'hidden'} : {}}>
+        {p.beats.map((b, i) => (
+          <Sequence key={i} from={b.from} durationInFrames={Math.max(1, b.to - b.from)}>
+            <BeatView b={b} t={p.theme} len={b.to - b.from} vertical={vertical} />
+          </Sequence>
+        ))}
+      </AbsoluteFill>
+      {vertical && <AbsoluteFill style={{top: 1520, background: `linear-gradient(180deg, ${alpha(p.theme.bg, 0.0)} 0%, ${alpha(p.theme.bg, 0.92)} 12%)`}} />}
       <Flash cuts={cuts} t={p.theme} />
       {vertical && <Captions words={p.words} t={p.theme} fps={p.fps} />}
       <Bug t={p.theme} vertical={vertical} />

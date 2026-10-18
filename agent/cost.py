@@ -1,5 +1,6 @@
 """Per-episode cost log (estimates from API usage numbers) -> WORK/cost.json."""
-import json
+import json, threading
+_L = threading.Lock()
 from .common import WORK
 
 # USD per 1M tokens (update if prices change)
@@ -17,6 +18,9 @@ def _save(d):
 
 def claude(usage):
     if not usage: return
+    with _L: _claude(usage)
+
+def _claude(usage):
     d = _log()
     c = (usage.get('input_tokens', 0) * CLAUDE['in'] + usage.get('output_tokens', 0) * CLAUDE['out']
          + usage.get('cache_read_input_tokens', 0) * CLAUDE['cache_read']) / 1e6
@@ -24,6 +28,9 @@ def claude(usage):
     d['claude_usd'] = round(d['claude_usd'] + c, 4); d['claude_calls'] += 1; _save(d)
 
 def image(usage, label):
+    with _L: _image(usage, label)
+
+def _image(usage, label):
     d = _log(); c = 0.0
     if usage:
         det = usage.get('input_tokens_details') or {}
@@ -33,5 +40,8 @@ def image(usage, label):
     d['items'].append({'img': label, 'usd': round(c, 4)}); _save(d)
 
 def tts(chars):
+    with _L: _tts(chars)
+
+def _tts(chars):
     d = _log(); c = chars / 1e6 * 15.0 * 0.8   # gpt-4o-mini-tts ~ $0.015/min ~ roughly $12/1M chars
     d['tts_usd'] = round(d.get('tts_usd', 0) + c, 4); d['claude_usd'] = d['claude_usd']; _save(d)

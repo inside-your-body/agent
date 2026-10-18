@@ -5,57 +5,68 @@ from .common import ROOT, save, load
 from . import images
 
 FONTS = ROOT / 'render/public/fonts'
-MAX_ILLUSTRATIONS = 14   # cut-outs, low quality (cheap)
+MAX_ILLUSTRATIONS = 22   # character cut-outs in new poses, low quality (cheap)
 
-MAX_CARTOONS = 10        # long video full scenes, medium quality
-MAX_CARTOONS_SHORT = 3
+MAX_CARTOONS = 48        # storyboard frames for the long video (first 12 medium quality, rest low)
+MAX_CARTOONS_SHORT = 12
+HQ_CARTOONS = 12
 
 def build(ep, style, ep_dir):
-    """Cast reference sheets -> cartoon scenes + cut-out illustrations (long + short), all consistent with the cast."""
+    """Cast reference sheets -> storyboard frames (cartoon) + character cut-outs, all consistent with the cast.
+    Images are generated in parallel; shots over the caps reuse an earlier drawing with a different camera move."""
+    from concurrent.futures import ThreadPoolExecutor
     out = ep_dir / 'assets'; out.mkdir(exist_ok=True)
-    dark = style['bg'][:2] in ('#0', '#1', '#2')
     hint = f"Art direction: {style.get('mood', '')}; palette built around {style['accent']}, {style['accent2']} and {style['accent3']}"
     cast = ep.get('cast') or []
     refs = {}
-    for c in cast[:4]:
-        p = out / f"cast_{c['id']}.png"
-        if p.exists() or images.cast_ref(c, hint, p):
-            refs[c['id']] = str(p)
-    n_img = n_cart = n_cart_v = 0
-    made = []   # [kind, img, cast ids, uses]
+    with ThreadPoolExecutor(4) as ex:
+        futs = {c['id']: ex.submit(lambda c=c: (out / f"cast_{c['id']}.png").exists() or images.cast_ref(c, hint, out / f"cast_{c['id']}.png")) for c in cast[:4]}
+        for cid, fu in futs.items():
+            if fu.result(): refs[cid] = str(out / f'cast_{cid}.png')
     groups = [(b, False) for sc in ep['scenes'] for b in sc['beats']] + [(b, True) for b in ep['short'].get('beats', [])]
+    jobs, n_img, n_cart, n_cart_v = [], 0, 0, 0
     for b, vertical in groups:
         ids = [i for i in (b.get('cast') or []) if i in refs]
         r = [refs[i] for i in ids] or list(refs.values())[:1]
-        if b.get('kind') == 'cartoon':
+        if b.get('kind') == 'cartoon' and b.get('illustration'):
             k = n_cart_v if vertical else n_cart
-            key = ('cartoon_v_%02d.png' if vertical else 'cartoon_%02d.png') % k
-            p = out / key
-            ok = k < (MAX_CARTOONS_SHORT if vertical else MAX_CARTOONS)
-            if b.get('illustration') and ok and (p.exists() or images.cartoon_scene(b['illustration'], cast, ids, r, hint, p, vertical)):
-                b['img'] = 'ep/' + key; made.append(['cartoon', b['img'], ids, 1, vertical])
+            if k < (MAX_CARTOONS_SHORT if vertical else MAX_CARTOONS):
+                key = ('cartoon_v_%02d.png' if vertical else 'cartoon_%02d.png') % k
+                q = 'medium' if (k < HQ_CARTOONS and not vertical) or (vertical and k < 4) else 'low'
+                jobs.append((b, 'cartoon', key, vertical, ids, lambda b=b, ids=ids, r=r, p=out / key, v=vertical, q=q:
+                             p.exists() or images.cartoon_scene(b['illustration'], cast, ids, r, hint, p, v, q)))
                 if vertical: n_cart_v += 1
                 else: n_cart += 1
-            else:
-                b['kind'] = 'illustration'; b['_was'] = 'cartoon'
-        if b.get('kind') == 'illustration' and not b.get('img'):
-            key = 'img_%02d.png' % n_img
-            p = out / key
-            if b.get('illustration') and n_img < MAX_ILLUSTRATIONS and (p.exists() or (images.sprite(b['illustration'], cast, ids, r if ids else [], hint, p) if ids
-                                                                          else images.illustration(b['illustration'], hint, p))):
-                b['img'] = 'ep/' + key; n_img += 1; made.append(['illustration', b['img'], ids, 1, None])
-            else:
-                pool = [x for x in made if x[4] in (None, vertical) and x[0] == ('cartoon' if b.get('_was') == 'cartoon' else x[0])] or [x for x in made if x[4] in (None, vertical)]
-                if pool:   # reuse an earlier image of the same cast with a different camera move (free)
-                    ids_b = set(b.get('cast') or [])
-                    pick = max(pool, key=lambda x: (len(ids_b & set(x[2])), -x[3]))
-                    b['kind'], b['img'] = pick[0], pick[1]
-                    b['motion'] = (['pan-left', 'pan-right', 'zoom-out', 'push'] if pick[0] == 'cartoon' else ['bounce', 'float', 'pop', 'shake'])[len(made) % 4]
-                    pick[3] += 1
-                else:
-                    b['kind'] = 'slam'; b['params'] = {'words': (b.get('text') or 'LOOK').split()[:3]}
+                continue
+        if b.get('kind') in ('cartoon', 'illustration') and b.get('illustration') and n_img < MAX_ILLUSTRATIONS:
+            key = 'img_%02d.png' % n_img; n_img += 1
+            jobs.append((b, 'illustration', key, None, ids, lambda b=b, ids=ids, r=r, p=out / key:
+                         p.exists() or (images.sprite(b['illustration'], cast, ids, r, hint, p) if ids else images.illustration(b['illustration'], hint, p))))
+            continue
+        if b.get('kind') in ('cartoon', 'illustration'):
+            b['_reuse'] = vertical
+    with ThreadPoolExecutor(4) as ex:
+        results = list(ex.map(lambda j: j[5](), jobs))
+    made = []
+    for (b, kind, key, vertical, ids, _), ok in zip(jobs, results):
+        if ok:
+            b['kind'], b['img'] = kind, 'ep/' + key
+            made.append([kind, b['img'], ids, 1, vertical])
+        else:
+            b['_reuse'] = vertical if vertical is not None else False
+    for b, vertical in groups:   # reuse drawings for overflow / failed shots (free), never a plain-text fallback
+        if '_reuse' not in b: continue
+        b.pop('_reuse')
+        pool = [x for x in made if x[4] in (None, vertical)]
+        if not pool:
+            b['kind'] = 'slam'; b['params'] = {'words': (b.get('text') or b.get('see') or 'LOOK').split()[:3]}; continue
+        ids_b = set(b.get('cast') or [])
+        pick = max(pool, key=lambda x: (len(ids_b & set(x[2])), -x[3]))
+        b['kind'], b['img'] = pick[0], pick[1]
+        b['motion'] = (['pan-left', 'pan-right', 'zoom-out', 'push', 'shake'] if pick[0] == 'cartoon' else ['bounce', 'float', 'pop', 'shake', 'walk-in'])[pick[3] % 5]
+        pick[3] += 1
     save(ep_dir / 'episode.json', ep)
-    print('cast:', len(refs), 'cartoon scenes:', n_cart, '+ short', n_cart_v, 'illustrations:', n_img)
+    print('cast:', len(refs), 'storyboard frames:', n_cart, '+ short', n_cart_v, 'cut-outs:', n_img, 'images ok:', sum(bool(x) for x in results), '/', len(results))
 
 def _font(name, size):
     try:

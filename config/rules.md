@@ -49,6 +49,13 @@ The whole video is ONE story with characters, told by the narrator.
 - Typography, motion and colour ideas come from the saved Pinterest reference pins; recreate ideas originally, never copy a pin.
 - Keep text inside safe areas; never overlap captions with graphics. Never show gore.
 
+## Storyboard & motion rules (owner's standing instructions)
+- Storyboard first: for every sentence decide what we SEE, then build the shot from it.
+- Whenever the narrator speaks, the screen shows what is being talked about (tongue → a tongue; bacteria eating → bacteria eating). Never an empty or unrelated screen.
+- No repeating templates: a kind never repeats within 3 shots; characters get new poses/expressions/actions as the story changes.
+- Shorts: captions live in their own bottom band and never overlap other text or graphics.
+- Audio: only commercially licensed sound (CC0 / own work) — see LICENSES.md.
+
 ## Thumbnail
 - The viewer must understand the TOPIC at a glance: a topic tag with the subject in 1–3 words ("IV DRIP", "BAD BREATH",
   "HEART ATTACK", "NO SLEEP 72H") + a curiosity line of 2–4 words that makes them want the answer

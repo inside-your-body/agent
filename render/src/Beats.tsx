@@ -3,7 +3,7 @@ import {AbsoluteFill, Img, staticFile, useCurrentFrame, useVideoConfig, interpol
 import {Beat, Theme, ff, alpha} from './theme';
 import {Icon, pickIcon} from './Icons';
 import {Stickman, BodyMap, STICK_POSES} from './Figures';
-import {MOTION} from './Motion';
+import {MOTION, Particle} from './Motion';
 
 const cl = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
 type BP = {b: Beat; t: Theme; len: number; vertical: boolean};
@@ -118,28 +118,50 @@ const Illustration: React.FC<BP> = ({b, t, vertical, len}) => {
 const Cartoon: React.FC<BP> = ({b, t, vertical, len}) => {
   const f = useCurrentFrame();
   const {width, height} = useVideoConfig();
+  const pr: any = (b as any).params || {};
+  const ov: any = pr.overlay || {};
   const p = interpolate(f, [0, Math.max(len, 1)], [0, 1], cl);
   const ez = Easing.inOut(Easing.quad)(p);
+  const FO: Record<string, string> = {left: '25% 50%', right: '75% 50%', top: '50% 25%', bottom: '50% 75%', center: '50% 45%'};
+  const origin = FO[pr.focus] || '50% 45%';
   let tr = '';
   switch (b.motion) {
     case 'pan-left': tr = `scale(1.16) translateX(${interpolate(ez, [0, 1], [5, -5])}%)`; break;
     case 'pan-right': tr = `scale(1.16) translateX(${interpolate(ez, [0, 1], [-5, 5])}%)`; break;
-    case 'zoom-out': tr = `scale(${interpolate(ez, [0, 1], [1.22, 1.04])})`; break;
+    case 'zoom-out': tr = `scale(${interpolate(ez, [0, 1], [1.25, 1.04])})`; break;
     case 'shake': tr = `scale(1.12) translate(${Math.sin(f * 1.9) * 6 * Math.max(0, 1 - f / 24)}px, ${Math.cos(f * 2.3) * 5 * Math.max(0, 1 - f / 24)}px)`; break;
-    default: tr = `scale(${interpolate(ez, [0, 1], [1.04, 1.2])}) translateY(${interpolate(ez, [0, 1], [0, -1.5])}%)`;
+    default: tr = `scale(${interpolate(ez, [0, 1], [1.04, 1.24])})`;
   }
   const e = useEnter(t, 8);
-  const label = b.text ? (
-    <div style={{position: 'absolute', left: 0, right: 0, display: 'flex', justifyContent: 'center', ...(vertical ? {top: 170} : {bottom: 70})}}>
-      <div style={{background: alpha(t.bg, 0.88), border: `4px solid ${t.accent}`, borderRadius: Math.max(14, t.radius), padding: vertical ? '18px 34px' : '18px 42px',
+  const label = b.text && !vertical ? (   // Shorts already have word captions -> no duplicate label
+    <div style={{position: 'absolute', left: 0, right: 0, display: 'flex', justifyContent: 'center', ...(vertical ? {top: 150} : {bottom: 70})}}>
+      <div style={{background: alpha(t.bg, 0.88), border: `4px solid ${t.accent}`, borderRadius: Math.max(14, t.radius), padding: vertical ? '16px 30px' : '18px 42px',
         transform: `translateY(${(1 - e) * 40}px) scale(${0.9 + 0.1 * e})`, opacity: e, boxShadow: `0 18px 40px ${alpha('#000', 0.3)}`, maxWidth: vertical ? 940 : 1500}}>
-        <Headline text={b.text} t={t} size={vertical ? 70 : 72} maxWidth={vertical ? 860 : 1400} delay={10} />
+        <Headline text={b.text} t={t} size={vertical ? 64 : 72} maxWidth={vertical ? 860 : 1400} delay={10} />
       </div>
     </div>) : null;
+  // motion-graphic overlays drawn on top of the storyboard frame
+  const parts = ov.particles ? Array.from({length: 18}, (_, i) => {
+    const x = ((i * 113 + f * (1.5 + (i % 4))) % (width + 200)) - 100, y = height * (0.15 + ((i * 37) % 70) / 100) + Math.sin((f + i * 11) / 14) * 30;
+    return <Particle key={i} type={ov.particles} x={x} y={y} r={vertical ? 26 : 22} rot={f * 2 + i * 20} t={t} />;
+  }) : null;
+  const ARW: Record<string, number> = {right: 0, down: 90, left: 180, up: 270};
+  const arrowE = spring({frame: f - 14, fps: 30, config: {damping: 10, stiffness: 160}});
+  const arrow = ov.arrow ? <div style={{position: 'absolute', left: vertical ? width / 2 - 120 : width * 0.62, top: vertical ? height * 0.42 : height * 0.32,
+      display: 'flex', alignItems: 'center', gap: 16, transform: `scale(${arrowE})`, opacity: arrowE}}>
+      <svg width={150} height={150} style={{transform: `rotate(${ARW[ov.arrow] ?? 0}deg) translateX(${Math.sin(f / 5) * 10}px)`}}>
+        <path d="M10 75 H110 M80 40 L120 75 L80 110" stroke={t.accent} strokeWidth={18} fill="none" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+      {ov.label && <div style={{background: t.accent, color: t.bg, fontFamily: ff(t.fontHead), fontSize: 46, padding: '6px 18px', borderRadius: 12, textTransform: 'uppercase'}}>{ov.label}</div>}
+    </div> : null;
+  const cnt = ov.counter ? <div style={{position: 'absolute', right: vertical ? 40 : 70, top: vertical ? 300 : 60, fontFamily: ff(t.fontHead), fontSize: vertical ? 120 : 130,
+      color: '#fff', WebkitTextStroke: '8px #000', paintOrder: 'stroke fill', transform: `scale(${spring({frame: f - 10, fps: 30, config: {damping: 9, stiffness: 200}})})`}}>{ov.counter}</div> : null;
   return (
     <AbsoluteFill style={{overflow: 'hidden', background: t.bg}}>
-      {b.img && <Img src={staticFile(b.img)} style={{position: 'absolute', width, height, objectFit: 'cover', transform: tr, transformOrigin: '50% 45%'}} />}
+      {b.img && <Img src={staticFile(b.img)} style={{position: 'absolute', width, height, objectFit: 'cover', transform: tr, transformOrigin: origin}} />}
       <AbsoluteFill style={{background: `radial-gradient(ellipse at 50% 50%, transparent 60%, ${alpha('#000', 0.35)} 100%)`}} />
+      {parts && <svg width={width} height={height} style={{position: 'absolute', opacity: 0.85}}>{parts}</svg>}
+      {arrow}{cnt}
       {label}
     </AbsoluteFill>
   );

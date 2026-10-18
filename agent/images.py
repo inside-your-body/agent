@@ -60,10 +60,10 @@ def cast_ref(c, style_hint, out):
 def cast_text(cast, ids):
     return ' '.join(f"{c['name']} looks like: {c['look']}." for c in cast if c['id'] in (ids or []))
 
-def cartoon_scene(prompt, cast, ids, refs, style_hint, out, vertical=False):
-    p = (CARTOON.format(style=style_hint) + f" Full scene with background, cinematic composition: {prompt}. "
+def cartoon_scene(prompt, cast, ids, refs, style_hint, out, vertical=False, quality='medium'):
+    p = (CARTOON.format(style=style_hint) + f" Storyboard frame, full scene with background, cinematic composition, the subject large and clearly readable: {prompt}. "
          + (f"Characters (keep them EXACTLY as in the reference images): {cast_text(cast, ids)}" if ids else ''))
-    return edit(p, refs, out, size='1024x1536' if vertical else '1536x1024')
+    return edit(p, refs, out, size='1024x1536' if vertical else '1536x1024', quality=quality)
 
 def sprite(prompt, cast, ids, refs, style_hint, out):
     p = (CARTOON.format(style=style_hint) + f" Subject: {prompt}. "

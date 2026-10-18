@@ -146,8 +146,12 @@ Return JSON with the same keys: {{"title", "scenes", "short", "thumbnail", "cast
     return ep
 
 SHOT_CATALOG = """Shot kinds (pick the one that literally SHOWS what the sentence says):
-- cartoon: full 2D cartoon scene of the story (AI image). fields: illustration (scene prompt), cast [ids], motion push|pan-left|pan-right|zoom-out|shake, text (short caption or null). Max 10 per long video, 3 per Short.
-- illustration: a cast character cut-out that walks in / reacts. fields: illustration (prompt: character + pose/action), cast [ids], motion walk-in|bounce|float|shake|pop, text. Max 8.
+- cartoon: a hand-drawn 2D storyboard frame of exactly this moment (AI drawing made from "see"). fields: illustration (detailed drawing prompt
+  = the storyboard frame: setting, characters, action, emotion, what body part/object is shown), cast [ids], motion push|pan-left|pan-right|zoom-out|shake,
+  focus center|left|right|top|bottom (where the camera drifts), text (short caption or null),
+  params {overlay: {particles: particle type drifting over the frame | null, arrow: left|right|up|down|null, label: short label for the arrow | null, counter: "value" | null}}.
+- illustration: a cast character cut-out in a NEW pose/expression for this moment (AI drawing). fields: illustration (character + pose + action + emotion), cast [ids],
+  motion walk-in|bounce|float|shake|pop, text.
 - slam: 1-4 big words slammed on the exact words the narrator says. params {words:[...], highlight: index, ghost: optional big faded number}. Max 20% of shots.
 - type: typewriter question with floating symbols. params {text, symbol: "?"|"!"|"Z"}. For questions/mysteries.
 - counter: a number counting up on cue. params {value: "60,000"|"75%"|"3 h", label, style: odometer|gauge|slam, cue: word}. Max 10%.
@@ -170,46 +174,65 @@ SHOT_CATALOG = """Shot kinds (pick the one that literally SHOWS what the sentenc
 - chart: bars. text = title, items ["Label:123", ...].
 """
 
+DRAWN = ('cartoon', 'illustration')
+TEXT_ONLY = ('slam', 'type', 'fact', 'list', 'counter', 'meter', 'chart', 'kinetic')
+
 def direct(ep, kind='long'):
-    """The director: one shot per sentence (sometimes two), chosen to SHOW exactly what is said."""
+    """Storyboard + director: for every sentence decide what we SEE (storyboard frame), then the shot that shows it."""
     if kind == 'long':
-        script = [{'id': sc['id'], 'title': sc.get('title'), 'sentences': {i: s for i, s in enumerate(sc['narration'])}} for sc in ep['scenes']]
-        rule = 'Long video: 1 shot per sentence; a long sentence may get 2 shots (second one with "cue" = the word where it starts). Very short connected sentences may share one shot.'
+        scenes = [{'id': sc['id'], 'title': sc.get('title'), 'sentences': {i: s for i, s in enumerate(sc['narration'])}} for sc in ep['scenes']]
+        rule = ('Long video: 1 shot per sentence; a long sentence may get 2 shots (second one with "cue" = the word where it starts). '
+                'In this part: about 55% DRAWN shots (cartoon storyboard frames / character illustrations), the rest motion-graphics kinds '
+                'that literally show the subject (organ, vessel, cells, battle, journey, heart, membrane, zoom...). Text-only kinds '
+                '(slam, type, fact, list, counter, meter, chart) at most 15% of shots.')
+        chunks = [scenes[k:k + 4] for k in range(0, len(scenes), 4)]
     else:
-        script = [{'id': 'short', 'sentences': {i: s for i, s in enumerate(ep['short']['narration'])}}]
-        rule = 'Short (vertical): EVERY sentence gets its own shot; fast and punchy; up to 3 cartoon shots.'
-    res = ask_json(f"""You are the motion-graphics director of an animated health channel. The viewer should feel the story is being
-re-built in front of them, sentence by sentence, with motion graphics, 2D drawings and typography.
+        chunks = [[{'id': 'short', 'sentences': {i: s for i, s in enumerate(ep['short']['narration'])}}]]
+        rule = 'Short (vertical): EVERY sentence gets its own shot; fast and punchy; about 60% drawn shots; keep on-screen text minimal (captions are added automatically).'
+    shots, used = {}, {}
+    for ch in chunks:
+        res = ask_json(f"""You are the storyboard artist AND motion-graphics director of an animated health channel. The viewer must SEE what the
+narrator says at every moment — the story is re-built in front of them, sentence by sentence (talking about the tongue → we see a tongue;
+about bacteria eating food → we see the bacteria eating). First imagine the storyboard frame for each sentence ("see"), then pick the shot.
 {SHOT_CATALOG}
 Rules:
 - {rule}
-- The shot must depict the sentence's concrete content (the organ, the particle, the number, the action, the character). Never a generic visual.
-- HARD LIMITS for the long video: at most 10 cartoon and 12 illustration shots in total; everything else must be motion-graphics kinds.
-- Never the same kind twice in a row. Vary layouts/actions. Use cartoon/illustration of the cast at story moments (characters acting).
-- On-screen text max 6 words, never the whole sentence; put 1 key word in CAPS.
-- "sfx": none|whoosh|pop|impact|tick|reveal|heartbeat|drip|bubble|riser|goo|shield|sparkle — only where it helps (about 1 in 3 shots), never harsh, never twice in a row.
+- "see" (required): one concrete sentence describing exactly what is on screen — subject, action, emotion. Never empty, never generic.
+- Characters change with the story: new pose, expression, action in each drawn shot (worried, sleeping, fighting, celebrating...).
+- Never the same kind within 3 consecutive shots. Vary camera moves, layouts, actions, colours.
+- Kinds already used earlier in this video (avoid overusing them): {json.dumps(used)}
+- On-screen text max 6 words, never the whole sentence; 1 key word in CAPS. Many drawn shots need no text at all.
+- "sfx": none|whoosh|pop|impact|tick|reveal|heartbeat|drip|bubble|riser|goo|shield|sparkle — only where it helps (about 1 in 3 shots), never twice in a row.
 Cast: {json.dumps(ep.get('cast', []), ensure_ascii=False)}
-Script: {json.dumps(script, ensure_ascii=False)}
-Return JSON: {{"scenes": [{{"id": scene id, "shots": [{{"at": sentence index, "cue": word or null, "kind": str, "text": str|null, "params": {{}}|null,
- "value": str|null, "items": [str]|null, "illustration": str|null, "cast": [str]|null, "motion": str|null, "sfx": str|null}}]}}]}}""",
-        max_tokens=32000)
-    shots = {s['id']: s.get('shots', []) for s in res.get('scenes', [])}
+Script part: {json.dumps(ch, ensure_ascii=False)}
+Return JSON: {{"scenes": [{{"id": scene id, "shots": [{{"at": sentence index, "cue": word or null, "see": str, "kind": str, "text": str|null,
+ "params": {{}}|null, "value": str|null, "items": [str]|null, "illustration": str|null, "cast": [str]|null, "motion": str|null, "focus": str|null, "sfx": str|null}}]}}]}}""",
+            max_tokens=32000)
+        for sc in res.get('scenes', []):
+            shots[sc['id']] = sc.get('shots', [])
+            for b in shots[sc['id']]: used[b.get('kind')] = used.get(b.get('kind'), 0) + 1
     return shots
 
 KINDS_OK = {'cartoon', 'illustration', 'slam', 'type', 'counter', 'meter', 'vessel', 'heart', 'organ', 'membrane', 'cells', 'battle', 'spread',
             'clock', 'journey', 'zoom', 'compare', 'list', 'fact', 'stickman', 'chart', 'kinetic'}
 
-def fix_shots(shots, n_sent):
-    """Enforce: valid kinds, first shot at 0, no same kind twice in a row, caps."""
+def fix_shots(shots, n_sent, recent=None):
+    """Enforce: valid kinds, first shot at 0, a kind never repeats within 3 shots (across scenes via `recent`)."""
+    recent = recent if recent is not None else []
     out = []
-    for s in sorted(shots, key=lambda x: (int(x.get('at', 0) or 0))):
-        s['at'] = min(max(int(s.get('at', 0) or 0), 0), n_sent - 1)
-        if s.get('kind') not in KINDS_OK: s['kind'] = 'slam'; s.setdefault('params', {'words': (s.get('text') or '').split()[:3]})
-        if out and out[-1]['kind'] == s['kind']:
-            s['kind'] = 'slam' if s['kind'] != 'slam' else 'type'
-            if s['kind'] == 'slam': s['params'] = {'words': (s.get('text') or 'WAIT').split()[:3]}
-            else: s['params'] = {'text': s.get('text') or '...'}
-        out.append(s)
+    for s_ in sorted(shots, key=lambda x: (int(x.get('at', 0) or 0))):
+        s_['at'] = min(max(int(s_.get('at', 0) or 0), 0), n_sent - 1)
+        if s_.get('kind') not in KINDS_OK:
+            s_['kind'] = 'cartoon'
+        if s_['kind'] in recent[-2:]:
+            # swap to a drawn storyboard frame of the same moment (keeps the subject on screen)
+            alt = 'cartoon' if 'cartoon' not in recent[-2:] else 'illustration' if 'illustration' not in recent[-2:] else 'organ'
+            s_['kind'] = alt
+            if alt in DRAWN and not s_.get('illustration'): s_['illustration'] = s_.get('see') or s_.get('text') or ''
+            if alt == 'organ': s_['params'] = {'organ': (s_.get('see') or ''), 'action': 'glow', 'label': s_.get('text')}
+        if s_['kind'] in DRAWN and not s_.get('illustration'): s_['illustration'] = s_.get('see') or ''
+        if s_.get('focus') and s_['kind'] == 'cartoon': s_['params'] = {**(s_.get('params') or {}), 'focus': s_['focus']}
+        out.append(s_); recent.append(s_['kind'])
     if out and out[0]['at'] != 0: out[0]['at'] = 0
     return out
 

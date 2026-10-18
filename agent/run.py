@@ -90,10 +90,11 @@ def main():
     # 3b. the director designs one shot per sentence (after the narration is final)
     if not ep.get('directed'):
         shots = llm.direct(ep, 'long')
+        recent = []
         for sc in ep['scenes']:
-            sc['beats'] = llm.fix_shots(shots.get(sc['id'], []) or [{'at': 0, 'kind': 'slam', 'params': {'words': sc.get('title', '').split()[:3]}}], len(sc['narration']))
+            sc['beats'] = llm.fix_shots(shots.get(sc['id'], []) or [{'at': 0, 'kind': 'cartoon', 'illustration': ' '.join(sc['narration'][:2])}], len(sc['narration']), recent)
         ss = llm.direct(ep, 'short')
-        ep['short']['beats'] = llm.fix_shots(ss.get('short', []) or [{'at': 0, 'kind': 'slam'}], len(ep['short']['narration']))
+        ep['short']['beats'] = llm.fix_shots(ss.get('short', []) or [{'at': 0, 'kind': 'cartoon', 'illustration': ep['short']['narration'][0]}], len(ep['short']['narration']), [])
         ep['directed'] = True; save(ep_dir / 'episode.json', ep)
         from collections import Counter
         print('shots:', Counter(b['kind'] for sc in ep['scenes'] for b in sc['beats']))
