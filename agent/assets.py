@@ -5,10 +5,10 @@ from .common import ROOT, save, load
 from . import images
 
 FONTS = ROOT / 'render/public/fonts'
-MAX_ILLUSTRATIONS = 22   # character cut-outs in new poses, low quality (cheap)
+MAX_ILLUSTRATIONS = 30   # character cut-outs in new poses, low quality (cheap)
 
-MAX_CARTOONS = 48        # storyboard frames for the long video (first 12 medium quality, rest low)
-MAX_CARTOONS_SHORT = 12
+MAX_CARTOONS = 90        # every drawn shot gets its OWN storyboard frame (first 12 medium quality, rest low) — no reused images
+MAX_CARTOONS_SHORT = 16
 HQ_CARTOONS = 12
 
 def build(ep, style, ep_dir):
@@ -54,17 +54,19 @@ def build(ep, style, ep_dir):
             made.append([kind, b['img'], ids, 1, vertical])
         else:
             b['_reuse'] = vertical if vertical is not None else False
-    for b, vertical in groups:   # reuse drawings for overflow / failed shots (free), never a plain-text fallback
-        if '_reuse' not in b: continue
-        b.pop('_reuse')
-        pool = [x for x in made if x[4] in (None, vertical)]
-        if not pool:
-            b['kind'] = 'slam'; b['params'] = {'words': (b.get('text') or b.get('see') or 'LOOK').split()[:3]}; continue
-        ids_b = set(b.get('cast') or [])
-        pick = max(pool, key=lambda x: (len(ids_b & set(x[2])), -x[3]))
-        b['kind'], b['img'] = pick[0], pick[1]
-        b['motion'] = (['pan-left', 'pan-right', 'zoom-out', 'push', 'shake'] if pick[0] == 'cartoon' else ['bounce', 'float', 'pop', 'shake', 'walk-in'])[pick[3] % 5]
-        pick[3] += 1
+    # failed/over-cap drawn shots: one more low-quality attempt; if that fails too, show the subject with a motion-graphics organ shot
+    retry = [(b, v) for b, v in groups if '_reuse' in b]
+    def _again(bv):
+        b, v = bv; key = f"retry_{abs(hash(b.get('illustration', ''))) % 10**8}.png"
+        ids = [i for i in (b.get('cast') or []) if i in refs]
+        ok = images.cartoon_scene(b.get('illustration') or b.get('see') or '', cast, ids, [refs[i] for i in ids], hint, out / key, v, 'low')
+        return key if ok else None
+    with ThreadPoolExecutor(4) as ex:
+        got = list(ex.map(_again, retry))
+    for (b, v), key in zip(retry, got):
+        b.pop('_reuse', None)
+        if key: b['kind'], b['img'] = 'cartoon', 'ep/' + key
+        else: b['kind'] = 'organ'; b['params'] = {'organ': b.get('see') or b.get('illustration') or '', 'action': 'glow', 'label': b.get('text')}
     save(ep_dir / 'episode.json', ep)
     print('cast:', len(refs), 'storyboard frames:', n_cart, '+ short', n_cart_v, 'cut-outs:', n_img, 'images ok:', sum(bool(x) for x in results), '/', len(results))
 

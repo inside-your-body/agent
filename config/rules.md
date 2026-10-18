@@ -52,7 +52,8 @@ The whole video is ONE story with characters, told by the narrator.
 ## Storyboard & motion rules (owner's standing instructions)
 - Storyboard first: for every sentence decide what we SEE, then build the shot from it.
 - Whenever the narrator speaks, the screen shows what is being talked about (tongue → a tongue; bacteria eating → bacteria eating). Never an empty or unrelated screen.
-- No repeating templates: a kind never repeats within 3 shots; characters get new poses/expressions/actions as the story changes.
+- NO REPETITION at all: a kind never repeats within 5 shots, every drawn shot is a new drawing (no reused images), text-only screens are never back to back; characters get new poses/expressions/actions as the story changes.
+- NO EMPTY SCREEN: whatever the narrator names (tongue, bacteria, heart...) is visible on screen in that moment.
 - Shorts: captions live in their own bottom band and never overlap other text or graphics.
 - Audio: only commercially licensed sound (CC0 / own work) — see LICENSES.md.
 

@@ -199,7 +199,8 @@ Rules:
 - {rule}
 - "see" (required): one concrete sentence describing exactly what is on screen — subject, action, emotion. Never empty, never generic.
 - Characters change with the story: new pose, expression, action in each drawn shot (worried, sleeping, fighting, celebrating...).
-- Never the same kind within 3 consecutive shots. Vary camera moves, layouts, actions, colours.
+- NO REPETITION: never the same kind within 5 consecutive shots; every drawn shot is a NEW drawing (new composition, new pose/action); text-only kinds are never back to back and never longer than one sentence. Vary camera moves, layouts, actions, colours.
+- NO EMPTY SCREEN: the subject the narrator names must be visible in every shot (drawn or as motion graphics).
 - Kinds already used earlier in this video (avoid overusing them): {json.dumps(used)}
 - On-screen text max 6 words, never the whole sentence; 1 key word in CAPS. Many drawn shots need no text at all.
 - "sfx": none|whoosh|pop|impact|tick|reveal|heartbeat|drip|bubble|riser|goo|shield|sparkle — only where it helps (about 1 in 3 shots), never twice in a row.
@@ -224,12 +225,13 @@ def fix_shots(shots, n_sent, recent=None):
         s_['at'] = min(max(int(s_.get('at', 0) or 0), 0), n_sent - 1)
         if s_.get('kind') not in KINDS_OK:
             s_['kind'] = 'cartoon'
-        if s_['kind'] in recent[-2:]:
+        if s_['kind'] in recent[-4:] or (s_['kind'] in TEXT_ONLY and recent and recent[-1] in TEXT_ONLY):
             # swap to a drawn storyboard frame of the same moment (keeps the subject on screen)
-            alt = 'cartoon' if 'cartoon' not in recent[-2:] else 'illustration' if 'illustration' not in recent[-2:] else 'organ'
+            alt = next((k for k in ('cartoon', 'illustration', 'organ', 'zoom') if k not in recent[-4:]), 'cartoon')
             s_['kind'] = alt
             if alt in DRAWN and not s_.get('illustration'): s_['illustration'] = s_.get('see') or s_.get('text') or ''
             if alt == 'organ': s_['params'] = {'organ': (s_.get('see') or ''), 'action': 'glow', 'label': s_.get('text')}
+            if alt == 'zoom': s_['params'] = {'label': s_.get('text'), 'target': s_.get('see') or ''}
         if s_['kind'] in DRAWN and not s_.get('illustration'): s_['illustration'] = s_.get('see') or ''
         if s_.get('focus') and s_['kind'] == 'cartoon': s_['params'] = {**(s_.get('params') or {}), 'focus': s_['focus']}
         out.append(s_); recent.append(s_['kind'])
