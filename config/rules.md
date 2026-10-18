@@ -42,10 +42,11 @@ The whole video is ONE story with characters, told by the narrator.
 
 ## Visuals
 - Every episode gets a NEW style (palette, fonts, motion language, transitions, music mood) — never the same as the last 5.
-- The core visual is 2D CARTOON: full cartoon scenes with the recurring cast (kind "cartoon") and character cut-outs that
-  walk in, bounce, fight (kind "illustration" with "cast"). Mix with kinetic type, body maps, counters, timelines, charts,
-  stick figures, split screens where they explain better.
-- Style references come from the Pinterest reference board; recreate ideas originally, never copy a pin.
+- MOTION GRAPHICS and KINETIC TYPOGRAPHY are the backbone (most of the video): kinetic type, body maps, counters,
+  timelines, charts, split screens, checklists, icons, stick figures explain the science.
+- The 2D cartoon cast complements them at key story moments: full cartoon scenes (kind "cartoon") and character
+  cut-outs that walk in, bounce, fight (kind "illustration" with "cast").
+- Typography, motion and colour ideas come from the saved Pinterest reference pins; recreate ideas originally, never copy a pin.
 - Keep text inside safe areas; never overlap captions with graphics. Never show gore.
 
 ## Thumbnail

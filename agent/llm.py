@@ -122,8 +122,10 @@ Research notes (only use facts from here):
 Write the full episode as a cartoon story with a recurring cast.
 Narration must total 1500–1600 words (our narrator reads ~2.9 words/s → ≈ 8:30–9:10). Count carefully: under 1480 words is a failure.
 Use 10–14 scenes. Every scene needs 3–8 beats so the visuals change every 6–12 seconds; the first beat of every scene has "at": 0.
-Visual mix: "cartoon" full scenes with the cast for exactly 10–12 key story moments; "illustration" cut-outs (often a cast member with a motion)
-for 6–8 moments; the rest kinetic, body, counter, chart, timeline, split, checklist, stickman (no kind more than 35% of beats).
+Visual mix — MOTION GRAPHICS + TYPOGRAPHY are the backbone (at least 60% of beats): kinetic type, counter, chart, timeline,
+body map, split, checklist, quote, icon, stickman — explain the science with them. The cartoon cast complements them:
+"cartoon" full scenes for 8–10 key story moments and "illustration" cut-outs of the cast (with a motion) for 5–8 moments.
+Never two cartoon beats in a row; no kind more than 30% of beats.
 "body" when an organ is discussed; numbers from research go in "counter" or "chart".
 On-screen "text" is short (max 7 words) and never just repeats the whole sentence. Mark 1 key word per text in CAPS.
 Explain what happens — never lecture or tell the viewer what to do.

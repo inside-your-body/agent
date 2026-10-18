@@ -7,7 +7,7 @@ from . import images
 FONTS = ROOT / 'render/public/fonts'
 MAX_ILLUSTRATIONS = 8    # cut-outs, low quality (economy mode)
 
-MAX_CARTOONS = 12        # long video full scenes, medium quality
+MAX_CARTOONS = 10        # long video full scenes, medium quality
 MAX_CARTOONS_SHORT = 3
 
 def build(ep, style, ep_dir):

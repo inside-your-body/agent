@@ -57,6 +57,10 @@ def _valid(t):
         return False
 
 # ---------- choose ----------
+FONTS = ['anton', 'inter', 'spacemono', 'bebas', 'montserrat', 'playfair', 'poppins', 'archivoblack', 'dmserif', 'fredoka']
+TRANSITIONS = ['slide', 'rise', 'zoom', 'fade', 'wipe', 'glitch', 'bounce', 'cut']
+PATTERNS = ['grid', 'dots', 'halftone', 'scan', 'gradient', 'paper', 'grain']
+
 def choose(topic, ep, used, ep_dir, vertical=False):
     recent = [u for u in used if u][-5:]
     candidates = [k for k in BASE if k not in [r.split('+')[0] for r in recent]] or list(BASE)
@@ -74,7 +78,12 @@ Base themes (choose one id from this list only): {json.dumps({k: BASE[k]['mood']
 Design references the channel owner saved on Pinterest (use them as inspiration for colours/mood): {json.dumps(analysed[:8])}
 You may re-tint the chosen theme: return replacement hex colours ONLY if they keep strong contrast
 (fg on bg ≥ 7:1, accent on bg ≥ 3:1). Return JSON: {{"base": id, "bg": hex|null, "bg2": hex|null, "fg": hex|null, "muted": hex|null,
-"accent": hex|null, "accent2": hex|null, "accent3": hex|null, "why": "one sentence"}}""", max_tokens=800)
+"accent": hex|null, "accent2": hex|null, "accent3": hex|null,
+"fontHead": one of {FONTS}|null, "fontBody": one of {FONTS}|null, "upper": bool|null,
+"transition": one of {TRANSITIONS}|null, "pattern": one of {PATTERNS}|null,
+"refs_used": [short description of the Pinterest refs whose typography/motion ideas you borrowed],
+"why": "one sentence"}}
+Borrow the TYPOGRAPHY and MOTION-GRAPHICS feel (font character, caps, transitions, backgrounds) from the references, not just colours.""", max_tokens=1200)
     except Exception as e:
         print('style pick failed', e)
     base_id = pick.get('base') if pick and pick.get('base') in candidates else random.choice(candidates)
@@ -86,6 +95,9 @@ You may re-tint the chosen theme: return replacement hex colours ONLY if they ke
             if isinstance(v, str) and re.fullmatch(r'#[0-9A-Fa-f]{6}', v): tinted[k] = v
         if tinted != theme and _valid(tinted):
             theme = tinted; theme['id'] = base_id + '+tint'
-    save(ep_dir / f"style_{'short' if vertical else 'long'}.json", {**theme, 'why': (pick or {}).get('why')})
+        for k, allowed in (('fontHead', FONTS), ('fontBody', FONTS), ('transition', TRANSITIONS), ('pattern', PATTERNS)):
+            if pick.get(k) in allowed: theme[k] = pick[k]
+        if isinstance(pick.get('upper'), bool): theme['upper'] = pick['upper']
+    save(ep_dir / f"style_{'short' if vertical else 'long'}.json", {**theme, 'why': (pick or {}).get('why'), 'refs_used': (pick or {}).get('refs_used')})
     print('style:', theme['id'])
     return theme
