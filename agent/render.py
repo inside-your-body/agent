@@ -34,7 +34,7 @@ def _beats_from(scenes, segs, total_s, end_card=None):
     beats = []
     for b in merged:
         beats.append({'from': int(round(b['from_s'] * FPS)), 'to': int(round(b['to_s'] * FPS)), 'kind': b.get('kind', 'kinetic'),
-                      'text': b.get('text'), 'value': b.get('value'), 'items': b.get('items'), 'img': b.get('img'), 'part': b.get('part')})
+                      'text': b.get('text'), 'value': b.get('value'), 'items': b.get('items'), 'img': b.get('img'), 'part': b.get('part'), 'motion': b.get('motion'), 'cast': b.get('cast')})
     return beats
 
 def props(ep, style, ep_dir, kind):

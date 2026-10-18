@@ -8,7 +8,7 @@ export type Theme = {
 
 export type Beat = {
   from: number; to: number; kind: string; text?: string; value?: string | null;
-  items?: string[] | null; img?: string | null; part?: string;
+  items?: string[] | null; img?: string | null; part?: string; motion?: string | null; cast?: string[] | null;
 };
 export type Word = {w: string; s: number; e: number};
 export type Props = {

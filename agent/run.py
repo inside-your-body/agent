@@ -41,11 +41,11 @@ def main():
     notes = (ep_dir / 'research.md').read_text() if (ep_dir / 'research.md').exists() else ''
     if not ep:
         notes = llm.research(topic['title']); (ep_dir / 'research.md').write_text(notes)
-        ep = llm.write_episode(topic['title'], notes); save(ep_dir / 'episode.json', ep)
-        for _ in range(2):   # length guard: long >= 1420 words, short >= 110 words
-            if llm.long_words(ep) >= 1420: break
+        ep = llm.write_episode(topic['title'], notes, topic.get('angle')); save(ep_dir / 'episode.json', ep)
+        for _ in range(2):   # length guard: long >= 1480 words, short >= 110 words
+            if llm.long_words(ep) >= 1480: break
             print('script too short:', llm.long_words(ep), 'words -> expanding')
-            ep = llm.expand_long(ep, notes, 1480); save(ep_dir / 'episode.json', ep)
+            ep = llm.expand_long(ep, notes, 1540); save(ep_dir / 'episode.json', ep)
         if llm._wc(ep['short']['narration']) < 110:
             ep = llm.expand_short(ep, 120); save(ep_dir / 'episode.json', ep)
         print('words: long', llm.long_words(ep), 'short', llm._wc(ep['short']['narration']))

@@ -79,20 +79,27 @@ RULES = (ROOT / 'config/rules.md').read_text()
 def research(topic):
     return ask(f"""Research the YouTube health topic: "{topic}".
 Use web search. Collect 12–20 accurate, specific, surprising facts with numbers and timelines, each with its source
-(WHO, CDC, NHS, NIH/PubMed, Mayo Clinic, major journals). Also list common myths, everyday situations the viewer
-recognises, and safe practical solutions. Output as a compact bullet list with URLs.""", web_search=True, max_tokens=6000)
+(WHO, CDC, NHS, NIH/PubMed, Mayo Clinic, major journals). Focus on WHAT HAPPENS inside the body step by step
+(a timeline: seconds, minutes, hours, days), which organs/cells/molecules are involved, the most surprising moments,
+common myths, and everyday situations the viewer recognises. Output as a compact bullet list with URLs.""", web_search=True, max_tokens=6000)
 
 EPISODE_SCHEMA = """{
  "title": str, "angle": str,
+ "cast": [ {"id": str, "name": str, "look": str} ],  // 2-4 recurring cartoon characters: usually one named human + body agents
+                                                  // (pill hero, white blood cell guard, virus villain, liver worker...).
+                                                  // "look": precise visual description (shape, colours, face, outfit) reused in every image
  "scenes": [ {"id": "s1", "part": "hook|problem|explain|solution|wrap", "title": str,   // chapter title, 2-5 words
    "narration": [str, ...],                       // short spoken sentences
    "beats": [ {"at": int,                         // index of the narration sentence this visual starts on
-      "kind": "kinetic|illustration|stickman|body|icon|counter|timeline|chart|split|checklist|quote",
+      "kind": "cartoon|kinetic|illustration|stickman|body|icon|counter|timeline|chart|split|checklist|quote",
       "text": str,                                // on-screen words (max 6), keyword UPPERCASE allowed
       "value": str|null,                          // counter: number with unit e.g. "7,000+" "50%"; body: organ name;
                                                   // stickman: pose idle|walk|run|happy|sad|point|think|tired|drink; quote: source
       "items": [str]|null,                        // timeline steps (max 6) / checklist (max 5) / split [left,right] / chart ["Label:123", ...]
-      "illustration": str|null                    // short prompt for a flat 2D illustration (transparent bg) if needed
+      "illustration": str|null,                   // illustration: prompt for ONE cut-out subject (transparent bg)
+                                                  // cartoon: prompt for a FULL 2D cartoon scene with background (what we see, action, setting)
+      "cast": [str]|null,                         // ids of cast characters appearing in this illustration/cartoon
+      "motion": str|null                          // illustration: walk-in|bounce|float|shake|pop ; cartoon: push|pan-left|pan-right|zoom-out|shake
    } ] } ],
  "short": {"narration": [str, ...], "beats": [same as above]},
  "upload": {"title": str, "description": str, "tags": [str], "hashtags": [str], "pinned_comment": str,
@@ -101,25 +108,28 @@ EPISODE_SCHEMA = """{
  "sources": [{"title": str, "url": str}]
 }"""
 
-def write_episode(topic, notes):
+def write_episode(topic, notes, angle=None):
     return ask_json(f"""You are the head writer of the YouTube channel "Inside Your Body".
 Follow these channel rules exactly:
 {RULES}
 
 Topic: "{topic}"
+{('Story angle: ' + angle) if angle else ''}
 Research notes (only use facts from here):
 {notes}
 
-Write the full episode. Narration must total 1450–1550 words (our narrator reads ~2.9 words/s, so this is ≈ 8:20–8:50). Count carefully: under 1400 words is a failure.
-Use 9–13 scenes. Every scene needs 3–8 beats so the visuals change every 6–12 seconds; the first beat of every scene has "at": 0.
-Mix beat kinds (no kind more than 30% of beats). Use "illustration" for 8–12 key moments (characters, organs, objects, situations);
-"body" when an organ is discussed; "stickman" for everyday human situations; numbers from research go in "counter" or "chart".
+Write the full episode as a cartoon story with a recurring cast.
+Narration must total 1500–1600 words (our narrator reads ~2.9 words/s → ≈ 8:30–9:10). Count carefully: under 1480 words is a failure.
+Use 10–14 scenes. Every scene needs 3–8 beats so the visuals change every 6–12 seconds; the first beat of every scene has "at": 0.
+Visual mix: "cartoon" full scenes with the cast for 10–14 key story moments; "illustration" cut-outs (often a cast member with a motion)
+for 6–10 moments; the rest kinetic, body, counter, chart, timeline, split, checklist, stickman (no kind more than 35% of beats).
+"body" when an organ is discussed; numbers from research go in "counter" or "chart".
 On-screen "text" is short (max 7 words) and never just repeats the whole sentence. Mark 1 key word per text in CAPS.
-Then write the Short (115–135 words, ≈ 40–46 s; loops back to its first line) and the upload package.
+Explain what happens — never lecture or tell the viewer what to do.
+Then write the Short (115–135 words, ≈ 40–46 s; loops back to its first line; it may use 3–5 "cartoon" beats) and the upload package.
 The description must include a "Chapters" section using the placeholder {{CHAPTERS}} which the system fills in.
 Schema (comments after // are explanations, do not output them):
-{EPISODE_SCHEMA}""", max_tokens=32000)
-
+{EPISODE_SCHEMA}""", max_tokens=40000)
 
 def _wc(lines):
     return sum(len(x.split()) for x in lines)
@@ -131,7 +141,7 @@ def expand_long(ep, notes, target):
     """Rewrite the scenes so narration reaches `target` words, keeping style, story and beat format."""
     cur = long_words(ep)
     out = ask_json(f"""You are the head writer of "Inside Your Body". This episode script is too SHORT: {cur} words of narration.
-It must reach {target}–{target + 100} words (videos must be over 8 minutes). Follow the channel rules:
+It must reach {target}–{target + 100} words (videos must be over 8 minutes). Explain what happens; never lecture. Follow the channel rules:
 {RULES}
 
 Research notes (only use facts from here):
@@ -143,7 +153,7 @@ Current scenes JSON:
 Return ONLY a JSON object {{"scenes": [...]}} with the same schema. Keep the hook and the story arc, keep scene ids/titles where possible,
 but deepen every scene: add a concrete everyday example, a "what's happening inside" explanation, a surprising fact from the notes, and
 open loops that carry viewers to the next scene. You may add 1–3 new scenes. Add beats for the new sentences ("at" = sentence index in that scene)
-so visuals still change every 6–12 seconds. Total narration MUST be at least {target} words.""", max_tokens=32000)
+so visuals still change every 6–12 seconds; reuse the existing cast ids for cartoon/illustration beats. Total narration MUST be at least {target} words.""", max_tokens=32000)
     if out.get('scenes') and long_words(out) > cur:
         ep['scenes'] = out['scenes']
     return ep

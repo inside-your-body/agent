@@ -60,24 +60,86 @@ const Kinetic: React.FC<BP> = ({b, t, vertical}) => {
   );
 };
 
+// cut-out illustration / cast character with character-like motion
+const spriteMotion = (motion: string | null | undefined, f: number, e: number, len: number, hasCast: boolean) => {
+  const m = motion || (hasCast ? 'walk-in' : 'float');
+  const push = interpolate(f, [0, len], [1, 1.05]);
+  switch (m) {
+    case 'walk-in': {
+      const x = interpolate(f, [0, 26], [-900, 0], {...cl, easing: Easing.out(Easing.cubic)});
+      const walking = f < 26;
+      const hop = walking ? -Math.abs(Math.sin(f / 2.6)) * 34 : Math.sin(f / 18) * 6;
+      const tilt = walking ? Math.sin(f / 2.6) * 5 : Math.sin(f / 30) * 1.5;
+      const squash = walking ? 1 : 1 + Math.sin(f / 9) * 0.015;
+      return `translate(${x}px, ${hop}px) rotate(${tilt}deg) scale(${push}, ${push * squash})`;
+    }
+    case 'bounce': {
+      const y = (1 - e) * -500 + Math.abs(Math.sin(f / 7)) * -22 * Math.max(0, 1 - f / 90);
+      const sq = 1 + Math.sin(f / 3.5) * 0.04 * Math.max(0, 1 - f / 40);
+      return `translateY(${y}px) scale(${push * (2 - sq)}, ${push * sq})`;
+    }
+    case 'shake': {
+      const k = Math.sin(f * 1.7) * 14 * (0.4 + 0.6 * Math.abs(Math.sin(f / 11)));
+      return `translateX(${k}px) rotate(${k / 5}deg) scale(${push * (0.85 + 0.15 * e)})`;
+    }
+    case 'pop':
+      return `scale(${push * e}) rotate(${(1 - e) * -12}deg)`;
+    default:
+      return `translateY(${Math.sin(f / 22) * 12 + (1 - e) * 60}px) rotate(${Math.sin(f / 40) * 2}deg) scale(${push * (0.85 + 0.15 * e)})`;
+  }
+};
+
 const Illustration: React.FC<BP> = ({b, t, vertical, len}) => {
   const f = useCurrentFrame();
   const e = useEnter(t);
-  const float = Math.sin(f / 22) * 10;
-  const push = interpolate(f, [0, len], [1, 1.06]);
-  const img = b.img ? <Img src={staticFile(b.img)} style={{width: vertical ? 760 : 820, height: vertical ? 760 : 820, objectFit: 'contain',
-    transform: `translateY(${float + (1 - e) * 60}px) scale(${push * (0.85 + 0.15 * e)})`, opacity: e,
-    filter: `drop-shadow(0 30px 40px ${alpha('#000', 0.25)})`}} /> : <Icon name={pickIcon(b.text, b.value) || 'heart'} size={420} color={t.accent} progress={e} width={4} />;
+  const hasCast = !!(b.cast && b.cast.length);
+  const S = vertical ? 800 : 860;
+  const img = b.img ? <div style={{position: 'relative', width: S, height: S}}>
+      <div style={{position: 'absolute', left: '22%', right: '22%', bottom: 18, height: 40, borderRadius: '50%', background: alpha('#000', 0.18), filter: 'blur(10px)', opacity: e}} />
+      <Img src={staticFile(b.img)} style={{position: 'absolute', inset: 0, width: S, height: S, objectFit: 'contain', opacity: Math.min(1, e * 1.4),
+        transform: spriteMotion(b.motion, f, e, len, hasCast), filter: `drop-shadow(0 26px 34px ${alpha('#000', 0.22)})`}} />
+    </div> : <Icon name={pickIcon(b.text, b.value) || 'heart'} size={420} color={t.accent} progress={e} width={4} />;
   return vertical ? (
-    <AbsoluteFill style={{alignItems: 'center', paddingTop: 230}}>
+    <AbsoluteFill style={{alignItems: 'center', paddingTop: 200}}>
       {img}
-      <div style={{marginTop: 10, padding: '0 60px'}}><Headline text={b.text || ''} t={t} size={92} maxWidth={940} delay={6} /></div>
+      <div style={{marginTop: 0, padding: '0 60px'}}><Headline text={b.text || ''} t={t} size={88} maxWidth={940} delay={6} /></div>
     </AbsoluteFill>
   ) : (
-    <AbsoluteFill style={{flexDirection: 'row', alignItems: 'center', padding: '0 120px', gap: 60}}>
-      <div style={{flex: '0 0 820px', display: 'flex', justifyContent: 'center'}}>{img}</div>
+    <AbsoluteFill style={{flexDirection: 'row', alignItems: 'center', padding: '0 110px', gap: 50}}>
+      <div style={{flex: '0 0 860px', display: 'flex', justifyContent: 'center'}}>{img}</div>
       <div style={{flex: 1}}><Headline text={b.text || ''} t={t} size={104} align="left" maxWidth={820} delay={6} />
         {b.value && <div style={{marginTop: 24, textAlign: 'left'}}><Sub text={b.value} t={t} size={44} /></div>}</div>
+    </AbsoluteFill>
+  );
+};
+
+// full-bleed 2D cartoon scene with a camera move + caption label
+const Cartoon: React.FC<BP> = ({b, t, vertical, len}) => {
+  const f = useCurrentFrame();
+  const {width, height} = useVideoConfig();
+  const p = interpolate(f, [0, Math.max(len, 1)], [0, 1], cl);
+  const ez = Easing.inOut(Easing.quad)(p);
+  let tr = '';
+  switch (b.motion) {
+    case 'pan-left': tr = `scale(1.16) translateX(${interpolate(ez, [0, 1], [5, -5])}%)`; break;
+    case 'pan-right': tr = `scale(1.16) translateX(${interpolate(ez, [0, 1], [-5, 5])}%)`; break;
+    case 'zoom-out': tr = `scale(${interpolate(ez, [0, 1], [1.22, 1.04])})`; break;
+    case 'shake': tr = `scale(1.12) translate(${Math.sin(f * 1.9) * 6 * Math.max(0, 1 - f / 24)}px, ${Math.cos(f * 2.3) * 5 * Math.max(0, 1 - f / 24)}px)`; break;
+    default: tr = `scale(${interpolate(ez, [0, 1], [1.04, 1.2])}) translateY(${interpolate(ez, [0, 1], [0, -1.5])}%)`;
+  }
+  const e = useEnter(t, 8);
+  const label = b.text ? (
+    <div style={{position: 'absolute', left: 0, right: 0, display: 'flex', justifyContent: 'center', ...(vertical ? {top: 170} : {bottom: 70})}}>
+      <div style={{background: alpha(t.bg, 0.88), border: `4px solid ${t.accent}`, borderRadius: Math.max(14, t.radius), padding: vertical ? '18px 34px' : '18px 42px',
+        transform: `translateY(${(1 - e) * 40}px) scale(${0.9 + 0.1 * e})`, opacity: e, boxShadow: `0 18px 40px ${alpha('#000', 0.3)}`, maxWidth: vertical ? 940 : 1500}}>
+        <Headline text={b.text} t={t} size={vertical ? 70 : 72} maxWidth={vertical ? 860 : 1400} delay={10} />
+      </div>
+    </div>) : null;
+  return (
+    <AbsoluteFill style={{overflow: 'hidden', background: t.bg}}>
+      {b.img && <Img src={staticFile(b.img)} style={{position: 'absolute', width, height, objectFit: 'cover', transform: tr, transformOrigin: '50% 45%'}} />}
+      <AbsoluteFill style={{background: `radial-gradient(ellipse at 50% 50%, transparent 60%, ${alpha('#000', 0.35)} 100%)`}} />
+      {label}
     </AbsoluteFill>
   );
 };
@@ -291,7 +353,7 @@ const EndCard: React.FC<BP> = ({b, t, vertical}) => {
 
 const KINDS: Record<string, React.FC<BP>> = {
   endcard: EndCard,
-  kinetic: Kinetic, illustration: Illustration, stickman: StickScene, icon: IconScene, counter: Counter, timeline: Timeline,
+  cartoon: Cartoon, kinetic: Kinetic, illustration: Illustration, stickman: StickScene, icon: IconScene, counter: Counter, timeline: Timeline,
   chart: Chart, split: Split, checklist: Checklist, quote: Quote, body: BodyScene,
 };
 
@@ -299,7 +361,7 @@ const KINDS: Record<string, React.FC<BP>> = {
 export const BeatView: React.FC<BP> = (p) => {
   const f = useCurrentFrame();
   const {t, len} = p;
-  const kind = p.b.kind === 'illustration' && !p.b.img ? 'icon' : p.b.kind;
+  const kind = (p.b.kind === 'illustration' || p.b.kind === 'cartoon') && !p.b.img ? 'icon' : p.b.kind;
   const K = KINDS[kind] || Kinetic;
   const inK = interpolate(f, [0, 12], [0, 1], {...cl, easing: Easing.out(Easing.cubic)});
   const outK = interpolate(f, [len - 8, len], [1, 0], {...cl, easing: Easing.in(Easing.cubic)});

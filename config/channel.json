@@ -4,7 +4,7 @@
     "handle": "@InsideYourBodyAnimated",
     "language": "en",
     "category_id": "27",
-    "playlist_name": "Inside Your Body \u2014 Health Explained"
+    "playlist_name": "Inside Your Body — Health Explained"
   },
   "schedule": {
     "every_days": 2,
@@ -31,8 +31,8 @@
     "height": 1080,
     "fps": 30,
     "min_seconds": 485,
-    "target_seconds": 500,
-    "max_seconds": 560
+    "target_seconds": 530,
+    "max_seconds": 620
   },
   "short": {
     "width": 1080,

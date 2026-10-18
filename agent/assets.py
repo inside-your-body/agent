@@ -7,24 +7,41 @@ from . import images
 FONTS = ROOT / 'render/public/fonts'
 MAX_ILLUSTRATIONS = 14
 
+MAX_CARTOONS = 16
+
 def build(ep, style, ep_dir):
-    """Generate images for illustration beats (long + short share the cache)."""
+    """Cast reference sheets -> cartoon scenes + cut-out illustrations (long + short), all consistent with the cast."""
     out = ep_dir / 'assets'; out.mkdir(exist_ok=True)
-    hint = f"style: {style.get('mood', '')}, colours {style['accent']} and {style['accent2']} on {'dark' if style['bg'].startswith('#0') or style['bg'].startswith('#1') else 'light'} background"
-    n = 0
-    beats = [b for sc in ep['scenes'] for b in sc['beats']] + ep['short'].get('beats', [])
-    for b in beats:
-        if b.get('kind') != 'illustration' or not b.get('illustration'):
-            continue
-        key = 'img_%02d.png' % n
-        p = out / key
-        if n < MAX_ILLUSTRATIONS and (p.exists() or images.illustration(b['illustration'], hint, p)):
-            b['img'] = 'ep/' + key
-            n += 1
-        else:
-            b['kind'] = 'icon'   # graceful fallback
+    dark = style['bg'][:2] in ('#0', '#1', '#2')
+    hint = f"Art direction: {style.get('mood', '')}; palette built around {style['accent']}, {style['accent2']} and {style['accent3']}"
+    cast = ep.get('cast') or []
+    refs = {}
+    for c in cast[:4]:
+        p = out / f"cast_{c['id']}.png"
+        if p.exists() or images.cast_ref(c, hint, p):
+            refs[c['id']] = str(p)
+    n_img = n_cart = 0
+    groups = [(b, False) for sc in ep['scenes'] for b in sc['beats']] + [(b, True) for b in ep['short'].get('beats', [])]
+    for b, vertical in groups:
+        ids = [i for i in (b.get('cast') or []) if i in refs]
+        r = [refs[i] for i in ids] or list(refs.values())[:1]
+        if b.get('kind') == 'cartoon':
+            key = ('cartoon_v_%02d.png' if vertical else 'cartoon_%02d.png') % n_cart
+            p = out / key
+            if b.get('illustration') and n_cart < MAX_CARTOONS and (p.exists() or images.cartoon_scene(b['illustration'], cast, ids, r, hint, p, vertical)):
+                b['img'] = 'ep/' + key; n_cart += 1
+            else:
+                b['kind'] = 'illustration'
+        if b.get('kind') == 'illustration' and not b.get('img'):
+            key = 'img_%02d.png' % n_img
+            p = out / key
+            if b.get('illustration') and n_img < MAX_ILLUSTRATIONS and (p.exists() or (images.sprite(b['illustration'], cast, ids, r if ids else [], hint, p) if ids
+                                                                          else images.illustration(b['illustration'], hint, p))):
+                b['img'] = 'ep/' + key; n_img += 1
+            else:
+                b['kind'] = 'icon'   # graceful fallback
     save(ep_dir / 'episode.json', ep)
-    print('illustrations:', n)
+    print('cast:', len(refs), 'cartoon scenes:', n_cart, 'illustrations:', n_img)
 
 def _font(name, size):
     try:
@@ -40,7 +57,8 @@ def thumbnail(ep, style, ep_dir):
     th = ep.get('thumbnail', {})
     art = ep_dir / 'thumb_art.png'
     if not art.exists():
-        images.thumbnail_art(th.get('image_prompt', ep['title']), art)
+        refs = sorted((ep_dir / 'assets').glob('cast_*.png'))[:2]
+        images.thumbnail_art(th.get('image_prompt', ep['title']), art, [str(x) for x in refs], images.cast_text(ep.get('cast') or [], [c['id'] for c in (ep.get('cast') or [])][:2]))
     W, H = 1280, 720
     if art.exists():
         im = Image.open(art).convert('RGB')
