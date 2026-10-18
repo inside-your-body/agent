@@ -22,9 +22,15 @@ def model():
 
 def ask(prompt, system='', max_tokens=16000, web_search=False, retries=4, image_url=None):
     headers = {'x-api-key': os.environ['ANTHROPIC_API_KEY'], 'anthropic-version': '2023-06-01', 'content-type': 'application/json'}
-    body = {'model': model(), 'max_tokens': max_tokens, 'system': system,
-            'messages': [{'role': 'user', 'content': prompt if not image_url else
-                          [{'type': 'image', 'source': {'type': 'url', 'url': image_url}}, {'type': 'text', 'text': prompt}]}]}
+    content = prompt
+    if image_url:   # download ourselves (Pinterest blocks Anthropic's URL fetcher via robots.txt) and send base64
+        import base64 as _b64
+        ir = requests.get(image_url, headers={'User-Agent': 'Mozilla/5.0'}, timeout=30); ir.raise_for_status()
+        mt = ir.headers.get('content-type', 'image/jpeg').split(';')[0]
+        if mt not in ('image/jpeg', 'image/png', 'image/gif', 'image/webp'): mt = 'image/jpeg'
+        content = [{'type': 'image', 'source': {'type': 'base64', 'media_type': mt, 'data': _b64.b64encode(ir.content).decode()}}, {'type': 'text', 'text': prompt}]
+        retries = 1
+    body = {'model': model(), 'max_tokens': max_tokens, 'system': system, 'messages': [{'role': 'user', 'content': content}]}
     if web_search:
         body['tools'] = [{'type': 'web_search_20250305', 'name': 'web_search', 'max_uses': 8}]
     # Sonnet 5.5 thinks by default and thinking counts toward max_tokens -> keep it minimal.
