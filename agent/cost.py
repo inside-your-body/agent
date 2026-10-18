@@ -12,7 +12,7 @@ def _log():
     except Exception: return {'claude_usd': 0.0, 'images_usd': 0.0, 'claude_calls': 0, 'images': 0, 'items': []}
 
 def _save(d):
-    d['total_usd'] = round(d['claude_usd'] + d['images_usd'], 3)
+    d['total_usd'] = round(d['claude_usd'] + d['images_usd'] + d.get('tts_usd', 0), 3)
     WORK.mkdir(parents=True, exist_ok=True); (WORK / 'cost.json').write_text(json.dumps(d, indent=1))
 
 def claude(usage):
@@ -31,3 +31,7 @@ def image(usage, label):
              + usage.get('output_tokens', 0) * IMAGE['out']) / 1e6
     d['images_usd'] = round(d['images_usd'] + c, 4); d['images'] += 1
     d['items'].append({'img': label, 'usd': round(c, 4)}); _save(d)
+
+def tts(chars):
+    d = _log(); c = chars / 1e6 * 15.0 * 0.8   # gpt-4o-mini-tts ~ $0.015/min ~ roughly $12/1M chars
+    d['tts_usd'] = round(d.get('tts_usd', 0) + c, 4); d['claude_usd'] = d['claude_usd']; _save(d)

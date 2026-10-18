@@ -4,3 +4,4 @@ render/out/
 render/public/ep/
 __pycache__/
 *.pyc
+render/public/proto/

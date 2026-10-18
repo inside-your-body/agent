@@ -16,7 +16,7 @@
     "min_hours_between_episodes": 40
   },
   "voice": {
-    "engine": "kokoro-onnx",
+    "engine": "openai",
     "model_url": "https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0/kokoro-v1.0.onnx",
     "voices_url": "https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0/voices-v1.0.bin",
     "blend": {
@@ -24,7 +24,13 @@
       "am_fenrir": 0.45
     },
     "speed": 1.05,
-    "locked": true
+    "locked": true,
+    "openai": {
+      "model": "gpt-4o-mini-tts",
+      "voice": "ballad",
+      "speed": 1.0,
+      "instructions": "Voice: a captivating documentary storyteller, warm and energetic, like a top science YouTuber. Tone: curious and dramatic — build suspense, lean into surprising words, short dramatic pauses before reveals and after questions. Pace: lively but clear, never rushed. Never monotone. American English."
+    }
   },
   "long_video": {
     "width": 1920,

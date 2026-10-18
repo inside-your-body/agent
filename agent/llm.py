@@ -89,25 +89,17 @@ EPISODE_SCHEMA = """{
  "cast": [ {"id": str, "name": str, "look": str} ],  // 2-4 recurring cartoon characters: usually one named human + body agents
                                                   // (pill hero, white blood cell guard, virus villain, liver worker...).
                                                   // "look": precise visual description (shape, colours, face, outfit) reused in every image
- "scenes": [ {"id": "s1", "part": "hook|problem|explain|solution|wrap", "title": str,   // chapter title, 2-5 words
-   "narration": [str, ...],                       // short spoken sentences
-   "beats": [ {"at": int,                         // index of the narration sentence this visual starts on
-      "kind": "cartoon|kinetic|illustration|stickman|body|icon|counter|timeline|chart|split|checklist|quote",
-      "text": str,                                // on-screen words (max 6), keyword UPPERCASE allowed
-      "value": str|null,                          // counter: number with unit e.g. "7,000+" "50%"; body: organ name;
-                                                  // stickman: pose idle|walk|run|happy|sad|point|think|tired|drink; quote: source
-      "items": [str]|null,                        // timeline steps (max 6) / checklist (max 5) / split [left,right] / chart ["Label:123", ...]
-      "illustration": str|null,                   // illustration: prompt for ONE cut-out subject (transparent bg)
-                                                  // cartoon: prompt for a FULL 2D cartoon scene with background (what we see, action, setting)
-      "cast": [str]|null,                         // ids of cast characters appearing in this illustration/cartoon
-      "motion": str|null                          // illustration: walk-in|bounce|float|shake|pop ; cartoon: push|pan-left|pan-right|zoom-out|shake
-   } ] } ],
- "short": {"narration": [str, ...], "beats": [same as above]},
+ "scenes": [ {"id": "s1", "part": "hook|situation|journey|climax|resolution", "title": str,   // chapter title, 2-5 words
+   "narration": [str, ...] } ],                   // short spoken sentences (one idea each)
+ "short": {"narration": [str, ...]},
  "upload": {"title": str, "description": str, "tags": [str], "hashtags": [str], "pinned_comment": str,
             "short_title": str, "short_description": str},
- "thumbnail": {"image_prompt": str, "big_text": str, "small_text": str},
+ "thumbnail": {"image_prompt": str, "line1": str, "line2": str},   // line1+line2 = one plain sentence that names the topic and makes people curious,
+                                                  // e.g. "WHAT AN IV DRIP" / "DOES INSIDE YOU"; max 4 words per line
  "sources": [{"title": str, "url": str}]
 }"""
+
+WORDS_MIN, WORDS_MAX = 1350, 1500
 
 def write_episode(topic, notes, angle=None):
     return ask_json(f"""You are the head writer of the YouTube channel "Inside Your Body".
@@ -119,20 +111,100 @@ Topic: "{topic}"
 Research notes (only use facts from here):
 {notes}
 
-Write the full episode as a cartoon story with a recurring cast.
-Narration must total 1500–1600 words (our narrator reads ~2.9 words/s → ≈ 8:30–9:10). Count carefully: under 1480 or over 1700 words is a failure.
-Use 10–14 scenes. Every scene needs 3–8 beats so the visuals change every 6–12 seconds; the first beat of every scene has "at": 0.
-Visual mix — MOTION GRAPHICS + TYPOGRAPHY are the backbone (at least 60% of beats): kinetic type, counter, chart, timeline,
-body map, split, checklist, quote, icon, stickman — explain the science with them. The cartoon cast complements them:
-"cartoon" full scenes for 8–10 key story moments and "illustration" cut-outs of the cast (with a motion) for 5–8 moments.
-Never two cartoon beats in a row; no kind more than 30% of beats. Use "icon" only for a concrete object (heart, pill, clock, water, brain...) named in "value".
-"body" when an organ is discussed; numbers from research go in "counter" or "chart".
-On-screen "text" is short (max 7 words) and never just repeats the whole sentence. Mark 1 key word per text in CAPS.
-Explain what happens — never lecture or tell the viewer what to do.
-Then write the Short (115–135 words, ≈ 40–46 s; loops back to its first line; it may use up to 3 "cartoon" beats; give EVERY short sentence its own beat (at = 0,1,2,...) so the picture changes every 2–3 s, mixing kinetic, counter, chart, body, split, illustration of the cast) and the upload package.
-The description must include a "Chapters" section using the placeholder {{CHAPTERS}} which the system fills in.
+Write the full episode as a cartoon story with a recurring cast, told by a narrator.
+Narration must total {WORDS_MIN}–{WORDS_MAX} words (our narrator reads ~2.5 words/s → ≈ 9–10 minutes). Count carefully.
+Use 10–14 scenes of 6–14 sentences. Every sentence must be something we can SHOW: an action, a place, a change, a number, a character.
+Max 8 numbers in the whole script; round them and make them vivid ("enough tubes to circle the Earth twice").
+Re-hook the viewer every 40–60 seconds with an open loop. Explain what happens — never lecture or tell the viewer what to do.
+Then write the Short (115–135 words, ≈ 45–50 s; the single most surprising moment told as a mini story; last line loops into the first)
+and the upload package. The description must include a "Chapters" section using the placeholder {{CHAPTERS}} which the system fills in.
 Schema (comments after // are explanations, do not output them):
-{EPISODE_SCHEMA}""", max_tokens=40000)
+{EPISODE_SCHEMA}""", max_tokens=30000)
+
+def edit_episode(ep, notes):
+    """Retention editor: rewrites weak sentences, keeps facts and length."""
+    out = ask_json(f"""You are the retention editor of a top animated science YouTube channel ("Inside Your Body").
+Rules: {RULES}
+Here is the draft script (JSON). Improve it for watch-time WITHOUT changing the facts:
+- The first 15 seconds must hook hard (a striking moment or question, no intro).
+- Every 40–60 s add/strengthen an open loop ("but at hour six, something strange happens...").
+- Replace dry or list-like sentences with story beats: characters doing things, vivid comparisons, sensory details.
+- Remove preaching or advice. Remove filler. Keep sentences short and spoken.
+- Keep scene ids/titles, keep total words between {WORDS_MIN} and {WORDS_MAX}.
+- Make thumbnail line1/line2 a plain sentence naming the topic + curiosity (max 4 words per line).
+Research notes for fact-checking: {notes[:6000]}
+Draft: {json.dumps({k: ep[k] for k in ('title', 'scenes', 'short', 'thumbnail', 'cast')}, ensure_ascii=False)}
+Return JSON with the same keys: {{"title", "scenes", "short", "thumbnail", "cast"}}.""", max_tokens=30000)
+    for k in ('scenes', 'short', 'thumbnail', 'cast', 'title'):
+        if out.get(k): ep[k] = out[k]
+    return ep
+
+SHOT_CATALOG = """Shot kinds (pick the one that literally SHOWS what the sentence says):
+- cartoon: full 2D cartoon scene of the story (AI image). fields: illustration (scene prompt), cast [ids], motion push|pan-left|pan-right|zoom-out|shake, text (short caption or null). Max 10 per long video, 3 per Short.
+- illustration: a cast character cut-out that walks in / reacts. fields: illustration (prompt: character + pose/action), cast [ids], motion walk-in|bounce|float|shake|pop, text. Max 8.
+- slam: 1-4 big words slammed on the exact words the narrator says. params {words:[...], highlight: index, ghost: optional big faded number}. Max 20% of shots.
+- type: typewriter question with floating symbols. params {text, symbol: "?"|"!"|"Z"}. For questions/mysteries.
+- counter: a number counting up on cue. params {value: "60,000"|"75%"|"3 h", label, style: odometer|gauge|slam, cue: word}. Max 10%.
+- meter: HUD bars filling/draining. params {title, bars:[{label, from:0-100, to:0-100, good:bool, cue}]}.
+- vessel: inside a blood vessel, things flowing. params {particles:[rbc|water|virus|bacteria|pill|sugar|fat|oxygen|smoke|alcohol|protein|platelet|wbc|toxin|drug], flow: slow|normal|fast|stopped, blockage: 0-1 (plaque narrowing), cue, label}.
+- heart: animated heart. params {mode: beat|squeeze|race|attack|stop, cue, label}.
+- organ: one organ close-up doing something. params {organ: brain|lungs|liver|stomach|kidney|intestine|tooth|tongue|bone|eye|skin|bladder,
+  action: glow|pulse|breathe|damage|heal|fill|shrink|inflame|gas|bacteria|signal, cue, label}.
+- membrane: a wall with gaps (capillary, gut wall, blood-brain barrier, kidney filter). params {pass: particle, block: particle, wall: capillary|gut|brain|kidney, leftLabel, rightLabel, label, cue}.
+- cells: a field of cells with a wave. params {action: fill|infect|die|heal|multiply, label, cue}.
+- battle: white blood cells vs invaders. params {invader: virus|bacteria|toxin, outcome: win|lose|ongoing, label, cue}.
+- spread: one person infecting many (network). params {label, unit, cue}.
+- clock: time jump. params {label: "HOUR 6"|"DAY 3"|"MINUTE 1", sub}.
+- journey: a particle travelling through the body. params {stops:[mouth|nose|throat|brain|lungs|heart|stomach|liver|kidneys|intestine|bladder|blood|arm|skin|bones|muscles|eyes], particle, label}.
+- zoom: zoom from the whole body into one spot (use when going from outside to inside). params {target, label}.
+- compare: two sides with VS. params {title, left:{label, big?, particle?}, right:{label, big?, particle?, cue}}.
+- list: numbered reveal (max 4). params {title, items:[{text, cue}]}.
+- fact: a fact card. params {tag, text, source}.
+- stickman: a stick figure in an everyday situation. value: pose idle|walk|run|happy|sad|point|think|tired|drink, text.
+- chart: bars. text = title, items ["Label:123", ...].
+"""
+
+def direct(ep, kind='long'):
+    """The director: one shot per sentence (sometimes two), chosen to SHOW exactly what is said."""
+    if kind == 'long':
+        script = [{'id': sc['id'], 'title': sc.get('title'), 'sentences': {i: s for i, s in enumerate(sc['narration'])}} for sc in ep['scenes']]
+        rule = 'Long video: 1 shot per sentence; a long sentence may get 2 shots (second one with "cue" = the word where it starts). Very short connected sentences may share one shot.'
+    else:
+        script = [{'id': 'short', 'sentences': {i: s for i, s in enumerate(ep['short']['narration'])}}]
+        rule = 'Short (vertical): EVERY sentence gets its own shot; fast and punchy; up to 3 cartoon shots.'
+    res = ask_json(f"""You are the motion-graphics director of an animated health channel. The viewer should feel the story is being
+re-built in front of them, sentence by sentence, with motion graphics, 2D drawings and typography.
+{SHOT_CATALOG}
+Rules:
+- {rule}
+- The shot must depict the sentence's concrete content (the organ, the particle, the number, the action, the character). Never a generic visual.
+- Never the same kind twice in a row. Vary layouts/actions. Use cartoon/illustration of the cast at story moments (characters acting).
+- On-screen text max 6 words, never the whole sentence; put 1 key word in CAPS.
+- "sfx": none|whoosh|pop|impact|tick|reveal|heartbeat|drip|bubble|riser|goo|shield|sparkle — only where it helps (about 1 in 3 shots), never harsh, never twice in a row.
+Cast: {json.dumps(ep.get('cast', []), ensure_ascii=False)}
+Script: {json.dumps(script, ensure_ascii=False)}
+Return JSON: {{"scenes": [{{"id": scene id, "shots": [{{"at": sentence index, "cue": word or null, "kind": str, "text": str|null, "params": {{}}|null,
+ "value": str|null, "items": [str]|null, "illustration": str|null, "cast": [str]|null, "motion": str|null, "sfx": str|null}}]}}]}}""",
+        max_tokens=32000)
+    shots = {s['id']: s.get('shots', []) for s in res.get('scenes', [])}
+    return shots
+
+KINDS_OK = {'cartoon', 'illustration', 'slam', 'type', 'counter', 'meter', 'vessel', 'heart', 'organ', 'membrane', 'cells', 'battle', 'spread',
+            'clock', 'journey', 'zoom', 'compare', 'list', 'fact', 'stickman', 'chart', 'kinetic'}
+
+def fix_shots(shots, n_sent):
+    """Enforce: valid kinds, first shot at 0, no same kind twice in a row, caps."""
+    out = []
+    for s in sorted(shots, key=lambda x: (int(x.get('at', 0) or 0))):
+        s['at'] = min(max(int(s.get('at', 0) or 0), 0), n_sent - 1)
+        if s.get('kind') not in KINDS_OK: s['kind'] = 'slam'; s.setdefault('params', {'words': (s.get('text') or '').split()[:3]})
+        if out and out[-1]['kind'] == s['kind']:
+            s['kind'] = 'slam' if s['kind'] != 'slam' else 'type'
+            if s['kind'] == 'slam': s['params'] = {'words': (s.get('text') or 'WAIT').split()[:3]}
+            else: s['params'] = {'text': s.get('text') or '...'}
+        out.append(s)
+    if out and out[0]['at'] != 0: out[0]['at'] = 0
+    return out
 
 def _wc(lines):
     return sum(len(x.split()) for x in lines)
@@ -155,8 +227,7 @@ Current scenes JSON:
 
 Return ONLY a JSON object {{"scenes": [...]}} with the same schema. Keep the hook and the story arc, keep scene ids/titles where possible,
 but deepen every scene: add a concrete everyday example, a "what's happening inside" explanation, a surprising fact from the notes, and
-open loops that carry viewers to the next scene. You may add 1–3 new scenes. Add beats for the new sentences ("at" = sentence index in that scene)
-so visuals still change every 6–12 seconds; reuse the existing cast ids for cartoon/illustration beats. Total narration MUST be at least {target} words.""", max_tokens=32000)
+open loops that carry viewers to the next scene. You may add 1–3 new scenes. Keep the cast. Total narration MUST be at least {target} words.""", max_tokens=32000)
     if out.get('scenes') and long_words(out) > cur:
         ep['scenes'] = out['scenes']
     return ep

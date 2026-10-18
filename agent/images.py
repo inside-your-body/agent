@@ -28,7 +28,7 @@ def thumbnail_art(prompt, out, refs=None, cast_desc=''):
     p = (f"YouTube thumbnail, 2D cartoon style matching the reference characters, ultra eye-catching, huge contrast, saturated colours, "
          f"dramatic lighting, one clear focal point readable on a small phone screen, big expressive emotion. {prompt}. "
          + (f"Characters: {cast_desc} " if cast_desc else '')
-         + "Leave clear empty space in the top third for a headline. No text, no letters, no watermark.")
+         + "Keep the bottom-left area simple and darker for a big headline. No text, no letters, no watermark.")
     return edit(p, refs or [], out, size='1536x1024', quality='high')
 
 def edit(prompt, refs, out, size='1536x1024', transparent=False, quality='medium', retries=2):

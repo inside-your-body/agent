@@ -47,10 +47,11 @@ def main():
     if not ep:
         notes = llm.research(topic['title']); (ep_dir / 'research.md').write_text(notes)
         ep = llm.write_episode(topic['title'], notes, ' | '.join(x for x in (topic.get('angle'), topic.get('format') and 'format: ' + topic['format']) if x)); save(ep_dir / 'episode.json', ep)
-        for _ in range(2):   # length guard: long >= 1480 words, short >= 110 words
-            if llm.long_words(ep) >= 1480: break
+        ep = llm.edit_episode(ep, notes); save(ep_dir / 'episode.json', ep)          # retention editor pass
+        for _ in range(2):   # length guard
+            if llm.long_words(ep) >= llm.WORDS_MIN - 60: break
             print('script too short:', llm.long_words(ep), 'words -> expanding')
-            ep = llm.expand_long(ep, notes, 1540); save(ep_dir / 'episode.json', ep)
+            ep = llm.expand_long(ep, notes, llm.WORDS_MIN + 40); save(ep_dir / 'episode.json', ep)
         if llm._wc(ep['short']['narration']) < 110:
             ep = llm.expand_short(ep, 120); save(ep_dir / 'episode.json', ep)
         print('words: long', llm.long_words(ep), 'short', llm._wc(ep['short']['narration']))
@@ -63,9 +64,10 @@ def main():
     # 3. voice (fixed narrator) + word timings
     def voice(kind):
         lines = [s for sc in ep['scenes'] for s in sc['narration']] if kind == 'long' else ep['short']['narration']
+        groups = [len(sc['narration']) for sc in ep['scenes']] if kind == 'long' else [len(lines)]
         wav = ep_dir / f'vo_{kind}.wav'
         if not wav.exists():
-            segs = tts.synth_lines(lines, wav); save(ep_dir / f'segs_{kind}.json', segs)
+            segs = tts.synth_lines(lines, wav, groups=groups); save(ep_dir / f'segs_{kind}.json', segs)
             save(ep_dir / f'words_{kind}.json', timing.words(wav))
         return load(ep_dir / f'segs_{kind}.json')[-1]['end']
     need_long = CFG['long_video']['min_seconds'] - 7 + 5      # end card adds 7 s; keep 5 s margin
@@ -84,6 +86,17 @@ def main():
             save(ep_dir / 'episode.json', ep)
             for f in (f'vo_{kind}.wav', f'segs_{kind}.json', f'words_{kind}.json'):
                 (ep_dir / f).unlink(missing_ok=True)
+
+    # 3b. the director designs one shot per sentence (after the narration is final)
+    if not ep.get('directed'):
+        shots = llm.direct(ep, 'long')
+        for sc in ep['scenes']:
+            sc['beats'] = llm.fix_shots(shots.get(sc['id'], []) or [{'at': 0, 'kind': 'slam', 'params': {'words': sc.get('title', '').split()[:3]}}], len(sc['narration']))
+        ss = llm.direct(ep, 'short')
+        ep['short']['beats'] = llm.fix_shots(ss.get('short', []) or [{'at': 0, 'kind': 'slam'}], len(ep['short']['narration']))
+        ep['directed'] = True; save(ep_dir / 'episode.json', ep)
+        from collections import Counter
+        print('shots:', Counter(b['kind'] for sc in ep['scenes'] for b in sc['beats']))
 
     # 4. illustrations + thumbnail art
     from . import assets

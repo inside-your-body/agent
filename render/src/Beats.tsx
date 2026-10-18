@@ -3,6 +3,7 @@ import {AbsoluteFill, Img, staticFile, useCurrentFrame, useVideoConfig, interpol
 import {Beat, Theme, ff, alpha} from './theme';
 import {Icon, pickIcon} from './Icons';
 import {Stickman, BodyMap, STICK_POSES} from './Figures';
+import {MOTION} from './Motion';
 
 const cl = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
 type BP = {b: Beat; t: Theme; len: number; vertical: boolean};
@@ -360,6 +361,7 @@ const KINDS: Record<string, React.FC<BP>> = {
   endcard: EndCard,
   cartoon: Cartoon, kinetic: Kinetic, illustration: Illustration, stickman: StickScene, icon: IconScene, counter: Counter, timeline: Timeline,
   chart: Chart, split: Split, checklist: Checklist, quote: Quote, body: BodyScene,
+  ...MOTION, counter: MOTION.counter2,
 };
 
 // ---------- transition wrapper ----------
@@ -371,7 +373,10 @@ export const BeatView: React.FC<BP> = (p) => {
   const inK = interpolate(f, [0, 12], [0, 1], {...cl, easing: Easing.out(Easing.cubic)});
   const outK = interpolate(f, [len - 8, len], [1, 0], {...cl, easing: Easing.in(Easing.cubic)});
   let style: React.CSSProperties = {opacity: Math.min(inK, outK)};
-  switch (t.transition) {
+  const TR = ['slide', 'rise', 'zoom', 'fade', 'wipe', 'cut', 'bounce'];
+  const h = Math.abs(Math.sin(p.b.from * 12.9898) * 43758.5453) % 1;
+  const tr = h < 0.5 ? t.transition : TR[Math.floor(h * 2 * TR.length) % TR.length];
+  switch (tr) {
     case 'slide': style.transform = `translateX(${(1 - inK) * 120 - (1 - outK) * 120}px)`; break;
     case 'rise': style.transform = `translateY(${(1 - inK) * 80 - (1 - outK) * 60}px)`; break;
     case 'zoom': style.transform = `scale(${1.25 - 0.25 * inK + (1 - outK) * 0.2})`; break;

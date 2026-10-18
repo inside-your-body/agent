@@ -87,20 +87,44 @@ def finish(video, ep_dir, kind, style):
     v = np.zeros(N); v[:min(N, len(vo))] = vo[:N]
     mus = music(dur, style.get('music', 'warm'))
     fx = np.zeros(N)
-    whoosh, pop, ding, impact = _load('whoosh.wav'), _load('pop.wav'), _load('ding.wav'), _load('impact.wav')
-    last = -9
+    SF2 = ROOT / 'render/public/sfx2'
+    cache = {}
+    def snd(name):
+        if name not in cache:
+            x, sr = sf.read(SF2 / f'{name}.wav')
+            if x.ndim > 1: x = x.mean(1)
+            x = resample_poly(x, SR, sr) if sr != SR else x
+            x = lp(x, 9000)                                   # soften: no harsh highs
+            fade = min(len(x), int(0.08 * SR)); x[-fade:] *= np.linspace(1, 0, fade)
+            cache[name] = x / max(1e-6, np.abs(x).max())
+        return cache[name]
+    VAR = {'whoosh': 3, 'pop': 4, 'impact': 3}
+    GAIN = {'whoosh': 0.13, 'pop': 0.22, 'impact': 0.28, 'tick': 0.14, 'reveal': 0.22, 'heartbeat': 0.35, 'drip': 0.25, 'bubble': 0.22,
+            'riser': 0.18, 'goo': 0.2, 'shield': 0.16, 'sparkle': 0.18, 'boom': 0.3, 'bong': 0.2, 'click': 0.15}
+    last_t, last_name, k = -9.0, None, 0
     for i, b in enumerate(p['beats']):
-        t = b['from'] / p['fps']
-        if i == 0: place(fx, impact, 0, 0.5); continue
-        if t - last < (1.5 if kind == 'short' else 5):   # sparse
-            continue
-        place(fx, whoosh, max(0, t - 0.25), 0.25); last = t
-        if b['kind'] == 'counter': place(fx, ding, t + 1.4, 0.18)
-        if b['kind'] in ('checklist', 'timeline'): place(fx, pop, t + 0.3, 0.3)
-        if b['kind'] == 'endcard': place(fx, pop, t + 1.5, 0.5)
+        t = b['from'] / p['fps']; t_end = b['to'] / p['fps']
+        name = b.get('sfx')
+        if name in (None, '', 'none'):
+            # default: an occasional soft whoosh on a cut, never dense
+            if i > 0 and t - last_t > (4 if kind == 'short' else 9) and i % 3 == 0: name = 'whoosh'
+            else: continue
+        if name == last_name and name not in ('tick', 'heartbeat') and t - last_t < 12: continue
+        base = name
+        if name in VAR: k += 1; name = f'{name}{1 + k % VAR[base]}'
+        try: x = snd(name)
+        except Exception: continue
+        g = GAIN.get(base, 0.2)
+        if base == 'riser': place(fx, x, max(0, t - len(x) / SR + 0.1), g)
+        elif base in ('heartbeat', 'tick'):
+            step = 0.86 if base == 'heartbeat' else 1.0
+            tt = t
+            while tt < min(t_end, t + 6): place(fx, x, tt, g); tt += step
+        else: place(fx, x, max(0, t - (0.2 if base == 'whoosh' else 0)), g)
+        last_t, last_name = t, base
     env = np.convolve(np.abs(v), np.ones(int(0.2 * SR)) / int(0.2 * SR), 'same')
     duck = 1 - 0.6 * np.clip(env / 0.04, 0, 1)
-    mix = v * 1.0 + mus * (0.16 if kind == 'long' else 0.22) * duck + fx * 0.5
+    mix = v * 1.0 + mus * (0.15 if kind == 'long' else 0.2) * duck + fx * 0.55
     mix /= np.abs(mix).max() / 0.95
     wav = ep_dir / f'mix_{kind}.wav'
     sf.write(wav, np.stack([mix, mix], 1).astype(np.float32), SR)

@@ -49,7 +49,7 @@ export const Stickman: React.FC<{pose?: string; color: string; size: number; acc
 };
 
 // ---------- Human body silhouette with highlightable organs ----------
-const ORGANS: Record<string, {x: number; y: number; rx: number; ry: number}> = {
+export const ORGANS: Record<string, {x: number; y: number; rx: number; ry: number}> = {
   brain: {x: 100, y: 32, rx: 16, ry: 12}, eyes: {x: 100, y: 40, rx: 12, ry: 4}, mouth: {x: 100, y: 54, rx: 7, ry: 3},
   throat: {x: 100, y: 70, rx: 6, ry: 8}, lungs: {x: 100, y: 110, rx: 30, ry: 22}, heart: {x: 106, y: 116, rx: 10, ry: 10},
   liver: {x: 88, y: 140, rx: 20, ry: 10}, stomach: {x: 112, y: 145, rx: 14, ry: 11}, pancreas: {x: 104, y: 156, rx: 14, ry: 4},
@@ -58,7 +58,7 @@ const ORGANS: Record<string, {x: number; y: number; rx: number; ry: number}> = {
   blood: {x: 100, y: 120, rx: 14, ry: 14}, gut: {x: 100, y: 180, rx: 24, ry: 16}, immune: {x: 100, y: 120, rx: 16, ry: 16},
 };
 export const ORGAN_NAMES = Object.keys(ORGANS);
-const BODY = 'M100 14 C114 14 122 26 122 40 C122 54 114 64 106 66 L106 74 C124 76 140 82 146 96 L156 170 C158 180 152 184 148 176 L136 120 L134 200 L130 300 C130 310 118 310 118 300 L110 210 L100 210 L90 210 L82 300 C82 310 70 310 70 300 L66 200 L64 120 L52 176 C48 184 42 180 44 170 L54 96 C60 82 76 76 94 74 L94 66 C86 64 78 54 78 40 C78 26 86 14 100 14 Z';
+export const BODY = 'M100 14 C114 14 122 26 122 40 C122 54 114 64 106 66 L106 74 C124 76 140 82 146 96 L156 170 C158 180 152 184 148 176 L136 120 L134 200 L130 300 C130 310 118 310 118 300 L110 210 L100 210 L90 210 L82 300 C82 310 70 310 70 300 L66 200 L64 120 L52 176 C48 184 42 180 44 170 L54 96 C60 82 76 76 94 74 L94 66 C86 64 78 54 78 40 C78 26 86 14 100 14 Z';
 
 export const BodyMap: React.FC<{organ?: string | null; t: Theme; height: number; progress: number}> = ({organ, t, height, progress}) => {
   const f = useCurrentFrame();

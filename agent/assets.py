@@ -75,30 +75,20 @@ def thumbnail(ep, style, ep_dir):
     else:
         im = Image.new('RGB', (W, H), style['bg'])
     # top gradient for the headline
-    grad = Image.new('L', (1, H)); [grad.putpixel((0, y), int(max(0, 210 - y * 0.75))) for y in range(H)]
+    # bottom gradient + two big lines bottom-left: line1 white, line2 yellow (plain sentence naming the topic + curiosity)
+    grad = Image.new('L', (1, H)); [grad.putpixel((0, y), int(max(0, (y - H * 0.45) / (H * 0.55)) * 190)) for y in range(H)]
     im.paste(Image.new('RGB', (W, H), '#000'), (0, 0), grad.resize((W, H)))
     d = ImageDraw.Draw(im)
-    big = (th.get('big_text') or ep['title']).upper()
-    words = big.split()
-    lines, cur = [], ''
-    for w in words:
-        if len(cur + ' ' + w) > 16 and cur: lines.append(cur); cur = w
-        else: cur = (cur + ' ' + w).strip()
-    lines.append(cur); lines = lines[:2]
-    size = 118 if max(len(l) for l in lines) <= 12 else 96
+    l1 = (th.get('line1') or th.get('big_text') or ep['title']).upper().strip()
+    l2 = (th.get('line2') or th.get('small_text') or '').upper().strip()
+    lines = [x for x in (l1, l2) if x]
+    size = 112
+    while size > 60 and max(d.textlength(l, font=_font('anton', size)) for l in lines) > W - 90: size -= 4
     f = _font('anton', size)
-    y = 26
+    y = H - 40 - int(size * 1.1) * len(lines)
     for i, l in enumerate(lines):
-        col = style['accent'] if i == len(lines) - 1 else '#FFFFFF'
-        tw = d.textlength(l, font=f)
-        d.text(((W - tw) / 2, y), l, font=f, fill=col, stroke_width=8, stroke_fill='#000000')
-        y += int(size * 1.02)
-    small = th.get('small_text')
-    if small:
-        fs = _font('anton', 54); tw = d.textlength(small.upper(), font=fs)
-        bx = (W - tw) / 2 - 22
-        d.rounded_rectangle([bx, H - 110, bx + tw + 44, H - 34], radius=12, fill=style['accent'])
-        d.text((bx + 22, H - 106), small.upper(), font=fs, fill='#000000' if style['accent'] not in ('#111111',) else '#FFFFFF')
+        d.text((44, y), l, font=f, fill='#FFFFFF' if i == 0 and len(lines) > 1 else '#FFD23D', stroke_width=11, stroke_fill='#000000')
+        y += int(size * 1.1)
     out = ep_dir / 'thumbnail.jpg'
     im.save(out, quality=92)
     return out
