@@ -184,6 +184,7 @@ re-built in front of them, sentence by sentence, with motion graphics, 2D drawin
 Rules:
 - {rule}
 - The shot must depict the sentence's concrete content (the organ, the particle, the number, the action, the character). Never a generic visual.
+- HARD LIMITS for the long video: at most 10 cartoon and 12 illustration shots in total; everything else must be motion-graphics kinds.
 - Never the same kind twice in a row. Vary layouts/actions. Use cartoon/illustration of the cast at story moments (characters acting).
 - On-screen text max 6 words, never the whole sentence; put 1 key word in CAPS.
 - "sfx": none|whoosh|pop|impact|tick|reveal|heartbeat|drip|bubble|riser|goo|shield|sparkle — only where it helps (about 1 in 3 shots), never harsh, never twice in a row.
