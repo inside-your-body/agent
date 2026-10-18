@@ -12,7 +12,7 @@
  },
  {
   "id": 300,
-  "title": "Why Your Breath Smells Bad (It's Not What You Think)",
+  "title": "Why Does Your Breath Smell Bad?",
   "angle": "Mystery story: the real sources of bad breath — bacteria colonies on the tongue, sulfur gases, dry mouth, tonsil stones, the gut myth. Zoom into the tongue as a city of bacteria.",
   "format": "mystery",
   "status": "next",
@@ -20,7 +20,7 @@
  },
  {
   "id": 301,
-  "title": "How a Perfect Tooth Rots From the Inside",
+  "title": "How Does a Healthy Tooth Rot?",
   "angle": "Follow one healthy tooth: sugar, acid-making bacteria, enamel erosion, the cavity reaching the nerve, abscess — and how it spreads trouble to the neighbouring teeth. Timeline over months.",
   "format": "journey",
   "status": "todo",
@@ -28,7 +28,7 @@
  },
  {
   "id": 302,
-  "title": "How the Flu Jumps From One Person to 100",
+  "title": "How Does the Flu Spread From Person to Person?",
   "angle": "Outbreak story: one sneeze, droplets in the air, a door handle, the virus hijacking cells, incubation, how one person seeds an outbreak. Contagion map motion graphics.",
   "format": "outbreak",
   "status": "todo",
@@ -36,7 +36,7 @@
  },
  {
   "id": 303,
-  "title": "What a Cold Pill Actually Does Inside You",
+  "title": "What Does a Cold Pill Do Inside Your Body?",
   "angle": "The pill as a character: swallowed, dissolves, enters blood; what it really fixes (symptoms) vs. what the immune system does to the virus.",
   "format": "journey",
   "status": "todo",
@@ -44,7 +44,7 @@
  },
  {
   "id": 304,
-  "title": "Your Body Without Sleep: Hour 1 to Hour 72",
+  "title": "What Happens to Your Body When You Don't Sleep?",
   "angle": "Hour-by-hour timeline of staying awake: micro-sleeps, hormones, hallucinations, then the recovery.",
   "format": "timeline",
   "status": "todo",
@@ -60,7 +60,7 @@
  },
  {
   "id": 306,
-  "title": "What a Stroke Does to Your Brain, Minute by Minute",
+  "title": "What Happens in Your Brain During a Stroke?",
   "angle": "Brain blackout story: a clot or bleed, 1.9 million neurons per minute, FAST signs, recovery and rewiring.",
   "format": "timeline",
   "status": "todo",
@@ -68,7 +68,7 @@
  },
  {
   "id": 307,
-  "title": "How Your Body Heals a Cut, Second by Second",
+  "title": "How Does Your Body Heal a Cut?",
   "angle": "Platelets plug the leak, clotting cascade, white blood cells clean up, new skin, scar.",
   "format": "timeline",
   "status": "todo",
@@ -84,7 +84,7 @@
  },
  {
   "id": 309,
-  "title": "What Drinking Milk Every Day Really Does",
+  "title": "What Happens If You Drink Milk Every Day?",
   "angle": "Follow a glass of milk: calcium, protein, lactase, myths vs. research.",
   "format": "habit",
   "status": "todo",

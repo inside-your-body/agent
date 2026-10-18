@@ -61,6 +61,7 @@ The whole video is ONE story with characters, told by the narrator.
   make our own version of the same idea — never copy, but don't be afraid to cover what already works.
 
 ## Upload package
-Title ≤ 70 chars, curiosity + search keyword ("What Happens Inside Your Body When…"). Every title different in wording.
+Title ≤ 70 chars: a plain, clear question or statement that names the topic the way people search it
+("Why Does Your Breath Smell Bad?", "What Happens Inside Your Body When You Get an IV Drip?"). Every title different in wording.
 Description: 2-line hook, what you'll see, chapters, sources, 3–5 hashtags. 15–20 tags. Pinned comment with a question.
 Short: title ≤ 60 chars + #Shorts, link to the full episode.
