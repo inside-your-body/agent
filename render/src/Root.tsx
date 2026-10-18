@@ -2,6 +2,7 @@ import React from 'react';
 import {Composition} from 'remotion';
 import {Episode} from './Episode';
 import {Props} from './theme';
+import {ProtoIV} from './ProtoIV';
 
 const demo: Props = {kind: 'long', fps: 30, frames: 150, channel: 'Inside Your Body', title: 'demo', words: [],
   theme: {id: 'paper-ink', bg: '#F1EDE4', bg2: '#E6DFD1', fg: '#1B1B1B', muted: '#6B6457', accent: '#E3241B', accent2: '#E8B21C', accent3: '#22B573',
@@ -14,5 +15,7 @@ export const Root: React.FC = () => (
       calculateMetadata={({props}) => ({durationInFrames: (props as any).frames, fps: (props as any).fps})} />
     <Composition id="Short" component={Episode as any} width={1080} height={1920} fps={30} durationInFrames={150} defaultProps={{...demo, kind: 'short'}}
       calculateMetadata={({props}) => ({durationInFrames: (props as any).frames, fps: (props as any).fps})} />
+    <Composition id="ProtoIV" component={ProtoIV as any} width={1920} height={1080} fps={30} durationInFrames={300} defaultProps={{fps: 30, frames: 300, sent: [], words: []}}
+      calculateMetadata={({props}) => ({durationInFrames: (props as any).frames})} />
   </>
 );

@@ -51,7 +51,7 @@ Here are videos getting the most views per day on YouTube right now (title, chan
 Our existing topics (do not repeat or closely duplicate): {json.dumps(existing, ensure_ascii=False)}
 
 Find what health/body themes and title patterns are pulling views (ignore music, games, kids, religion, non-health).
-Propose 6 NEW topics we could make better, each with a curiosity-gap title (not copied from any video), a story angle
+Topics that already pulled millions of views are the best bets: propose 6 NEW topics that are our own version of those proven ideas (same curiosity, our story angle, never a copy), each with a curiosity-gap title (not copied from any video), a story angle
 for an 8–9 minute animated story, a format (timeline|journey|mystery|compilation|outbreak|habit|signs) and the evidence.
 Return JSON: {{"trends": "2-3 sentences", "topics": [{{"title": str, "angle": str, "format": str, "evidence": str}}]}}""",
         max_tokens=6000)

@@ -50,10 +50,15 @@ The whole video is ONE story with characters, told by the narrator.
 - Keep text inside safe areas; never overlap captions with graphics. Never show gore.
 
 ## Thumbnail
-- One clear, emotional cartoon image (our character's shocked face, the pill hero facing a virus army, a glowing organ...),
-  huge contrast, readable on a phone.
-- big_text: 2–4 punchy curiosity words that do NOT repeat the title ("YOUR LIVER PANICS", "HOUR 6 IS WILD", "NOBODY TELLS YOU").
-  small_text: optional 2–4 words.
+- The viewer must understand the TOPIC at a glance: a topic tag with the subject in 1–3 words ("IV DRIP", "BAD BREATH",
+  "HEART ATTACK", "NO SLEEP 72H") + a curiosity line of 2–4 words that makes them want the answer
+  ("WHAT HAPPENS INSIDE YOU?", "WHERE DOES IT GO?", "HOUR 6 IS WILD").
+- One clear, emotional cartoon image (shocked face, the hero facing the villain, a glowing organ), huge contrast, phone-readable.
+- thumbnail.big_text = the topic tag; thumbnail.small_text = the curiosity line.
+
+## Topics
+- Model topics and title patterns on health videos that are PROVEN to get millions of views (the weekly scout finds them):
+  make our own version of the same idea — never copy, but don't be afraid to cover what already works.
 
 ## Upload package
 Title ≤ 70 chars, curiosity + search keyword ("What Happens Inside Your Body When…"). Every title different in wording.
