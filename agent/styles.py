@@ -27,8 +27,9 @@ def fetch_refs():
                     new.append(guid)
         except Exception as e:
             print('pinterest feed error', url, e)
-    # analyse up to 12 new pins per run (cost control)
-    for g in new[:12]:
+    # analyse up to 12 not-yet-analysed pins per run (cost control); give up on a pin after 2 failures
+    todo = [g for g, v in refs.items() if not v.get('analysis') and v.get('fails', 0) < 2][:12]
+    for g in todo:
         try:
             refs[g]['analysis'] = llm.ask_json_image(
                 refs[g]['img'],
@@ -36,6 +37,7 @@ def fetch_refs():
                 'Return JSON: {"palette": [5 hex colours, background first], "dark": bool, "typography": "e.g. heavy condensed sans / rounded / serif", '
                 '"motion": "how elements would animate", "mood": "3-6 words", "fit_topics": "what health topics it suits"}')
         except Exception as e:
+            refs[g]['fails'] = refs[g].get('fails', 0) + 1
             print('ref analysis failed', e)
     save(REFS, refs)
     return refs
@@ -61,7 +63,7 @@ FONTS = ['anton', 'inter', 'spacemono', 'bebas', 'montserrat', 'playfair', 'popp
 TRANSITIONS = ['slide', 'rise', 'zoom', 'fade', 'wipe', 'glitch', 'bounce', 'cut']
 PATTERNS = ['grid', 'dots', 'halftone', 'scan', 'gradient', 'paper', 'grain']
 
-def choose(topic, ep, used, ep_dir, vertical=False):
+def choose(topic, ep, used, ep_dir, vertical=False, avoid=None):
     recent = [u for u in used if u][-5:]
     candidates = [k for k in BASE if k not in [r.split('+')[0] for r in recent]] or list(BASE)
     refs = {}
@@ -83,6 +85,7 @@ You may re-tint the chosen theme: return replacement hex colours ONLY if they ke
 "transition": one of {TRANSITIONS}|null, "pattern": one of {PATTERNS}|null,
 "refs_used": [short description of the Pinterest refs whose typography/motion ideas you borrowed],
 "why": "one sentence"}}
+{('This Short must look clearly different from the long video, which uses: ' + json.dumps({k: avoid.get(k) for k in ('id', 'fontHead', 'transition', 'pattern', 'bg')}) + ' -> use a different fontHead and transition.') if avoid else ''}
 Borrow the TYPOGRAPHY and MOTION-GRAPHICS feel (font character, caps, transitions, backgrounds) from the references, not just colours.""", max_tokens=1200)
     except Exception as e:
         print('style pick failed', e)
@@ -98,6 +101,11 @@ Borrow the TYPOGRAPHY and MOTION-GRAPHICS feel (font character, caps, transition
         for k, allowed in (('fontHead', FONTS), ('fontBody', FONTS), ('transition', TRANSITIONS), ('pattern', PATTERNS)):
             if pick.get(k) in allowed: theme[k] = pick[k]
         if isinstance(pick.get('upper'), bool): theme['upper'] = pick['upper']
+    if avoid:   # guarantee the Short differs from the long video
+        if theme.get('fontHead') == avoid.get('fontHead'):
+            theme['fontHead'] = random.choice([f for f in ('anton', 'bebas', 'archivoblack', 'fredoka', 'poppins', 'playfair') if f != avoid.get('fontHead')])
+        if theme.get('transition') == avoid.get('transition'):
+            theme['transition'] = random.choice([x for x in TRANSITIONS if x not in (avoid.get('transition'), 'cut')])
     save(ep_dir / f"style_{'short' if vertical else 'long'}.json", {**theme, 'why': (pick or {}).get('why'), 'refs_used': (pick or {}).get('refs_used')})
     print('style:', theme['id'])
     return theme

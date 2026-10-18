@@ -73,7 +73,7 @@ def ask_json(prompt, **kw):
     raise RuntimeError('no JSON from Claude')
 
 def ask_json_image(url, prompt):
-    return ask_json(prompt, image_url=url, max_tokens=600)
+    return ask_json(prompt, image_url=url, max_tokens=3000)
 
 RULES = (ROOT / 'config/rules.md').read_text()
 
@@ -120,16 +120,16 @@ Research notes (only use facts from here):
 {notes}
 
 Write the full episode as a cartoon story with a recurring cast.
-Narration must total 1500–1600 words (our narrator reads ~2.9 words/s → ≈ 8:30–9:10). Count carefully: under 1480 words is a failure.
+Narration must total 1500–1600 words (our narrator reads ~2.9 words/s → ≈ 8:30–9:10). Count carefully: under 1480 or over 1700 words is a failure.
 Use 10–14 scenes. Every scene needs 3–8 beats so the visuals change every 6–12 seconds; the first beat of every scene has "at": 0.
 Visual mix — MOTION GRAPHICS + TYPOGRAPHY are the backbone (at least 60% of beats): kinetic type, counter, chart, timeline,
 body map, split, checklist, quote, icon, stickman — explain the science with them. The cartoon cast complements them:
 "cartoon" full scenes for 8–10 key story moments and "illustration" cut-outs of the cast (with a motion) for 5–8 moments.
-Never two cartoon beats in a row; no kind more than 30% of beats.
+Never two cartoon beats in a row; no kind more than 30% of beats. Use "icon" only for a concrete object (heart, pill, clock, water, brain...) named in "value".
 "body" when an organ is discussed; numbers from research go in "counter" or "chart".
 On-screen "text" is short (max 7 words) and never just repeats the whole sentence. Mark 1 key word per text in CAPS.
 Explain what happens — never lecture or tell the viewer what to do.
-Then write the Short (115–135 words, ≈ 40–46 s; loops back to its first line; it may use up to 3 "cartoon" beats) and the upload package.
+Then write the Short (115–135 words, ≈ 40–46 s; loops back to its first line; it may use up to 3 "cartoon" beats; give EVERY short sentence its own beat (at = 0,1,2,...) so the picture changes every 2–3 s, mixing kinetic, counter, chart, body, split, illustration of the cast) and the upload package.
 The description must include a "Chapters" section using the placeholder {{CHAPTERS}} which the system fills in.
 Schema (comments after // are explanations, do not output them):
 {EPISODE_SCHEMA}""", max_tokens=40000)

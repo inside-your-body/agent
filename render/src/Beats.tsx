@@ -161,7 +161,12 @@ const StickScene: React.FC<BP> = ({b, t, vertical}) => {
   );
 };
 
-const IconScene: React.FC<BP> = ({b, t, vertical}) => {
+const IconScene: React.FC<BP> = (p) => {
+  const name0 = pickIcon(p.b.value, p.b.text);
+  if (!name0) return <Kinetic {...p} />;   // no matching icon -> typography instead of a generic check mark
+  return <IconInner {...p} />;
+};
+const IconInner: React.FC<BP> = ({b, t, vertical}) => {
   const f = useCurrentFrame();
   const name = pickIcon(b.value, b.text) || 'check';
   const draw = interpolate(f, [0, 26], [0, 1], {...cl, easing: Easing.inOut(Easing.cubic)});

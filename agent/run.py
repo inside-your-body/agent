@@ -53,7 +53,7 @@ def main():
     # 2. style (Pinterest board refs -> new style spec, never one of the last used)
     from . import styles
     style = styles.choose(topic['title'], ep, load(ROOT / 'data/history.json')['used_styles'], ep_dir)
-    short_style = styles.choose(topic['title'] + ' short', ep, load(ROOT / 'data/history.json')['used_styles'] + [style['id']], ep_dir, vertical=True)
+    short_style = styles.choose(topic['title'] + ' short', ep, load(ROOT / 'data/history.json')['used_styles'] + [style['id']], ep_dir, vertical=True, avoid=style)
 
     # 3. voice (fixed narrator) + word timings
     def voice(kind):

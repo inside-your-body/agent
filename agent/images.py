@@ -54,7 +54,7 @@ CARTOON = ("Polished 2D cartoon animation still, flat vector shapes with soft sh
 
 def cast_ref(c, style_hint, out):
     p = (CARTOON.format(style=style_hint) + f" Character design reference: {c['name']} — {c['look']}. "
-         "Single full-body character, front three-quarter view, friendly pose, centered, isolated on a transparent background.")
+         "Single full-body character, front three-quarter view, friendly pose, centered. Fully transparent background: no backdrop, no frame, no panel, no decorative lines or icons behind the character.")
     return gen(p, out, size='1024x1024', transparent=True)
 
 def cast_text(cast, ids):
@@ -68,5 +68,5 @@ def cartoon_scene(prompt, cast, ids, refs, style_hint, out, vertical=False):
 def sprite(prompt, cast, ids, refs, style_hint, out):
     p = (CARTOON.format(style=style_hint) + f" Subject: {prompt}. "
          + (f"Characters (keep them EXACTLY as in the reference images): {cast_text(cast, ids)} " if ids else '')
-         + "Isolated on a transparent background, centered, full body visible.")
+         + "Cut-out isolated on a fully transparent background: no backdrop, no frame, no panel, no decorative lines; centered, full body visible.")
     return edit(p, refs, out, size='1024x1024', transparent=True, quality='low')
