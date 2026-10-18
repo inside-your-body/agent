@@ -47,7 +47,7 @@ def _openai_tts(text):
             r = requests.post('https://api.openai.com/v1/audio/speech', timeout=300,
                               headers={'Authorization': 'Bearer ' + os.environ['OPENAI_API_KEY']},
                               json={'model': oa.get('model', 'gpt-4o-mini-tts'), 'voice': oa.get('voice', 'ballad'), 'input': text,
-                                    'instructions': oa.get('instructions', ''), 'response_format': 'wav', 'speed': oa.get('speed', 1.0)})
+                                    'instructions': oa.get('instructions', ''), 'response_format': 'wav'})
             r.raise_for_status()
             a_, sr = sf.read(io.BytesIO(r.content), dtype='float32')
             if a_.ndim > 1: a_ = a_.mean(1)
