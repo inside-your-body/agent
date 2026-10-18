@@ -38,9 +38,17 @@ def main():
 
     # 1. research + script
     ep = load(ep_dir / 'episode.json')
+    notes = (ep_dir / 'research.md').read_text() if (ep_dir / 'research.md').exists() else ''
     if not ep:
         notes = llm.research(topic['title']); (ep_dir / 'research.md').write_text(notes)
         ep = llm.write_episode(topic['title'], notes); save(ep_dir / 'episode.json', ep)
+        for _ in range(2):   # length guard: long >= 1420 words, short >= 110 words
+            if llm.long_words(ep) >= 1420: break
+            print('script too short:', llm.long_words(ep), 'words -> expanding')
+            ep = llm.expand_long(ep, notes, 1480); save(ep_dir / 'episode.json', ep)
+        if llm._wc(ep['short']['narration']) < 110:
+            ep = llm.expand_short(ep, 120); save(ep_dir / 'episode.json', ep)
+        print('words: long', llm.long_words(ep), 'short', llm._wc(ep['short']['narration']))
 
     # 2. style (Pinterest board refs -> new style spec, never one of the last used)
     from . import styles
@@ -48,11 +56,29 @@ def main():
     short_style = styles.choose(topic['title'] + ' short', ep, load(ROOT / 'data/history.json')['used_styles'] + [style['id']], ep_dir, vertical=True)
 
     # 3. voice (fixed narrator) + word timings
-    for kind, lines in (('long', [s for sc in ep['scenes'] for s in sc['narration']]), ('short', ep['short']['narration'])):
+    def voice(kind):
+        lines = [s for sc in ep['scenes'] for s in sc['narration']] if kind == 'long' else ep['short']['narration']
         wav = ep_dir / f'vo_{kind}.wav'
         if not wav.exists():
             segs = tts.synth_lines(lines, wav); save(ep_dir / f'segs_{kind}.json', segs)
             save(ep_dir / f'words_{kind}.json', timing.words(wav))
+        return load(ep_dir / f'segs_{kind}.json')[-1]['end']
+    need_long = CFG['long_video']['min_seconds'] - 7 + 5      # end card adds 7 s; keep 5 s margin
+    need_short = CFG['short']['min_seconds'] - 0.4
+    for kind, need in (('long', need_long), ('short', need_short)):
+        for attempt in range(3):
+            vo = voice(kind)
+            print(f'voice {kind}: {vo:.1f}s (need {need:.0f}s)')
+            if vo >= need or attempt == 2: break
+            if kind == 'long':
+                rate = llm.long_words(ep) / vo
+                ep = llm.expand_long(ep, notes, int(need * rate * 1.06))
+            else:
+                rate = llm._wc(ep['short']['narration']) / vo
+                ep = llm.expand_short(ep, int(need * rate * 1.08) + 4)
+            save(ep_dir / 'episode.json', ep)
+            for f in (f'vo_{kind}.wav', f'segs_{kind}.json', f'words_{kind}.json'):
+                (ep_dir / f).unlink(missing_ok=True)
 
     # 4. illustrations + thumbnail art
     from . import assets

@@ -110,12 +110,51 @@ Topic: "{topic}"
 Research notes (only use facts from here):
 {notes}
 
-Write the full episode. Narration must total 1250–1350 words (≈ 8:15 at our narrator speed).
+Write the full episode. Narration must total 1450–1550 words (our narrator reads ~2.9 words/s, so this is ≈ 8:20–8:50). Count carefully: under 1400 words is a failure.
 Use 9–13 scenes. Every scene needs 3–8 beats so the visuals change every 6–12 seconds; the first beat of every scene has "at": 0.
 Mix beat kinds (no kind more than 30% of beats). Use "illustration" for 8–12 key moments (characters, organs, objects, situations);
 "body" when an organ is discussed; "stickman" for everyday human situations; numbers from research go in "counter" or "chart".
 On-screen "text" is short (max 7 words) and never just repeats the whole sentence. Mark 1 key word per text in CAPS.
-Then write the Short (95–120 words, loops back to its first line) and the upload package.
+Then write the Short (115–135 words, ≈ 40–46 s; loops back to its first line) and the upload package.
 The description must include a "Chapters" section using the placeholder {{CHAPTERS}} which the system fills in.
 Schema (comments after // are explanations, do not output them):
 {EPISODE_SCHEMA}""", max_tokens=32000)
+
+
+def _wc(lines):
+    return sum(len(x.split()) for x in lines)
+
+def long_words(ep):
+    return _wc([s for sc in ep['scenes'] for s in sc['narration']])
+
+def expand_long(ep, notes, target):
+    """Rewrite the scenes so narration reaches `target` words, keeping style, story and beat format."""
+    cur = long_words(ep)
+    out = ask_json(f"""You are the head writer of "Inside Your Body". This episode script is too SHORT: {cur} words of narration.
+It must reach {target}–{target + 100} words (videos must be over 8 minutes). Follow the channel rules:
+{RULES}
+
+Research notes (only use facts from here):
+{notes}
+
+Current scenes JSON:
+{json.dumps(ep['scenes'], ensure_ascii=False)}
+
+Return ONLY a JSON object {{"scenes": [...]}} with the same schema. Keep the hook and the story arc, keep scene ids/titles where possible,
+but deepen every scene: add a concrete everyday example, a "what's happening inside" explanation, a surprising fact from the notes, and
+open loops that carry viewers to the next scene. You may add 1–3 new scenes. Add beats for the new sentences ("at" = sentence index in that scene)
+so visuals still change every 6–12 seconds. Total narration MUST be at least {target} words.""", max_tokens=32000)
+    if out.get('scenes') and long_words(out) > cur:
+        ep['scenes'] = out['scenes']
+    return ep
+
+def expand_short(ep, target_words):
+    sh = ep['short']; cur = _wc(sh['narration'])
+    out = ask_json(f"""This YouTube Short script for "Inside Your Body" is too short ({cur} words). Rewrite it to {target_words}–{target_words + 12} words
+(40–46 seconds). Keep the hook as the first line, fast punchy sentences, and make the last line loop back into the first.
+Current short JSON:
+{json.dumps(sh, ensure_ascii=False)}
+Return ONLY the full short JSON object with the same keys (narration list, beats with "at" sentence indexes, etc.).""", max_tokens=8000)
+    if out.get('narration') and _wc(out['narration']) > cur:
+        ep['short'] = {**sh, **out}
+    return ep
