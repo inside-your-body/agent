@@ -59,6 +59,8 @@ jobs:
             work/*/qa/*.jpg
             work/*/research.md
             work/raw_fail_*.txt
+            work/cost.json
+            work/*/assets/cast_*.png
             work/*/style_*.json
           retention-days: 14
       - name: Commit topic/history updates

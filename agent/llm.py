@@ -42,6 +42,7 @@ def ask(prompt, system='', max_tokens=16000, web_search=False, retries=4, image_
             r.raise_for_status()
             j = r.json()
             txt = ''.join(b.get('text', '') for b in j.get('content', []) if b.get('type') == 'text')
+            from . import cost; cost.claude(j.get('usage'))
             print(f"claude: stop={j.get('stop_reason')} usage={j.get('usage')} blocks={[b.get('type') for b in j.get('content', [])]} chars={len(txt)}", flush=True)
             return txt
         except Exception as e:
@@ -121,12 +122,12 @@ Research notes (only use facts from here):
 Write the full episode as a cartoon story with a recurring cast.
 Narration must total 1500–1600 words (our narrator reads ~2.9 words/s → ≈ 8:30–9:10). Count carefully: under 1480 words is a failure.
 Use 10–14 scenes. Every scene needs 3–8 beats so the visuals change every 6–12 seconds; the first beat of every scene has "at": 0.
-Visual mix: "cartoon" full scenes with the cast for 10–14 key story moments; "illustration" cut-outs (often a cast member with a motion)
-for 6–10 moments; the rest kinetic, body, counter, chart, timeline, split, checklist, stickman (no kind more than 35% of beats).
+Visual mix: "cartoon" full scenes with the cast for exactly 10–12 key story moments; "illustration" cut-outs (often a cast member with a motion)
+for 6–8 moments; the rest kinetic, body, counter, chart, timeline, split, checklist, stickman (no kind more than 35% of beats).
 "body" when an organ is discussed; numbers from research go in "counter" or "chart".
 On-screen "text" is short (max 7 words) and never just repeats the whole sentence. Mark 1 key word per text in CAPS.
 Explain what happens — never lecture or tell the viewer what to do.
-Then write the Short (115–135 words, ≈ 40–46 s; loops back to its first line; it may use 3–5 "cartoon" beats) and the upload package.
+Then write the Short (115–135 words, ≈ 40–46 s; loops back to its first line; it may use up to 3 "cartoon" beats) and the upload package.
 The description must include a "Chapters" section using the placeholder {{CHAPTERS}} which the system fills in.
 Schema (comments after // are explanations, do not output them):
 {EPISODE_SCHEMA}""", max_tokens=40000)

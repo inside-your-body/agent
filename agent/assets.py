@@ -5,9 +5,10 @@ from .common import ROOT, save, load
 from . import images
 
 FONTS = ROOT / 'render/public/fonts'
-MAX_ILLUSTRATIONS = 14
+MAX_ILLUSTRATIONS = 8    # cut-outs, low quality (economy mode)
 
-MAX_CARTOONS = 16
+MAX_CARTOONS = 12        # long video full scenes, medium quality
+MAX_CARTOONS_SHORT = 3
 
 def build(ep, style, ep_dir):
     """Cast reference sheets -> cartoon scenes + cut-out illustrations (long + short), all consistent with the cast."""
@@ -20,16 +21,20 @@ def build(ep, style, ep_dir):
         p = out / f"cast_{c['id']}.png"
         if p.exists() or images.cast_ref(c, hint, p):
             refs[c['id']] = str(p)
-    n_img = n_cart = 0
+    n_img = n_cart = n_cart_v = 0
     groups = [(b, False) for sc in ep['scenes'] for b in sc['beats']] + [(b, True) for b in ep['short'].get('beats', [])]
     for b, vertical in groups:
         ids = [i for i in (b.get('cast') or []) if i in refs]
         r = [refs[i] for i in ids] or list(refs.values())[:1]
         if b.get('kind') == 'cartoon':
-            key = ('cartoon_v_%02d.png' if vertical else 'cartoon_%02d.png') % n_cart
+            k = n_cart_v if vertical else n_cart
+            key = ('cartoon_v_%02d.png' if vertical else 'cartoon_%02d.png') % k
             p = out / key
-            if b.get('illustration') and n_cart < MAX_CARTOONS and (p.exists() or images.cartoon_scene(b['illustration'], cast, ids, r, hint, p, vertical)):
-                b['img'] = 'ep/' + key; n_cart += 1
+            ok = k < (MAX_CARTOONS_SHORT if vertical else MAX_CARTOONS)
+            if b.get('illustration') and ok and (p.exists() or images.cartoon_scene(b['illustration'], cast, ids, r, hint, p, vertical)):
+                b['img'] = 'ep/' + key
+                if vertical: n_cart_v += 1
+                else: n_cart += 1
             else:
                 b['kind'] = 'illustration'
         if b.get('kind') == 'illustration' and not b.get('img'):
@@ -41,7 +46,7 @@ def build(ep, style, ep_dir):
             else:
                 b['kind'] = 'icon'   # graceful fallback
     save(ep_dir / 'episode.json', ep)
-    print('cast:', len(refs), 'cartoon scenes:', n_cart, 'illustrations:', n_img)
+    print('cast:', len(refs), 'cartoon scenes:', n_cart, '+ short', n_cart_v, 'illustrations:', n_img)
 
 def _font(name, size):
     try:

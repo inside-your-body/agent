@@ -12,6 +12,7 @@ def gen(prompt, out, size='1024x1024', transparent=False, quality='medium', retr
         try:
             r = requests.post(API, headers={'Authorization': 'Bearer ' + os.environ['OPENAI_API_KEY']}, json=body, timeout=300)
             r.raise_for_status()
+            from . import cost; cost.image(r.json().get('usage'), f"{pathlib.Path(out).name} {size} {quality}")
             pathlib.Path(out).write_bytes(base64.b64decode(r.json()['data'][0]['b64_json']))
             return out
         except Exception as e:
@@ -21,7 +22,7 @@ def gen(prompt, out, size='1024x1024', transparent=False, quality='medium', retr
 def illustration(prompt, style_hint, out):
     p = (f"Flat 2D vector illustration for an animated health explainer, {style_hint}. Subject: {prompt}. "
          "Clean shapes, no text, no letters, no watermark, isolated on a transparent background, centered, friendly, not gory.")
-    return gen(p, out, transparent=True)
+    return gen(p, out, transparent=True, quality='low')
 
 def thumbnail_art(prompt, out, refs=None, cast_desc=''):
     p = (f"YouTube thumbnail, 2D cartoon style matching the reference characters, ultra eye-catching, huge contrast, saturated colours, "
@@ -41,6 +42,7 @@ def edit(prompt, refs, out, size='1536x1024', transparent=False, quality='medium
                 files = [('image[]', (pathlib.Path(r).name, open(r, 'rb'), 'image/png')) for r in refs]
                 r = requests.post(EDIT_API, headers={'Authorization': 'Bearer ' + os.environ['OPENAI_API_KEY']}, data=data, files=files, timeout=300)
                 r.raise_for_status()
+                from . import cost; cost.image(r.json().get('usage'), f"{pathlib.Path(out).name} {size} {quality} edit")
                 pathlib.Path(out).write_bytes(base64.b64decode(r.json()['data'][0]['b64_json']))
                 return out
             except Exception as e:
@@ -67,4 +69,4 @@ def sprite(prompt, cast, ids, refs, style_hint, out):
     p = (CARTOON.format(style=style_hint) + f" Subject: {prompt}. "
          + (f"Characters (keep them EXACTLY as in the reference images): {cast_text(cast, ids)} " if ids else '')
          + "Isolated on a transparent background, centered, full body visible.")
-    return edit(p, refs, out, size='1024x1024', transparent=True)
+    return edit(p, refs, out, size='1024x1024', transparent=True, quality='low')
