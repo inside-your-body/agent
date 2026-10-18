@@ -26,10 +26,10 @@ def build(ep, ep_dir):
         if total + len(t) + 2 > 480: break
         keep.append(t); total += len(t) + 2
     hashtags = ' '.join('#' + h.lstrip('#') for h in up.get('hashtags', [])[:5])
-    if hashtags and hashtags not in desc: desc += '\n\n' + hashtags
+    if hashtags and not any(('#' + h.lstrip('#')).lower() in desc.lower() for h in up.get('hashtags', [])[:2]): desc += '\n\n' + hashtags
     pkg = {'title': up['title'][:100], 'description': desc[:4900], 'tags': keep,
            'short_title': (up.get('short_title') or up['title'])[:95] + ('' if '#Shorts' in up.get('short_title', '') else ' #Shorts'),
-           'short_description': (up.get('short_description') or '') + '\n\nFull episode: {FULL_URL}\n\n' + hashtags,
+           'short_description': (up.get('short_description') or '') + '\n\nFull episode: {FULL_URL}' + ('' if '#' in (up.get('short_description') or '') else '\n\n' + hashtags),
            'pinned_comment': up.get('pinned_comment', '')}
     save(ep_dir / 'package.json', pkg)
     return pkg
