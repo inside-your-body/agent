@@ -7,372 +7,423 @@
  {
   "id": 100,
   "title": "The Journey of an IV Drip Inside Your Body",
-  "angle": "Character gets sick, goes to the clinic, gets an IV drip; follow the drip fluid as a cartoon hero from the vein to the heart, cells and kidneys, minute by minute until they feel better.",
+  "status": "done",
+  "note": "test episode, published manually by the owner"
+ },
+ {
+  "id": 300,
+  "title": "Why Your Breath Smells Bad (It's Not What You Think)",
+  "angle": "Mystery story: the real sources of bad breath — bacteria colonies on the tongue, sulfur gases, dry mouth, tonsil stones, the gut myth. Zoom into the tongue as a city of bacteria.",
+  "format": "mystery",
   "status": "next",
   "source": "user"
  },
  {
-  "id": 101,
-  "title": "What a Cold Pill Does Inside Your Body",
-  "angle": "The pill as a cartoon character: swallowed, dissolves in the stomach, enters the blood, reaches the targets; white blood cells fight the cold virus; what the pill really does vs. what the immune system does.",
+  "id": 301,
+  "title": "How a Perfect Tooth Rots From the Inside",
+  "angle": "Follow one healthy tooth: sugar, acid-making bacteria, enamel erosion, the cavity reaching the nerve, abscess — and how it spreads trouble to the neighbouring teeth. Timeline over months.",
+  "format": "journey",
   "status": "todo",
   "source": "user"
  },
  {
-  "id": 102,
-  "title": "What Happens Inside Your Body When You Drink Alcohol",
-  "angle": "Follow the first drink: mouth, stomach, blood in minutes, brain control room, liver factory working overtime, sleep, the morning after. Explain, don't preach.",
+  "id": 302,
+  "title": "How the Flu Jumps From One Person to 100",
+  "angle": "Outbreak story: one sneeze, droplets in the air, a door handle, the virus hijacking cells, incubation, how one person seeds an outbreak. Contagion map motion graphics.",
+  "format": "outbreak",
   "status": "todo",
   "source": "user"
  },
  {
-  "id": 103,
-  "title": "The Secret Life of Antibiotics Inside Your Body",
-  "angle": "Antibiotic soldiers vs bacteria villains; why they don't work on viruses; how some bacteria survive and become resistant. Story, no lecturing.",
+  "id": 303,
+  "title": "What a Cold Pill Actually Does Inside You",
+  "angle": "The pill as a character: swallowed, dissolves, enters blood; what it really fixes (symptoms) vs. what the immune system does to the virus.",
+  "format": "journey",
   "status": "todo",
   "source": "user"
  },
  {
-  "id": 104,
-  "title": "How Your Body Heals a Wound, Minute by Minute",
-  "angle": "Character cuts a finger: platelets plug the leak, clotting, white blood cells clean up, new skin builds, scar. Timeline from second 1 to week 3.",
+  "id": 304,
+  "title": "Your Body Without Sleep: Hour 1 to Hour 72",
+  "angle": "Hour-by-hour timeline of staying awake: micro-sleeps, hormones, hallucinations, then the recovery.",
+  "format": "timeline",
   "status": "todo",
   "source": "user"
  },
  {
-  "id": 105,
-  "title": "What Happens to Your Body When You Don't Sleep for 3 Days",
-  "angle": "Hour by hour: 16 h, 24 h, 36 h, 48 h, 72 h — brain, hormones, micro-sleeps, hallucinations; then the recovery.",
-  "status": "todo",
-  "source": "user"
- },
- {
-  "id": 106,
-  "title": "What Happens to Your Body If You Drink Milk Every Day",
-  "angle": "Follow a glass of milk: calcium, protein, bones, gut and lactase, myths vs research.",
-  "status": "todo",
-  "source": "user"
- },
- {
-  "id": 107,
+  "id": 305,
   "title": "What Happens Inside Your Body During a Heart Attack",
-  "angle": "Minute-by-minute story of a blocked artery, heart muscle under siege, the signs, what doctors do, how the heart recovers.",
+  "angle": "Minute-by-minute: plaque cracks, clot forms, heart muscle starving, signs, what doctors do.",
+  "format": "timeline",
   "status": "todo",
   "source": "user"
  },
  {
-  "id": 108,
-  "title": "What Vegetables Really Do Inside Your Body",
-  "angle": "Follow a plate of vegetables: fibre feeding gut bacteria, vitamins as tiny workers, nitrates and blood vessels — surprising effects.",
+  "id": 306,
+  "title": "What a Stroke Does to Your Brain, Minute by Minute",
+  "angle": "Brain blackout story: a clot or bleed, 1.9 million neurons per minute, FAST signs, recovery and rewiring.",
+  "format": "timeline",
   "status": "todo",
   "source": "user"
  },
  {
-  "id": 109,
-  "title": "What Happens to Your Body When You Quit Smoking: Hour by Hour",
-  "angle": "Recovery timeline as a story: 20 minutes, 12 hours, 2 days, 2 weeks, 1 year, 10 years. Fascinating body repair, no lecture.",
+  "id": 307,
+  "title": "How Your Body Heals a Cut, Second by Second",
+  "angle": "Platelets plug the leak, clotting cascade, white blood cells clean up, new skin, scar.",
+  "format": "timeline",
   "status": "todo",
   "source": "user"
  },
  {
-  "id": 110,
-  "title": "A Cigarette's Journey Through Your Body",
-  "angle": "Smoke as cartoon particles traveling mouth → lungs → blood → heart → brain; what each organ does in response. Explain only.",
+  "id": 308,
+  "title": "What Happens If You Stop Drinking Water",
+  "angle": "Hour 6, day 1, day 3: blood thickens, brain shrinks slightly, kidneys emergency mode.",
+  "format": "timeline",
   "status": "todo",
   "source": "user"
  },
  {
-  "id": 111,
-  "title": "What Happens Inside Your Body Under General Anesthesia",
-  "angle": "From the countdown to waking up: how the brain is switched off, breathing, the team, where 'you' go.",
+  "id": 309,
+  "title": "What Drinking Milk Every Day Really Does",
+  "angle": "Follow a glass of milk: calcium, protein, lactase, myths vs. research.",
+  "format": "habit",
+  "status": "todo",
+  "source": "user"
+ },
+ {
+  "id": 310,
+  "title": "Every Weird Thing Your Body Does, Explained",
+  "angle": "Compilation: hiccups, yawning contagion, brain freeze, goosebumps, the falling jerk when sleeping, cracking knuckles, stomach growl — each a 40-second mini story.",
+  "format": "compilation",
   "status": "todo"
  },
  {
-  "id": 112,
-  "title": "What Happens to Your Body When You Get a Fever",
-  "angle": "The brain's thermostat turns up; immune army; chills and sweating explained; why fever is a weapon.",
+  "id": 311,
+  "title": "Your Tattoo Is Living Inside Your Immune System",
+  "angle": "The ink is constantly eaten and re-eaten by immune cells; why tattoos fade; laser removal. (Inspired by a viral format, told in our own way.)",
+  "format": "mystery",
   "status": "todo"
  },
  {
-  "id": 113,
-  "title": "What Happens to Your Body When You Stop Eating Sugar",
-  "angle": "Day 1, day 3, week 2, month 1 — cravings, energy, taste buds, brain reward system.",
-  "status": "todo"
- },
- {
-  "id": 114,
-  "title": "The Journey of Food Through Your Body in 24 Hours",
-  "angle": "A sandwich's adventure from bite to exit: mouth, stomach acid, intestine, gut bacteria city.",
-  "status": "todo"
- },
- {
-  "id": 115,
-  "title": "What Happens to Your Body When You Drink Coffee",
-  "angle": "Caffeine molecule as a sneaky character blocking 'sleep' signals; minute 10 to hour 10; crash.",
-  "status": "todo"
- },
- {
-  "id": 116,
-  "title": "What Happens When a Virus Enters Your Body",
-  "angle": "Virus villains break in, hijack cells; alarm system; T cells and antibodies counterattack; memory cells.",
-  "status": "todo"
- },
- {
-  "id": 117,
-  "title": "What Happens Inside Your Body When You Faint",
-  "angle": "Blood pressure drop, brain power cut, the body's emergency reboot.",
-  "status": "todo"
- },
- {
-  "id": 118,
-  "title": "What Happens to Your Body When You Fast for 72 Hours",
-  "angle": "Hour 4, 12, 18, 24, 48, 72: fuel switching, ketones, autophagy claims vs evidence.",
-  "status": "todo"
- },
- {
-  "id": 119,
-  "title": "What Happens to Your Body When You Donate Blood",
-  "angle": "Needle to recovery: how the body rebuilds a pint of blood, iron, the life it saves.",
-  "status": "todo"
- },
- {
-  "id": 120,
-  "title": "What Happens Inside Your Body During an Allergic Reaction",
-  "angle": "Immune system overreacts to a harmless pollen 'guest'; histamine alarm; anaphylaxis; how adrenaline helps.",
-  "status": "todo"
- },
- {
-  "id": 121,
-  "title": "What Happens to Your Body When You Eat Extremely Spicy Food",
-  "angle": "Capsaicin tricks pain sensors; sweating, tears, endorphins; why some love it.",
-  "status": "todo"
- },
- {
-  "id": 122,
-  "title": "What Happens to Your Body When You Drink Energy Drinks",
-  "angle": "Minute-by-minute: sugar rush, caffeine, heart rate, the crash.",
-  "status": "todo"
- },
- {
-  "id": 123,
-  "title": "What Happens to Your Body When You Get Food Poisoning",
-  "angle": "Bacteria villains in the gut; the body's eject buttons; recovery timeline.",
-  "status": "todo"
- },
- {
-  "id": 124,
-  "title": "What Happens Inside Your Body When You Get a Vaccine",
-  "angle": "Training camp for the immune system: wanted posters, practice fight, memory cells.",
-  "status": "todo"
- },
- {
-  "id": 125,
-  "title": "What Happens to Your Body When You Stop Drinking Alcohol for 30 Days",
-  "angle": "Day 1 to day 30: sleep, liver, skin, brain — a recovery story.",
-  "status": "todo"
- },
- {
-  "id": 126,
-  "title": "What Happens Inside Your Body When You Get Drunk",
-  "angle": "Blood alcohol levels stage by stage: talkative, clumsy, memory gaps; the liver's race.",
-  "status": "todo"
- },
- {
-  "id": 127,
-  "title": "What a Hangover Actually Is, Inside Your Body",
-  "angle": "The morning after, explained: dehydration, toxins, inflammation, sleep — and why remedies mostly don't work.",
-  "status": "todo"
- },
- {
-  "id": 128,
-  "title": "What Happens to Your Body When You Stop Exercising",
-  "angle": "Week 1, week 2, month 1, month 3: muscles, heart, brain, blood sugar.",
-  "status": "todo"
- },
- {
-  "id": 129,
+  "id": 312,
   "title": "What Happens to Your Body When You Walk Every Day",
-  "angle": "Hidden effects of a daily walk on heart, brain, joints and mood — as a story.",
+  "angle": "Day 1, week 2, month 3: heart, blood sugar, brain, joints, mood.",
+  "format": "habit",
   "status": "todo"
  },
  {
-  "id": 130,
-  "title": "What Happens to Your Body When You Sit All Day",
-  "angle": "Hour by hour at the desk: circulation, muscles, metabolism; then what moving does.",
+  "id": 313,
+  "title": "What Eating Once a Day Does to Your Body, Hour by Hour",
+  "angle": "Fuel switching, hunger hormones, ketones, the big meal effects.",
+  "format": "timeline",
   "status": "todo"
  },
  {
-  "id": 131,
-  "title": "What Happens Inside Your Body When You're Stressed",
-  "angle": "The alarm system: adrenaline, cortisol, heart, gut, immune — short vs long-term stress.",
+  "id": 314,
+  "title": "The Real Reason You Have Allergies",
+  "angle": "The immune system mistakes harmless pollen for an invader; IgE, mast cells, histamine explosion.",
+  "format": "mystery",
   "status": "todo"
  },
  {
-  "id": 132,
-  "title": "What Happens to Your Body When You Cry",
-  "angle": "Three kinds of tears, the chemistry of emotional crying, the calm after.",
+  "id": 315,
+  "title": "Why Your Brain Edits Reality Every Second",
+  "angle": "Blind spot, saccadic masking, predictions — your brain hides things from you.",
+  "format": "mystery",
   "status": "todo"
  },
  {
-  "id": 133,
-  "title": "What Happens Inside Your Body When You Laugh",
-  "angle": "Muscles, lungs, brain chemicals, immune effects — a funny-science story.",
+  "id": 316,
+  "title": "When Your Body Attacks Itself",
+  "angle": "Autoimmunity story: friendly-fire immune cells; why it happens.",
+  "format": "mystery",
   "status": "todo"
  },
  {
-  "id": 134,
-  "title": "What Happens to Your Body When You Don't Drink Enough Water",
-  "angle": "Hour 6, day 1, day 3 — blood, brain, kidneys working overtime.",
+  "id": 317,
+  "title": "What Caffeine Really Does to Your Brain",
+  "angle": "Adenosine blocking, minute 10 to hour 10, the crash, tolerance.",
+  "format": "timeline",
   "status": "todo"
  },
  {
-  "id": 135,
-  "title": "How Long Can You Survive Without Water? What Happens Inside",
-  "angle": "The body's emergency water-saving plan, stage by stage.",
+  "id": 318,
+  "title": "What Happens Inside a Brain on Alcohol",
+  "angle": "Neurotransmitters, memory blackout, the liver race, the morning after.",
+  "format": "journey",
   "status": "todo"
  },
  {
-  "id": 136,
-  "title": "What Happens Inside Your Body When You Have a Stroke",
-  "angle": "Brain blackout story; FAST signs; why every minute matters; recovery.",
+  "id": 319,
+  "title": "How Long Could You Survive Without...",
+  "angle": "Without air, water, food, sleep, a heart beat — a countdown compilation of the body's limits.",
+  "format": "compilation",
   "status": "todo"
  },
  {
-  "id": 137,
-  "title": "What Happens to Your Body When You Eat Fast Food",
-  "angle": "Minute 10, 20, 40, 60: blood sugar, insulin, salt, thirst, hunger again.",
+  "id": 320,
+  "title": "The Parasites That Could Be Living Inside You",
+  "angle": "Tapeworm, pinworm, toxoplasma — how they get in, live, and how the body notices. Non-gory.",
+  "format": "mystery",
   "status": "todo"
  },
  {
-  "id": 138,
-  "title": "What Happens Inside Your Body When You Get a Sunburn",
-  "angle": "UV rays as invaders hitting skin cell DNA; redness, peeling, repair crews.",
+  "id": 321,
+  "title": "The Brain-Eating Amoeba: How It Really Works",
+  "angle": "Naegleria fowleri's path through the nose; why it's so rare; myths.",
+  "format": "mystery",
   "status": "todo"
  },
  {
-  "id": 139,
-  "title": "What Happens Inside Your Body When You Break a Bone",
-  "angle": "Crack to full repair: bleeding, soft callus, hard callus, remodeling over months.",
-  "status": "todo"
- },
- {
-  "id": 140,
-  "title": "What Happens to Your Body When You Hold Your Pee",
-  "angle": "Bladder stretch sensors, the brain's veto, what happens if you hold too long.",
-  "status": "todo"
- },
- {
-  "id": 141,
-  "title": "What Happens to Your Body When You Scroll Your Phone at Night",
-  "angle": "Blue light, dopamine loops, melatonin, sleep cycles — as a night-time story.",
-  "status": "todo"
- },
- {
-  "id": 142,
-  "title": "What Happens Inside Your Body When You Catch the Flu",
-  "angle": "Day 1–10: invasion, fever, aches, immune war, recovery.",
-  "status": "todo"
- },
- {
-  "id": 143,
-  "title": "What Happens to Your Body When You Take Painkillers",
-  "angle": "Follow a painkiller: where it goes, how it blocks pain signals, liver and stomach effects.",
-  "status": "todo"
- },
- {
-  "id": 144,
-  "title": "What Happens Inside Your Body When You Have Kidney Stones",
-  "angle": "How a stone forms crystal by crystal, its painful journey, how it leaves.",
-  "status": "todo"
- },
- {
-  "id": 145,
-  "title": "What Happens to Your Body When You Eat Too Much Salt",
-  "angle": "Water pulled into blood, pressure in the pipes, kidneys and heart response.",
-  "status": "todo"
- },
- {
-  "id": 146,
-  "title": "What Happens to Your Body When You Sleep Only 5 Hours a Night",
-  "angle": "One week of short sleep: brain, hunger hormones, immunity, mood.",
-  "status": "todo"
- },
- {
-  "id": 147,
-  "title": "What Happens Inside Your Body When You Get Goosebumps, Hiccups and Brain Freeze",
-  "angle": "Three weird body reflexes explained as mini stories.",
-  "status": "todo"
- },
- {
-  "id": 148,
-  "title": "What Happens to Your Body When You Eat Eggs Every Day",
-  "angle": "Protein, cholesterol myths vs evidence, brain nutrients.",
-  "status": "todo"
- },
- {
-  "id": 149,
-  "title": "What Happens to Your Body When You Take a Cold Shower",
-  "angle": "First 30 seconds shock, breathing, heart, brown fat; hype vs research.",
-  "status": "todo"
- },
- {
-  "id": 150,
-  "title": "What Happens Inside Your Body When You Get Appendicitis",
-  "angle": "A tiny organ under attack; pain that moves; surgery and recovery.",
-  "status": "todo"
- },
- {
-  "id": 151,
-  "title": "What Happens to Your Body When You Eat Chocolate",
-  "angle": "Cocoa compounds, sugar, brain reward, heart — dark vs milk.",
-  "status": "todo"
- },
- {
-  "id": 152,
-  "title": "What Happens Inside Your Body When You Get COVID or a Bad Cold: The Immune Battle",
-  "angle": "Innate vs adaptive immunity as two armies.",
-  "status": "todo"
- },
- {
-  "id": 153,
-  "title": "What Happens to Your Body When You Stop Using Social Media for a Week",
-  "angle": "Dopamine, attention, sleep, mood — day by day.",
-  "status": "todo"
- },
- {
-  "id": 154,
-  "title": "What Happens Inside Your Body When You're in Love",
-  "angle": "Brain chemistry story: dopamine, oxytocin, heart racing, the long-term phase.",
-  "status": "todo"
- },
- {
-  "id": 155,
-  "title": "What Happens to Your Body When You Breathe Polluted Air",
-  "angle": "Particles' journey from nose to lungs to blood.",
-  "status": "todo"
- },
- {
-  "id": 156,
-  "title": "What Happens Inside Your Body When You Overeat at a Big Meal",
-  "angle": "The stomach stretch, food coma, blood sugar, the night after.",
-  "status": "todo"
- },
- {
-  "id": 157,
-  "title": "What Happens Inside Your Body When You Get an Insulin Spike",
-  "angle": "Sugar in blood, insulin keys, cells, fat storage, crash — a story.",
-  "status": "todo"
- },
- {
-  "id": 158,
+  "id": 322,
   "title": "What Happens to Your Body After You Die",
-  "angle": "Respectful, scientific timeline of the first minutes, hours and days.",
+  "angle": "Respectful scientific timeline: minutes, hours, days.",
+  "format": "timeline",
   "status": "todo"
  },
  {
-  "id": 159,
-  "title": "What Happens Inside Your Body When You Have a Panic Attack",
-  "angle": "False alarm in the brain; heart, breathing, the wave that passes.",
+  "id": 323,
+  "title": "What Happens to Your Body Under Anesthesia",
+  "angle": "From the countdown to waking up: switching the brain off.",
+  "format": "journey",
+  "status": "todo"
+ },
+ {
+  "id": 324,
+  "title": "The Journey of Food: 24 Hours Inside You",
+  "angle": "A burger's trip from bite to exit; gut bacteria city.",
+  "format": "journey",
+  "status": "todo"
+ },
+ {
+  "id": 325,
+  "title": "Signs Your Kidneys Are Struggling That You Can See",
+  "angle": "Visible signs explained by what's happening inside; when to see a doctor (neutral).",
+  "format": "signs",
+  "status": "todo"
+ },
+ {
+  "id": 326,
+  "title": "How Cancer Starts From One Cell",
+  "angle": "One mutation, then another; the cell that refuses to die; how the body fights it.",
+  "format": "journey",
+  "status": "todo"
+ },
+ {
+  "id": 327,
+  "title": "Why Cancer Is So Hard to Kill",
+  "angle": "Hiding, mutating, recruiting blood vessels — explained as a strategy game.",
+  "format": "mystery",
+  "status": "todo"
+ },
+ {
+  "id": 328,
+  "title": "What Vaping Actually Does Inside Your Lungs",
+  "angle": "Aerosol journey, nicotine and the brain; what research knows and doesn't.",
+  "format": "journey",
+  "status": "todo"
+ },
+ {
+  "id": 329,
+  "title": "What Happens to Your Body When You Get a Fever",
+  "angle": "The brain's thermostat, chills, sweating, why fever is a weapon.",
+  "format": "mystery",
+  "status": "todo"
+ },
+ {
+  "id": 330,
+  "title": "How Your Immune System Remembers Every Germ",
+  "angle": "Memory cells, antibodies, why you get chickenpox once.",
+  "format": "journey",
+  "status": "todo"
+ },
+ {
+  "id": 331,
+  "title": "What Happens When You Hold Your Breath",
+  "angle": "Second-by-second: CO2 alarm, the urge, diaphragm spasms, the limit.",
+  "format": "timeline",
+  "status": "todo"
+ },
+ {
+  "id": 332,
+  "title": "Why You Jerk Awake When Falling Asleep",
+  "angle": "The hypnic jerk mystery and theories.",
+  "format": "mystery",
+  "status": "todo"
+ },
+ {
+  "id": 333,
+  "title": "What Sugar Does to Your Brain in 60 Minutes",
+  "angle": "Dopamine, insulin, the crash, cravings.",
+  "format": "timeline",
+  "status": "todo"
+ },
+ {
+  "id": 334,
+  "title": "What Happens Inside Your Body When You Get a Vaccine",
+  "angle": "Training camp for the immune system.",
+  "format": "journey",
+  "status": "todo"
+ },
+ {
+  "id": 335,
+  "title": "Food Poisoning: What Bacteria Do in Your Gut",
+  "angle": "The villains, the body's eject buttons, recovery.",
+  "format": "journey",
+  "status": "todo"
+ },
+ {
+  "id": 336,
+  "title": "What Happens When You Crack Your Knuckles",
+  "angle": "Gas bubbles in joints, the arthritis myth.",
+  "format": "mystery",
+  "status": "todo"
+ },
+ {
+  "id": 337,
+  "title": "What Happens Inside Your Body During a Panic Attack",
+  "angle": "A false alarm in the brain; heart, breathing, the wave that passes.",
+  "format": "timeline",
+  "status": "todo"
+ },
+ {
+  "id": 338,
+  "title": "How Kidney Stones Form, Crystal by Crystal",
+  "angle": "Formation and the painful journey out.",
+  "format": "journey",
+  "status": "todo"
+ },
+ {
+  "id": 339,
+  "title": "What Happens to Your Body When You Fast for 3 Days",
+  "angle": "Hour 12, 24, 48, 72: fuel switching, ketones, autophagy claims vs evidence.",
+  "format": "timeline",
+  "status": "todo"
+ },
+ {
+  "id": 340,
+  "title": "Every Drug Class and What It Does to Your Brain",
+  "angle": "Stimulants, depressants, opioids, psychedelics — mechanisms only, neutral.",
+  "format": "compilation",
+  "status": "todo"
+ },
+ {
+  "id": 341,
+  "title": "What Happens Inside Your Body When You Break a Bone",
+  "angle": "Crack to full repair over months.",
+  "format": "timeline",
+  "status": "todo"
+ },
+ {
+  "id": 342,
+  "title": "Why Some People Never Get Sick",
+  "angle": "Immune genetics, sleep, gut microbes, exposure — the science.",
+  "format": "mystery",
+  "status": "todo"
+ },
+ {
+  "id": 343,
+  "title": "What Happens to Your Body When You Eat Too Much Salt",
+  "angle": "Water pulled into blood, pressure, kidneys and heart.",
+  "format": "journey",
+  "status": "todo"
+ },
+ {
+  "id": 344,
+  "title": "What Happens to Your Eyes When You Stare at Screens",
+  "angle": "Blinking, focus muscles, blue light myths vs. facts.",
+  "format": "mystery",
+  "status": "todo"
+ },
+ {
+  "id": 345,
+  "title": "The Hidden World of Bacteria on Your Skin",
+  "angle": "Trillions of residents: friends, freeloaders and villains.",
+  "format": "mystery",
+  "status": "todo"
+ },
+ {
+  "id": 346,
+  "title": "What Happens to Your Body When You Stop Exercising",
+  "angle": "Week 1 to month 3: muscles, heart, brain.",
+  "format": "timeline",
+  "status": "todo"
+ },
+ {
+  "id": 347,
+  "title": "How Antibiotics Kill Bacteria — and How Bacteria Fight Back",
+  "angle": "Antibiotic soldiers vs. bacteria; resistance evolving.",
+  "format": "journey",
+  "status": "todo"
+ },
+ {
+  "id": 348,
+  "title": "What Happens to Your Body When You Get Sunburned",
+  "angle": "UV hits skin DNA; redness, peeling, repair crews.",
+  "format": "journey",
+  "status": "todo"
+ },
+ {
+  "id": 349,
+  "title": "What Happens Inside Your Body When You Laugh",
+  "angle": "Muscles, lungs, brain chemicals.",
+  "format": "mystery",
+  "status": "todo"
+ },
+ {
+  "id": 350,
+  "title": "Why We Get Old: What Ageing Does to Every Cell",
+  "angle": "Telomeres, damage, inflammation — the clocks inside you.",
+  "format": "mystery",
+  "status": "todo"
+ },
+ {
+  "id": 351,
+  "title": "What Happens to Your Brain When You Scroll at Night",
+  "angle": "Dopamine loops, melatonin, sleep cycles.",
+  "format": "timeline",
+  "status": "todo"
+ },
+ {
+  "id": 352,
+  "title": "What Happens Inside Your Body When You're in Love",
+  "angle": "Brain chemistry phases.",
+  "format": "mystery",
+  "status": "todo"
+ },
+ {
+  "id": 353,
+  "title": "What Happens When You Swallow Gum, a Seed or a Tooth",
+  "angle": "Compilation of 'what if you swallow' myths, explained.",
+  "format": "compilation",
+  "status": "todo"
+ },
+ {
+  "id": 354,
+  "title": "The 5 Organs You Can Live Without",
+  "angle": "Appendix, spleen, gallbladder, a kidney, a lung — how the body adapts.",
+  "format": "compilation",
+  "status": "todo"
+ },
+ {
+  "id": 355,
+  "title": "What Happens to Your Body in Space",
+  "angle": "Bones, muscles, eyes, fluids floating up — health science.",
+  "format": "journey",
+  "status": "todo"
+ },
+ {
+  "id": 356,
+  "title": "Why Your Stomach Doesn't Digest Itself",
+  "angle": "Acid strong enough to dissolve metal; the mucus shield; ulcers.",
+  "format": "mystery",
+  "status": "todo"
+ },
+ {
+  "id": 357,
+  "title": "What Happens to Your Body When You Drink Energy Drinks",
+  "angle": "Minute by minute: caffeine, sugar, heart, crash.",
+  "format": "timeline",
   "status": "todo"
  }
 ]

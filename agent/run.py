@@ -32,6 +32,11 @@ def main():
         gap = (dt.datetime.utcnow() - dt.datetime.fromisoformat(last)).total_seconds() / 3600
         if gap < CFG['schedule']['min_hours_between_episodes']:
             print(f'last episode {gap:.0f} h ago -> skip today'); return
+    if not a.topic:
+        try:
+            from . import scout; scout.run()          # weekly: refresh topic bank from what's getting views now
+        except Exception as e:
+            print('scout skipped:', e)
     topic = {'id': None, 'title': a.topic} if a.topic else pick_topic()
     ep_dir = WORK / dt.datetime.utcnow().strftime('%Y%m%d'); ep_dir.mkdir(parents=True, exist_ok=True)
     print('== topic:', topic['title'])
@@ -41,7 +46,7 @@ def main():
     notes = (ep_dir / 'research.md').read_text() if (ep_dir / 'research.md').exists() else ''
     if not ep:
         notes = llm.research(topic['title']); (ep_dir / 'research.md').write_text(notes)
-        ep = llm.write_episode(topic['title'], notes, topic.get('angle')); save(ep_dir / 'episode.json', ep)
+        ep = llm.write_episode(topic['title'], notes, ' | '.join(x for x in (topic.get('angle'), topic.get('format') and 'format: ' + topic['format']) if x)); save(ep_dir / 'episode.json', ep)
         for _ in range(2):   # length guard: long >= 1480 words, short >= 110 words
             if llm.long_words(ep) >= 1480: break
             print('script too short:', llm.long_words(ep), 'words -> expanding')
