@@ -92,3 +92,8 @@ Short: title ≤ 60 chars + #Shorts, link to the full episode.
 - Motion graphics tell the story (core of the channel); characters/hero/stick figures only when the topic calls for them, acting inside the motion graphics.
 - Kinetic typography for key words, synced to the spoken word. Sound effects designed with each animation: one per meaningful event
   (word lands, something appears, impact, liquid, build-up), 1-4 per part, ≥1.5 s apart, soft and pleasant — never annoying.
+
+## Storytelling craft (owner's reference, Oct 2026)
+Hook · Open loops · Emotional triggers (surprise, awe, fun gross-out, tension, pride, nostalgia) · Pacing (short punchy runs + one longer
+sentence to land an idea) · Curiosity gap · Pattern interrupts every 60-90 s (shock fact, tone change, direct question, format switch) —
+in the script AND mirrored in the visuals.

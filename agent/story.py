@@ -47,6 +47,9 @@ Make the STORYBOARD for these sequences. {rule}
   of key words carry the explanation. A hero / stick figures / cartoon characters appear when the topic needs them (a person, a pill hero,
   white-blood-cell guards...), acting inside the motion graphics — not as a slideshow of drawings.
 - Note in "motion" the key word(s) that appear as typography and the moments that deserve a subtle sound effect.
+- PATTERN INTERRUPTS in the visuals: every 60-90 s one act breaks the visual rhythm on purpose (sudden zoom 1000× into a cell, a split
+  screen, a freeze-frame with a big typographic fact, a change of palette/lighting, a countdown, "myth vs fact" card) — matching the
+  script's interrupt. Emotional beats get visuals that make the feeling land (awe = scale reveal, gross-out = close-up, tension = slow push-in).
 - Poses: ask only for poses you really use (0-2 per act). Backdrops only where a painted setting helps (about 1 in 3 acts).
 Scenes (sentence indexes start at 0 in each scene): {json.dumps(ch, ensure_ascii=False)}
 Return JSON exactly: {SCHEMA}""", max_tokens=24000)

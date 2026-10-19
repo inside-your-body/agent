@@ -118,6 +118,14 @@ HOOK_RULES = """OPENING = the first 30 seconds (analytics: this is where we lose
 - By ~20 seconds, promise the payoff concretely ("by the end, you'll know exactly where that smell is coming from — and it's not where you think").
 - No background, history, definitions or statistics before 0:30. Every sentence must be instantly visual."""
 
+STORY_CRAFT = """STORYTELLING CRAFT (apply all six, every episode):
+1. HOOK — sentence 1 is one of: a tense moment, an intriguing question, an unexpected statement, or a belief the viewer holds that we are about to break.
+2. OPEN LOOPS — raise a question and do NOT answer it yet; answer it later in the story. Keep 1-2 loops open at all times; close each one with a satisfying reveal.
+3. EMOTIONAL TRIGGERS — every scene makes the viewer FEEL something: surprise, awe ("your body does WHAT?"), mild disgust/fun gross-out, tension, pride in the body, nostalgia (everyday moments everyone knows). Name the feeling you are aiming for in each scene to yourself and write for it.
+4. PACING — mix deliberately: runs of very short punchy sentences for tension and action, then one longer sentence to let a big idea land. Never three long sentences in a row.
+5. CURIOSITY GAP — give enough to hook, never everything at once: tease the answer before giving it ("the culprit isn't what you think…").
+6. PATTERN INTERRUPTS — every 60-90 seconds break the rhythm: a shocking one-line fact, a sudden change of tone (whisper → excitement), a direct question to the viewer, a surprising comparison or a format switch (countdown, myth vs fact, "zoom in 1000×")."""
+
 SEO_RULES = """SEARCH (analytics: viewers find us with concrete searches like "tonsil stones", "first cigarette"):
 - upload.title contains the exact phrase people type into YouTube search for this topic, front-loaded, ≤ 60 characters, still a plain clear question/statement.
 - The first 5 tags are exact search phrases people type (short, lowercase); then related phrases (15–20 tags total).
@@ -136,6 +144,7 @@ Research notes (only use facts from here):
 Write the full episode as a cartoon story with a recurring cast, told by a narrator.
 Narration must total {WORDS_MIN}–{WORDS_MAX} words (≈ 8:30–9 minutes with pauses). Count carefully.
 {HOOK_RULES}
+{STORY_CRAFT}
 {SEO_RULES}
 Use 10–14 scenes of 6–14 sentences. Every sentence must be something we can SHOW: an action, a place, a change, a number, a character.
 Max 8 numbers in the whole script; round them and make them vivid ("enough tubes to circle the Earth twice").
@@ -153,6 +162,7 @@ Rules: {RULES}
 Here is the draft script (JSON). Improve it for watch-time WITHOUT changing the facts:
 {HOOK_RULES}
 - Every 40–60 s add/strengthen an open loop ("but at hour six, something strange happens...").
+- Check the six storytelling tools and fix what is weak: {STORY_CRAFT}
 - Replace dry or list-like sentences with story beats: characters doing things, vivid comparisons, sensory details.
 - Remove preaching or advice. Remove filler. Keep sentences short and spoken.
 - Keep scene ids/titles, keep total words between {WORDS_MIN} and {WORDS_MAX}.
