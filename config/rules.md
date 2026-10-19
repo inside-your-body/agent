@@ -15,9 +15,9 @@ Audience: curious adults worldwide (US/UK first). Tone: warm, energetic, wonder-
   Neutral facts like "here's how the body recovers / what helps it" are fine when they are part of the story, never as orders.
 - Topics must be things people actually search for, with a curiosity gap — never trivial or obvious.
 
-## Story format (retention first) — narration 1500–1600 words (≈ 8:30)
+## Story format (retention first) — narration 1200–1320 words (≈ 8:30–9:15)
 The whole video is ONE story with characters, told by the narrator.
-1. HOOK (0–15 s): a striking moment or question ("In the next 8 minutes, a tiny pill is going to fight a war inside you.").
+1. HOOK (0–30 s, where we lose most viewers): cold open in the most surprising visual moment, a burning question, a concrete payoff promise by ~20 s, no background before 0:30. A striking moment or question ("In the next 8 minutes, a tiny pill is going to fight a war inside you.").
    No channel intro before it.
 2. THE SITUATION (problem/trigger): our human character (named, relatable) gets into the situation — catches a cold,
    gets an IV drip at the clinic, cuts a finger, stays awake all night, drinks the first beer...
@@ -73,3 +73,10 @@ Title ≤ 70 chars: a plain, clear question or statement that names the topic th
 ("Why Does Your Breath Smell Bad?", "What Happens Inside Your Body When You Get an IV Drip?"). Every title different in wording.
 Description: 2-line hook, what you'll see, chapters, sources, 3–5 hashtags. 15–20 tags. Pinned comment with a question.
 Short: title ≤ 60 chars + #Shorts, link to the full episode.
+
+## Lessons from our analytics (Oct 2026)
+- Biggest drop is the first minute → the opening must be a cold open + payoff promise, all visual.
+- Thumbnail CTR was 1.3–2% → 3 thumbnail concepts per episode (Test & compare); topic must be readable in 1 second.
+- Search terms that brought viewers were concrete ("tonsil stones", "first cigarette") → titles/tags use exact search phrases.
+- Shorts bring ~97% of views but almost nobody goes to the long video → every Short points to the full episode (line + comment + link).
+- 10:50 was too long for current retention → 8:30–9:15.

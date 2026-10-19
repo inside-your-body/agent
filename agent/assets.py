@@ -80,12 +80,7 @@ def _font(name, size):
     except Exception:
         return ImageFont.truetype('DejaVuSans-Bold.ttf', size)
 
-def thumbnail(ep, style, ep_dir):
-    th = ep.get('thumbnail', {})
-    art = ep_dir / 'thumb_art.png'
-    if not art.exists():
-        refs = sorted((ep_dir / 'assets').glob('cast_*.png'))[:2]
-        images.thumbnail_art(th.get('image_prompt', ep['title']), art, [str(x) for x in refs], images.cast_text(ep.get('cast') or [], [c['id'] for c in (ep.get('cast') or [])][:2]))
+def _compose(art, l1, l2, style, out):
     W, H = 1280, 720
     if art.exists():
         im = Image.open(art).convert('RGB')
@@ -96,14 +91,11 @@ def thumbnail(ep, style, ep_dir):
         im = ImageEnhance.Contrast(im).enhance(1.12); im = ImageEnhance.Color(im).enhance(1.15)
     else:
         im = Image.new('RGB', (W, H), style['bg'])
-    # top gradient for the headline
     # bottom gradient + two big lines bottom-left: line1 white, line2 yellow (plain sentence naming the topic + curiosity)
     grad = Image.new('L', (1, H)); [grad.putpixel((0, y), int(max(0, (y - H * 0.45) / (H * 0.55)) * 190)) for y in range(H)]
     im.paste(Image.new('RGB', (W, H), '#000'), (0, 0), grad.resize((W, H)))
     d = ImageDraw.Draw(im)
-    l1 = (th.get('line1') or th.get('big_text') or ep['title']).upper().strip()
-    l2 = (th.get('line2') or th.get('small_text') or '').upper().strip()
-    lines = [x for x in (l1, l2) if x]
+    lines = [x for x in (l1.upper().strip(), l2.upper().strip()) if x]
     size = 112
     while size > 60 and max(d.textlength(l, font=_font('anton', size)) for l in lines) > W - 90: size -= 4
     f = _font('anton', size)
@@ -111,9 +103,31 @@ def thumbnail(ep, style, ep_dir):
     for i, l in enumerate(lines):
         d.text((44, y), l, font=f, fill='#FFFFFF' if i == 0 and len(lines) > 1 else '#FFD23D', stroke_width=11, stroke_fill='#000000')
         y += int(size * 1.1)
-    out = ep_dir / 'thumbnail.jpg'
     im.save(out, quality=92)
     return out
+
+def thumbnail(ep, style, ep_dir):
+    """Main thumbnail (uploaded) + up to 2 variants (thumbnail_b/c.jpg) for YouTube's Test & compare."""
+    th = ep.get('thumbnail', {})
+    refs = [str(x) for x in sorted((ep_dir / 'assets').glob('cast_*.png'))[:2]]
+    cast = images.cast_text(ep.get('cast') or [], [c['id'] for c in (ep.get('cast') or [])][:2])
+    opts = [th] + [v for v in (th.get('variants') or []) if isinstance(v, dict)][:2]
+    outs = []
+    for i, o in enumerate(opts):
+        suf = '' if i == 0 else '_' + 'bc'[i - 1]
+        art = ep_dir / f'thumb_art{suf}.png'
+        if not art.exists():
+            try:
+                images.thumbnail_art(o.get('image_prompt') or ep['title'], art, refs, cast, quality='high' if i == 0 else 'medium')
+            except Exception as e:
+                print('thumbnail art failed', suf or 'main', e)
+                if i: continue
+        if i and not art.exists(): continue
+        l1 = o.get('line1') or o.get('big_text') or (ep['title'] if i == 0 else '')
+        l2 = o.get('line2') or o.get('small_text') or ''
+        if not (l1 or l2): continue
+        outs.append(_compose(art, l1, l2, style, ep_dir / f'thumbnail{suf}.jpg'))
+    return outs[0]
 
 def stage_for_render(ep_dir):
     """Copy generated images into render/public/ep for Remotion staticFile()."""

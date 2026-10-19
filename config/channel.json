@@ -37,8 +37,8 @@
     "height": 1080,
     "fps": 30,
     "min_seconds": 485,
-    "target_seconds": 530,
-    "max_seconds": 620
+    "target_seconds": 525,
+    "max_seconds": 570
   },
   "short": {
     "width": 1080,

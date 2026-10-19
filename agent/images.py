@@ -24,12 +24,12 @@ def illustration(prompt, style_hint, out):
          "Clean shapes, no text, no letters, no watermark, isolated on a transparent background, centered, friendly, not gory.")
     return gen(p, out, transparent=True, quality='low')
 
-def thumbnail_art(prompt, out, refs=None, cast_desc=''):
+def thumbnail_art(prompt, out, refs=None, cast_desc='', quality='high'):
     p = (f"YouTube thumbnail, 2D cartoon style matching the reference characters, ultra eye-catching, huge contrast, saturated colours, "
          f"dramatic lighting, one clear focal point readable on a small phone screen, big expressive emotion. {prompt}. "
          + (f"Characters: {cast_desc} " if cast_desc else '')
          + "Keep the bottom-left area simple and darker for a big headline. No text, no letters, no watermark.")
-    return edit(p, refs or [], out, size='1536x1024', quality='high')
+    return edit(p, refs or [], out, size='1536x1024', quality=quality)
 
 def edit(prompt, refs, out, size='1536x1024', transparent=False, quality='medium', retries=2):
     """gpt-image edits endpoint with reference images (keeps the cast consistent). Falls back to plain generation."""

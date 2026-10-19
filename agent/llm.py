@@ -100,12 +100,26 @@ EPISODE_SCHEMA = """{
  "short": {"narration": [str, ...]},
  "upload": {"title": str, "description": str, "tags": [str], "hashtags": [str], "pinned_comment": str,
             "short_title": str, "short_description": str},
- "thumbnail": {"image_prompt": str, "line1": str, "line2": str},   // line1+line2 = one plain sentence that names the topic and makes people curious,
+ "thumbnail": {"image_prompt": str, "line1": str, "line2": str,   // line1+line2 = one plain sentence that names the topic and makes people curious,
                                                   // e.g. "WHAT AN IV DRIP" / "DOES INSIDE YOU"; max 4 words per line
+   "variants": [ {"image_prompt": str, "line1": str, "line2": str} ] },  // exactly 2 alternative thumbnails with a DIFFERENT concept each
+                                                  // (e.g. extreme close-up of the body part with a shocking detail / a character's shocked
+                                                  // reaction / before-vs-after split) and different wording, for A/B testing
  "sources": [{"title": str, "url": str}]
 }"""
 
-WORDS_MIN, WORDS_MAX = 1350, 1500
+WORDS_MIN, WORDS_MAX = 1200, 1320   # ≈ 8:30–9:15 with pauses (analytics: 10:50 was too long for our retention)
+
+HOOK_RULES = """OPENING = the first 30 seconds (analytics: this is where we lose 1/3 of viewers). The hook scene has 5–7 short sentences:
+- Sentence 1 is a COLD OPEN in the middle of the most surprising, most visual moment of the whole story (no "hi", no "in this video", no definition).
+- Sentences 2–3 turn it into a burning question the viewer needs answered.
+- By ~20 seconds, promise the payoff concretely ("by the end, you'll know exactly where that smell is coming from — and it's not where you think").
+- No background, history, definitions or statistics before 0:30. Every sentence must be instantly visual."""
+
+SEO_RULES = """SEARCH (analytics: viewers find us with concrete searches like "tonsil stones", "first cigarette"):
+- upload.title contains the exact phrase people type into YouTube search for this topic, front-loaded, ≤ 60 characters, still a plain clear question/statement.
+- The first 5 tags are exact search phrases people type (short, lowercase); then related phrases (15–20 tags total).
+- The first line of the description repeats the main search phrase naturally."""
 
 def write_episode(topic, notes, angle=None):
     return ask_json(f"""You are the head writer of the YouTube channel "Inside Your Body".
@@ -118,11 +132,14 @@ Research notes (only use facts from here):
 {notes}
 
 Write the full episode as a cartoon story with a recurring cast, told by a narrator.
-Narration must total {WORDS_MIN}–{WORDS_MAX} words (our narrator reads ~2.5 words/s → ≈ 9–10 minutes). Count carefully.
+Narration must total {WORDS_MIN}–{WORDS_MAX} words (≈ 8:30–9 minutes with pauses). Count carefully.
+{HOOK_RULES}
+{SEO_RULES}
 Use 10–14 scenes of 6–14 sentences. Every sentence must be something we can SHOW: an action, a place, a change, a number, a character.
 Max 8 numbers in the whole script; round them and make them vivid ("enough tubes to circle the Earth twice").
 Re-hook the viewer every 40–60 seconds with an open loop. Explain what happens — never lecture or tell the viewer what to do.
-Then write the Short (115–135 words, ≈ 45–50 s; the single most surprising moment told as a mini story; last line loops into the first)
+Then write the Short (115–135 words, ≈ 45–50 s; the single most surprising moment told as a mini story; the second-to-last line sends
+viewers to the full episode ("the whole story is in the full video, linked above"); the last line loops into the first)
 and the upload package. The description must include a "Chapters" section using the placeholder {{CHAPTERS}} which the system fills in.
 Schema (comments after // are explanations, do not output them):
 {EPISODE_SCHEMA}""", max_tokens=30000)
@@ -132,12 +149,13 @@ def edit_episode(ep, notes):
     out = ask_json(f"""You are the retention editor of a top animated science YouTube channel ("Inside Your Body").
 Rules: {RULES}
 Here is the draft script (JSON). Improve it for watch-time WITHOUT changing the facts:
-- The first 15 seconds must hook hard (a striking moment or question, no intro).
+{HOOK_RULES}
 - Every 40–60 s add/strengthen an open loop ("but at hour six, something strange happens...").
 - Replace dry or list-like sentences with story beats: characters doing things, vivid comparisons, sensory details.
 - Remove preaching or advice. Remove filler. Keep sentences short and spoken.
 - Keep scene ids/titles, keep total words between {WORDS_MIN} and {WORDS_MAX}.
-- Make thumbnail line1/line2 a plain sentence naming the topic + curiosity (max 4 words per line).
+- Make thumbnail line1/line2 a plain sentence naming the topic + curiosity (max 4 words per line); keep 2 "variants" with different concepts.
+- Short: keep the second-to-last line pointing to the full episode and the loop back to the first line.
 Research notes for fact-checking: {notes[:6000]}
 Draft: {json.dumps({k: ep[k] for k in ('title', 'scenes', 'short', 'thumbnail', 'cast')}, ensure_ascii=False)}
 Return JSON with the same keys: {{"title", "scenes", "short", "thumbnail", "cast"}}.""", max_tokens=30000)
@@ -197,6 +215,7 @@ about bacteria eating food → we see the bacteria eating). First imagine the st
 {SHOT_CATALOG}
 Rules:
 - {rule}
+- OPENING (hook scene / first 30 s): every shot is a drawn shot or a dramatic motion shot of the subject (no text-only kinds), the most striking image first, faster cuts (a long sentence gets 2 shots), "riser"/"impact" sfx on the reveal.
 - "see" (required): one concrete sentence describing exactly what is on screen — subject, action, emotion. Never empty, never generic.
 - Characters change with the story: new pose, expression, action in each drawn shot (worried, sleeping, fighting, celebrating...).
 - NO REPETITION: never the same kind within 5 consecutive shots; every drawn shot is a NEW drawing (new composition, new pose/action); text-only kinds are never back to back and never longer than one sentence. Vary camera moves, layouts, actions, colours.

@@ -30,6 +30,9 @@ def build(ep, ep_dir):
     pkg = {'title': up['title'][:100], 'description': desc[:4900], 'tags': keep,
            'short_title': (up.get('short_title') or up['title'])[:95] + ('' if '#Shorts' in up.get('short_title', '') else ' #Shorts'),
            'short_description': (up.get('short_description') or '') + '\n\nFull episode: {FULL_URL}' + ('' if '#' in (up.get('short_description') or '') else '\n\n' + hashtags),
-           'pinned_comment': up.get('pinned_comment', '')}
+           'pinned_comment': up.get('pinned_comment', ''),
+           'thumbnail_variants': [p.name for p in sorted(ep_dir.glob('thumbnail*.jpg'))],
+           'manual_steps': 'Optional (Studio, 1 min): Details > Thumbnail > Test & compare with thumbnail.jpg + thumbnail_b.jpg + thumbnail_c.jpg; '
+                           'Short > Related video = the full episode; pin the comments.'}
     save(ep_dir / 'package.json', pkg)
     return pkg
