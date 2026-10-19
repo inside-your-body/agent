@@ -166,6 +166,11 @@ Return JSON with the same keys: {{"title", "scenes", "short", "thumbnail", "cast
     return ep
 
 SHOT_CATALOG = """Shot kinds (pick the one that literally SHOWS what the sentence says):
+- gen: a BRAND-NEW motion-graphics animation designed and coded from scratch for exactly this moment by a motion designer (no template).
+  Use it for every key moment: mechanisms, processes, transformations, journeys, comparisons, numbers that matter, reveals.
+  fields: design (REQUIRED, 2-4 sentences: the composition, every element on screen, exactly what moves/changes and when — synced to
+  the spoken words, the camera move, and the visual metaphor; must be specific to this sentence and unlike any other shot), text (≤4 words or null).
+The kinds below are older pre-built templates — use them only rarely (max 8% of shots in total):
 - cartoon: a hand-drawn 2D storyboard frame of exactly this moment (AI drawing made from "see"). fields: illustration (detailed drawing prompt
   = the storyboard frame: setting, characters, action, emotion, what body part/object is shown), cast [ids], motion push|pan-left|pan-right|zoom-out|shake,
   focus center|left|right|top|bottom (where the camera drifts), text (short caption or null),
@@ -202,13 +207,13 @@ def direct(ep, kind='long'):
     if kind == 'long':
         scenes = [{'id': sc['id'], 'title': sc.get('title'), 'sentences': {i: s for i, s in enumerate(sc['narration'])}} for sc in ep['scenes']]
         rule = ('Long video: 1 shot per sentence; a long sentence may get 2 shots (second one with "cue" = the word where it starts). '
-                'In this part: about 55% DRAWN shots (cartoon storyboard frames / character illustrations), the rest motion-graphics kinds '
-                'that literally show the subject (organ, vessel, cells, battle, journey, heart, membrane, zoom...). Text-only kinds '
-                '(slam, type, fact, list, counter, meter, chart) at most 15% of shots.')
+                'In this part: about 45% "gen" shots (new animations designed from scratch for the key moments), about 50% DRAWN shots '
+                '(cartoon storyboard frames / character illustrations for story and emotion beats), template kinds at most 5%. '
+                'Never two text-only shots; never a template where a gen shot could show it better.')
         chunks = [scenes[k:k + 4] for k in range(0, len(scenes), 4)]
     else:
         chunks = [[{'id': 'short', 'sentences': {i: s for i, s in enumerate(ep['short']['narration'])}}]]
-        rule = 'Short (vertical): EVERY sentence gets its own shot; fast and punchy; about 60% drawn shots; keep on-screen text minimal (captions are added automatically).'
+        rule = 'Short (vertical): EVERY sentence gets its own shot; fast and punchy; about 45% gen shots and 55% drawn shots, no templates; keep on-screen text minimal (captions are added automatically).'
     shots, used = {}, {}
     for ch in chunks:
         res = ask_json(f"""You are the storyboard artist AND motion-graphics director of an animated health channel. The viewer must SEE what the
@@ -217,7 +222,7 @@ about bacteria eating food → we see the bacteria eating). First imagine the st
 {SHOT_CATALOG}
 Rules:
 - {rule}
-- OPENING (hook scene / first 30 s): every shot is a drawn shot or a dramatic motion shot of the subject (no text-only kinds), the most striking image first, faster cuts (a long sentence gets 2 shots), "riser"/"impact" sfx on the reveal.
+- OPENING (hook scene / first 30 s): every shot is a drawn shot or a gen animation of the subject (no templates, no text-only kinds), the most striking image first, faster cuts (a long sentence gets 2 shots), "riser"/"impact" sfx on the reveal.
 - "see" (required): one concrete sentence describing exactly what is on screen — subject, action, emotion. Never empty, never generic.
 - Characters change with the story: new pose, expression, action in each drawn shot (worried, sleeping, fighting, celebrating...).
   Never the generic "character presenting with an open hand" pose. The human character is NOT in two consecutive shots — show the body part,
@@ -231,14 +236,14 @@ Rules:
 Cast: {json.dumps(ep.get('cast', []), ensure_ascii=False)}
 Script part: {json.dumps(ch, ensure_ascii=False)}
 Return JSON: {{"scenes": [{{"id": scene id, "shots": [{{"at": sentence index, "cue": word or null, "see": str, "kind": str, "text": str|null,
- "params": {{}}|null, "value": str|null, "items": [str]|null, "illustration": str|null, "cast": [str]|null, "motion": str|null, "focus": str|null, "sfx": str|null}}]}}]}}""",
+ "design": str|null, "params": {{}}|null, "value": str|null, "items": [str]|null, "illustration": str|null, "cast": [str]|null, "motion": str|null, "focus": str|null, "sfx": str|null}}]}}]}}""",
             max_tokens=32000)
         for sc in res.get('scenes', []):
             shots[sc['id']] = sc.get('shots', [])
             for b in shots[sc['id']]: used[b.get('kind')] = used.get(b.get('kind'), 0) + 1
     return shots
 
-KINDS_OK = {'cartoon', 'illustration', 'slam', 'type', 'counter', 'meter', 'vessel', 'heart', 'organ', 'membrane', 'cells', 'battle', 'spread',
+KINDS_OK = {'gen', 'cartoon', 'illustration', 'slam', 'type', 'counter', 'meter', 'vessel', 'heart', 'organ', 'membrane', 'cells', 'battle', 'spread',
             'clock', 'journey', 'zoom', 'compare', 'list', 'fact', 'stickman', 'chart', 'kinetic'}
 
 ORGANS = ('brain', 'lung', 'liver', 'stomach', 'kidney', 'intestine', 'tooth', 'tongue', 'bone', 'eye', 'skin', 'bladder', 'heart')
@@ -252,8 +257,10 @@ def fix_shots(shots, n_sent, recent=None):
         s_['at'] = min(max(int(s_.get('at', 0) or 0), 0), n_sent - 1)
         if s_.get('kind') not in KINDS_OK:
             s_['kind'] = 'cartoon'
-        overused = s_['kind'] not in DRAWN and recent.count(s_['kind']) >= MAX_PER_KIND
-        if overused or s_['kind'] in recent[-4:] or (s_['kind'] in TEXT_ONLY and recent and recent[-1] in TEXT_ONLY):
+        unique = s_['kind'] in DRAWN or s_['kind'] == 'gen'          # every one of these is newly made -> never a repeat
+        if s_['kind'] == 'gen' and not (s_.get('design') or s_.get('see')): s_['kind'] = 'cartoon'
+        overused = not unique and recent.count(s_['kind']) >= MAX_PER_KIND
+        if not unique and (overused or s_['kind'] in recent[-4:] or (s_['kind'] in TEXT_ONLY and recent and recent[-1] in TEXT_ONLY)):
             # swap to a drawn storyboard frame of the same moment (keeps the subject on screen)
             # swap to a NEW drawn storyboard frame of exactly this moment (always unique, keeps the subject on screen)
             s_['kind'] = 'cartoon'

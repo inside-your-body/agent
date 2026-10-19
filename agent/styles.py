@@ -63,7 +63,7 @@ FONTS = ['anton', 'inter', 'spacemono', 'bebas', 'montserrat', 'playfair', 'popp
 TRANSITIONS = ['slide', 'rise', 'zoom', 'fade', 'wipe', 'glitch', 'bounce', 'cut']
 PATTERNS = ['grid', 'dots', 'halftone', 'scan', 'gradient', 'paper', 'grain']
 
-def choose(topic, ep, used, ep_dir, vertical=False, avoid=None):
+def choose(topic, ep, used, ep_dir, vertical=False, avoid=None, recent_langs=None):
     recent = [u for u in used if u][-5:]
     candidates = [k for k in BASE if k not in [r.split('+')[0] for r in recent]] or list(BASE)
     refs = {}
@@ -84,9 +84,20 @@ You may re-tint the chosen theme: return replacement hex colours ONLY if they ke
 "fontHead": one of {FONTS}|null, "fontBody": one of {FONTS}|null, "upper": bool|null,
 "transition": one of {TRANSITIONS}|null, "pattern": one of {PATTERNS}|null,
 "refs_used": [short description of the Pinterest refs whose typography/motion ideas you borrowed],
+"lang": {{"name": "2-4 word name of this video's DESIGN LANGUAGE",
+  "art_style": "how every drawing/illustration in this video looks (medium, rendering, line, shading, texture) — 1-2 sentences",
+  "shape_language": "geometric / blobby / hand-cut / technical... and how organs, cells and characters are built from it",
+  "line_quality": "e.g. thick wobbly ink, no outlines, thin technical lines, chalk strokes",
+  "texture": "e.g. paper grain, halftone dots, glossy gradients, risograph misregistration, none",
+  "motion_personality": "how things move: snappy overshoot / slow organic / stop-motion jitter / mechanical easing ...",
+  "camera": "camera habits: flat 2D pans, push-ins, split screens, isometric cutaways ...",
+  "typography_feel": "how the few on-screen words look and animate"}},
 "why": "one sentence"}}
-{('This Short must look clearly different from the long video, which uses: ' + json.dumps({k: avoid.get(k) for k in ('id', 'fontHead', 'transition', 'pattern', 'bg')}) + ' -> use a different fontHead and transition.') if avoid else ''}
-Borrow the TYPOGRAPHY and MOTION-GRAPHICS feel (font character, caps, transitions, backgrounds) from the references, not just colours.""", max_tokens=1200)
+DESIGN LANGUAGE: invent a complete, distinctive visual language for THIS video (like a different studio made it) — inspired by the
+Pinterest references and the topic. It must be clearly DIFFERENT from these recent videos' languages: {json.dumps(recent_langs or [])}
+(different medium/art style, shape language, texture and motion personality — not just new colours).
+{('This Short must look clearly different from the long video, which uses: ' + json.dumps({k: avoid.get(k) for k in ('id', 'fontHead', 'transition', 'pattern', 'bg', 'lang')}) + ' -> use a different fontHead, transition and design language.') if avoid else ''}
+Borrow the TYPOGRAPHY and MOTION-GRAPHICS feel (font character, caps, transitions, backgrounds) from the references, not just colours.""", max_tokens=3000)
     except Exception as e:
         print('style pick failed', e)
     base_id = pick.get('base') if pick and pick.get('base') in candidates else random.choice(candidates)
@@ -101,6 +112,10 @@ Borrow the TYPOGRAPHY and MOTION-GRAPHICS feel (font character, caps, transition
         for k, allowed in (('fontHead', FONTS), ('fontBody', FONTS), ('transition', TRANSITIONS), ('pattern', PATTERNS)):
             if pick.get(k) in allowed: theme[k] = pick[k]
         if isinstance(pick.get('upper'), bool): theme['upper'] = pick['upper']
+    lang = (pick or {}).get('lang') if isinstance((pick or {}).get('lang'), dict) else None
+    theme['lang'] = lang or {'name': theme['id'], 'art_style': 'polished flat 2D vector cartoon with soft shading and bold clean outlines',
+                             'motion_personality': 'snappy with soft overshoot'}
+    theme['art_style'] = theme['lang'].get('art_style')
     if avoid:   # guarantee the Short differs from the long video
         if theme.get('fontHead') == avoid.get('fontHead'):
             theme['fontHead'] = random.choice([f for f in ('anton', 'bebas', 'archivoblack', 'fredoka', 'poppins', 'playfair') if f != avoid.get('fontHead')])

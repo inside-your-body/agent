@@ -11,12 +11,17 @@ MAX_CARTOONS = 90        # every drawn shot gets its OWN storyboard frame (first
 MAX_CARTOONS_SHORT = 16
 HQ_CARTOONS = 12
 
-def build(ep, style, ep_dir):
+def _hint(style):
+    art = style.get('art_style') or 'polished flat 2D vector cartoon, soft shading, bold clean outlines'
+    return (f"ART STYLE (follow strictly): {art}. Texture: {(style.get('lang') or {}).get('texture', '')}. "
+            f"Palette built around {style['accent']}, {style['accent2']} and {style['accent3']} on {style['bg']}")
+
+def build(ep, style, ep_dir, short_style=None):
     """Cast reference sheets -> storyboard frames (cartoon) + character cut-outs, all consistent with the cast.
     Images are generated in parallel; shots over the caps reuse an earlier drawing with a different camera move."""
     from concurrent.futures import ThreadPoolExecutor
     out = ep_dir / 'assets'; out.mkdir(exist_ok=True)
-    hint = f"Art direction: {style.get('mood', '')}; palette built around {style['accent']}, {style['accent2']} and {style['accent3']}"
+    hint = _hint(style); hint_v = _hint(short_style or style)
     cast = ep.get('cast') or []
     refs = {}
     with ThreadPoolExecutor(4) as ex:
@@ -34,7 +39,7 @@ def build(ep, style, ep_dir):
                 key = ('cartoon_v_%02d.png' if vertical else 'cartoon_%02d.png') % k
                 q = 'medium' if (k < HQ_CARTOONS and not vertical) or (vertical and k < 4) else 'low'
                 jobs.append((b, 'cartoon', key, vertical, ids, lambda b=b, ids=ids, r=r, p=out / key, v=vertical, q=q:
-                             p.exists() or images.cartoon_scene(b['illustration'], cast, ids, r, hint, p, v, q)))
+                             p.exists() or images.cartoon_scene(b['illustration'], cast, ids, r, hint_v if v else hint, p, v, q)))
                 if vertical: n_cart_v += 1
                 else: n_cart += 1
                 continue
@@ -59,14 +64,14 @@ def build(ep, style, ep_dir):
     def _again(bv):
         b, v = bv; key = f"retry_{abs(hash(b.get('illustration', ''))) % 10**8}.png"
         ids = [i for i in (b.get('cast') or []) if i in refs]
-        ok = images.cartoon_scene(b.get('illustration') or b.get('see') or '', cast, ids, [refs[i] for i in ids], hint, out / key, v, 'low')
+        ok = images.cartoon_scene(b.get('illustration') or b.get('see') or '', cast, ids, [refs[i] for i in ids], hint_v if v else hint, out / key, v, 'low')
         return key if ok else None
     with ThreadPoolExecutor(4) as ex:
         got = list(ex.map(_again, retry))
     for (b, v), key in zip(retry, got):
         b.pop('_reuse', None)
         if key: b['kind'], b['img'] = 'cartoon', 'ep/' + key
-        else: b['kind'] = 'organ'; b['params'] = {'organ': b.get('see') or b.get('illustration') or '', 'action': 'glow', 'label': b.get('text')}
+        else: b['kind'] = 'kinetic'; b['text'] = b.get('text') or (b.get('see') or '')[:60]
     save(ep_dir / 'episode.json', ep)
     print('cast:', len(refs), 'storyboard frames:', n_cart, '+ short', n_cart_v, 'cut-outs:', n_img, 'images ok:', sum(bool(x) for x in results), '/', len(results))
 

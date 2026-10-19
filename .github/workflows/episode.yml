@@ -62,6 +62,8 @@ jobs:
             work/cost.json
             work/*/assets/cast_*.png
             work/*/style_*.json
+            work/*/gen/*.tsx
+            work/*/gen/qa*/st/*.jpg
           retention-days: 14
       - name: Commit topic/history updates
         if: success()

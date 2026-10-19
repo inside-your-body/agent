@@ -80,3 +80,9 @@ Short: title ≤ 60 chars + #Shorts, link to the full episode.
 - Search terms that brought viewers were concrete ("tonsil stones", "first cigarette") → titles/tags use exact search phrases.
 - Shorts bring ~97% of views but almost nobody goes to the long video → every Short points to the full episode (line + comment + link).
 - 10:50 was too long for current retention → 8:30–9:15.
+
+## Motion design (owner's standing instruction, Oct 2026)
+- Every key moment gets a BRAND-NEW animation designed and coded from scratch for that moment (kind "gen") — no templates.
+  Each is QA-checked (stills + art review) and redesigned once if it fails; failures become a new drawing, never a template.
+- Every video has its own DESIGN LANGUAGE (art style, shape language, line, texture, motion personality, camera, typography),
+  clearly different from recent videos — drawings, animations and the Short all follow it.

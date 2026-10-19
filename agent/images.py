@@ -49,8 +49,8 @@ def edit(prompt, refs, out, size='1536x1024', transparent=False, quality='medium
                 print('image edit error', e, getattr(e, 'response', None) is not None and e.response.text[:300]); time.sleep(8 * (a + 1))
     return gen(prompt, out, size=size, transparent=transparent, quality=quality)
 
-CARTOON = ("Polished 2D cartoon animation still, flat vector shapes with soft shading, bold clean outlines, expressive faces, "
-           "like a high-end animated science explainer. {style}. No text, no letters, no numbers, no watermark, not gory.")
+CARTOON = ("2D animation still for a high-end animated science explainer, expressive faces. {style}. "
+           "No text, no letters, no numbers, no watermark, not gory.")
 
 def cast_ref(c, style_hint, out):
     p = (CARTOON.format(style=style_hint) + f" Character design reference: {c['name']} — {c['look']}. "

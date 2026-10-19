@@ -4,6 +4,7 @@ import {Beat, Theme, ff, alpha} from './theme';
 import {Icon, pickIcon} from './Icons';
 import {Stickman, BodyMap, STICK_POSES} from './Figures';
 import {MOTION, Particle} from './Motion';
+import {GenShot} from './GenShot';
 
 const cl = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
 type BP = {b: Beat; t: Theme; len: number; vertical: boolean};
@@ -384,6 +385,7 @@ const KINDS: Record<string, React.FC<BP>> = {
   cartoon: Cartoon, kinetic: Kinetic, illustration: Illustration, stickman: StickScene, icon: IconScene, counter: Counter, timeline: Timeline,
   chart: Chart, split: Split, checklist: Checklist, quote: Quote, body: BodyScene,
   ...MOTION, counter: MOTION.counter2,
+  gen: (p: BP) => <GenShot {...p} />,
 };
 
 // ---------- transition wrapper ----------

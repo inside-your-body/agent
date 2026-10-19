@@ -18,6 +18,7 @@ def mark_done(topic_id, entry):
     save(ROOT / 'data/topics.json', topics)
     h = load(ROOT / 'data/history.json'); h['episodes'].append(entry)
     h['used_styles'] += [entry.get('style'), entry.get('short_style')]
+    h.setdefault('used_langs', []).extend([x for x in (entry.get('lang'), entry.get('short_lang')) if x])
     save(ROOT / 'data/history.json', h)
 
 def main():
@@ -62,8 +63,12 @@ def main():
 
     # 2. style (Pinterest board refs -> new style spec, never one of the last used)
     from . import styles
-    style = styles.choose(topic['title'], ep, load(ROOT / 'data/history.json')['used_styles'], ep_dir)
-    short_style = styles.choose(topic['title'] + ' short', ep, load(ROOT / 'data/history.json')['used_styles'] + [style['id']], ep_dir, vertical=True, avoid=style)
+    hist = load(ROOT / 'data/history.json')
+    style = load(ep_dir / 'style_long.json') if (ep_dir / 'style_long.json').exists() and load(ep_dir / 'style_long.json').get('lang') else \
+        styles.choose(topic['title'], ep, hist['used_styles'], ep_dir, recent_langs=hist.get('used_langs', [])[-8:])
+    short_style = load(ep_dir / 'style_short.json') if (ep_dir / 'style_short.json').exists() and load(ep_dir / 'style_short.json').get('lang') else \
+        styles.choose(topic['title'] + ' short', ep, hist['used_styles'] + [style['id']], ep_dir, vertical=True, avoid=style,
+                      recent_langs=hist.get('used_langs', [])[-8:] + [style.get('lang')])
 
     # 3. voice (fixed narrator) + word timings
     def voice(kind):
@@ -103,9 +108,15 @@ def main():
         from collections import Counter
         print('shots:', Counter(b['kind'] for sc in ep['scenes'] for b in sc['beats']))
 
+    # 3c. a brand-new animation designed and coded from scratch for every key moment (no templates)
+    from . import genmotion
+    if not ep.get('gen_done'):
+        genmotion.build(ep, style, short_style, ep_dir); ep['gen_done'] = True; save(ep_dir / 'episode.json', ep)
+    genmotion.stage(ep_dir)
+
     # 4. illustrations + thumbnail art
     from . import assets
-    assets.build(ep, style, ep_dir)
+    assets.build(ep, style, ep_dir, short_style)
 
     # 5. render long + short, 6. audio mix, 7. QA
     from . import render, audio, qa
@@ -140,6 +151,7 @@ def main():
         print('short comment not posted:', e)
     mark_done(topic['id'], {'topic': topic['title'], 'video_id': vid, 'short_id': svid,
                             'style': style['id'], 'short_style': short_style['id'], 'publish_at': at,
+                            'lang': style.get('lang'), 'short_lang': short_style.get('lang'),
                             'built_at': dt.datetime.utcnow().isoformat(timespec='seconds')})
     save(ep_dir / 'result.json', {'video': vid, 'short': svid, 'publish_at': at, 'pinned_comment': pkg['pinned_comment']})
     print('DONE', vid, svid, at)
