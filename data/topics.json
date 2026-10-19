@@ -15,15 +15,16 @@
   "title": "Why Does Your Breath Smell Bad?",
   "angle": "Mystery story: the real sources of bad breath — bacteria colonies on the tongue, sulfur gases, dry mouth, tonsil stones, the gut myth. Zoom into the tongue as a city of bacteria.",
   "format": "mystery",
-  "status": "next",
-  "source": "user"
+  "status": "done",
+  "source": "user",
+  "video_id": "I-ATYrIjjiA"
  },
  {
   "id": 301,
   "title": "How Does a Healthy Tooth Rot?",
   "angle": "Follow one healthy tooth: sugar, acid-making bacteria, enamel erosion, the cavity reaching the nerve, abscess — and how it spreads trouble to the neighbouring teeth. Timeline over months.",
   "format": "journey",
-  "status": "todo",
+  "status": "next",
   "source": "user"
  },
  {
