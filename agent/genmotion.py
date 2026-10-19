@@ -24,6 +24,14 @@ CONTRACT = """Write ONE self-contained React component file (TypeScript/TSX) for
   All timing scales with dur (main action done by ~0.75*dur). Use a seeded pseudo-random: const rnd=(i:number)=>{const x=Math.sin(i*99.13)*43758.55;return x-Math.floor(x);}.
 - Rich and specific: at least 8 distinct drawn elements; biology must be correct; characters (if any) are simple cartoon shapes with faces/limbs that move.
 - On-screen text: at most 4 words total (optional), using theme.head font, never covering the subject.
+- MOTION GRAPHICS TELL THE STORY: animated diagrams, shapes, icons, particles, kinetic typography and transitions carry the explanation;
+  the cartoon cast/hero/stick figures appear only when this part calls for them. Key words appear as KINETIC TYPOGRAPHY in the design
+  language (animated in, synced to the exact spoken word, 1-4 words, never a full sentence).
+- SOUND DESIGN: also export the sound effects for the events in your animation, frames relative to this part (same timing as the visuals):
+  `export const SFX: {f: number; s: string}[] = [...]` with s one of: pop, click, whoosh, reveal, sparkle, bubble, drip, goo, impact, boom,
+  riser, shield, heartbeat, tick, bong. One effect per meaningful event (a key word lands → pop/click; something appears → reveal/sparkle;
+  liquid → drip/bubble; hit/crash → impact; build-up → riser; heart → heartbeat). 1-4 effects per part, at least 45 frames apart,
+  never on every element — subtle and pleasant, never annoying. Empty array if nothing deserves a sound.
 - Keep it under 380 lines. Valid TSX. Output ONLY the code in one ```tsx block."""
 
 
@@ -68,6 +76,19 @@ def _static_ok(code, allowed=()):
     if 'staticFile(' in code and len(files) < code.count('staticFile('): return 'staticFile must use literal file paths'
     return None
 
+
+SFX_OK = {'pop', 'click', 'whoosh', 'reveal', 'sparkle', 'bubble', 'drip', 'goo', 'impact', 'boom', 'riser', 'shield', 'heartbeat', 'tick', 'bong'}
+
+def _sfx(code, dur):
+    """Sound cues the animation exported -> [{'p': fraction of the part, 's': name}] (scaled to the real length at mix time)."""
+    m = re.search(r'export\s+const\s+SFX[^=]*=\s*(\[.*?\])\s*;', code, re.S)
+    if not m: return []
+    out, last = [], -999
+    for f, name in re.findall(r"f\s*:\s*(\d+(?:\.\d+)?)\s*,\s*s\s*:\s*['\"]([a-z]+)['\"]", m.group(1)):
+        f = float(f)
+        if name in SFX_OK and 0 <= f <= dur and f - last >= 40:
+            out.append({'p': round(f / max(1, dur), 4), 's': name}); last = f
+    return out[:4]
 
 def _write(gid, code):
     (GEN_DIR / f'{gid}.tsx').write_text(code)
@@ -292,7 +313,10 @@ def build(ep, style, short_style, ep_dir):
         if f.stem not in codes: f.unlink()
     _index(sorted(codes))
     save(gdir / 'done.json', codes)
-    for g, c in codes.items(): (gdir / f'{g}.tsx').write_text(c)
+    for g, c in codes.items():
+        (gdir / f'{g}.tsx').write_text(c)
+        ev = _sfx(c, meta[g]['dur'])
+        if ev: meta[g]['b']['sfx_events'] = ev
     save(ep_dir / 'episode.json', ep)
     print(f'genmotion: {len(codes)} new animations in the video, {len(meta) - len(codes)} became drawings')
     return len(codes)

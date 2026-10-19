@@ -43,7 +43,10 @@ Make the STORYBOARD for these sequences. {rule}
   as the narration goes on (like a professional explainer), never a slideshow of unrelated pictures.
 - Whatever the narrator names is visible at that moment (tongue → a tongue; bacteria eating → bacteria eating). Never an empty screen.
 - Every act is a different composition/action from every other act in the video. Characters change pose/expression with the story.
-- Mix: animated diagrams of the biology, the cartoon cast acting inside them, kinetic typography only for key words.
+- MOTION GRAPHICS TELL THE STORY (the channel's core): animated diagrams of the biology, shapes, particles, icons and KINETIC TYPOGRAPHY
+  of key words carry the explanation. A hero / stick figures / cartoon characters appear when the topic needs them (a person, a pill hero,
+  white-blood-cell guards...), acting inside the motion graphics — not as a slideshow of drawings.
+- Note in "motion" the key word(s) that appear as typography and the moments that deserve a subtle sound effect.
 - Poses: ask only for poses you really use (0-2 per act). Backdrops only where a painted setting helps (about 1 in 3 acts).
 Scenes (sentence indexes start at 0 in each scene): {json.dumps(ch, ensure_ascii=False)}
 Return JSON exactly: {SCHEMA}""", max_tokens=24000)

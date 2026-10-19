@@ -104,6 +104,22 @@ def finish(video, ep_dir, kind, style):
     last_t, last_name, k = -9.0, None, 0
     for i, b in enumerate(p['beats']):
         t = b['from'] / p['fps']; t_end = b['to'] / p['fps']
+        if b.get('kind') == 'gen':
+            # sounds designed together with the animation, synced to its own events
+            for e in (b.get('sfx_events') or []):
+                base = e['s']; te = t + e['p'] * (t_end - t)
+                if te - last_t < 1.4: continue
+                nm = base
+                if base in VAR: k += 1; nm = f'{base}{1 + k % VAR[base]}'
+                try: x = snd(nm)
+                except Exception: continue
+                if base == 'riser': place(fx, x, max(0, te - len(x) / SR + 0.1), GAIN.get(base, 0.2))
+                elif base == 'heartbeat':
+                    tt = te
+                    while tt < min(t_end, te + 4): place(fx, x, tt, GAIN[base]); tt += 0.86
+                else: place(fx, x, max(0, te - (0.2 if base == 'whoosh' else 0)), GAIN.get(base, 0.2))
+                last_t, last_name = te, base
+            continue
         name = b.get('sfx')
         if name in (None, '', 'none'):
             # default: an occasional soft whoosh on a cut, never dense

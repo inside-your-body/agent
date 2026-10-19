@@ -89,3 +89,6 @@ Short: title ≤ 60 chars + #Shorts, link to the full episode.
 - WORKFLOW (owner's decision): script → storyboard for every sequence (continuous acts) → automatic creative-director review →
   drawings the storyboard needs → one continuous animation per act, designed with the previous act in view → QA → publish automatically.
   No human approval step: the agent controls quality itself.
+- Motion graphics tell the story (core of the channel); characters/hero/stick figures only when the topic calls for them, acting inside the motion graphics.
+- Kinetic typography for key words, synced to the spoken word. Sound effects designed with each animation: one per meaningful event
+  (word lands, something appears, impact, liquid, build-up), 1-4 per part, ≥1.5 s apart, soft and pleasant — never annoying.

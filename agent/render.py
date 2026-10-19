@@ -48,7 +48,8 @@ def _beats_from(scenes, segs, total_s, words, end_card=None):
         bw = [[w['w'], int(round(w['s'] * FPS)) - f0] for w in words if b['from_s'] - 0.05 <= w['s'] < b['to_s']]
         beats.append({'from': f0, 'to': f1, 'kind': b.get('kind', 'slam'),
                       'text': b.get('text'), 'value': b.get('value'), 'items': b.get('items'), 'img': b.get('img'), 'part': b.get('part'),
-                      'motion': b.get('motion'), 'cast': b.get('cast'), 'params': b.get('params') or {}, 'words': bw, 'sfx': b.get('sfx')})
+                      'motion': b.get('motion'), 'cast': b.get('cast'), 'params': b.get('params') or {}, 'words': bw, 'sfx': b.get('sfx'),
+                      'sfx_events': b.get('sfx_events')})
     return beats
 
 def props(ep, style, ep_dir, kind):
