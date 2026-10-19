@@ -12,8 +12,9 @@ def mark_done(topic_id, entry):
     topics = load(ROOT / 'data/topics.json')
     for x in topics:
         if x['id'] == topic_id: x['status'] = 'done'
-    nxt = next((x for x in topics if x['status'] == 'todo'), None)
-    if nxt: nxt['status'] = 'next'
+    if not any(x['status'] == 'next' for x in topics):
+        nxt = next((x for x in topics if x['status'] == 'todo'), None)
+        if nxt: nxt['status'] = 'next'
     save(ROOT / 'data/topics.json', topics)
     h = load(ROOT / 'data/history.json'); h['episodes'].append(entry)
     h['used_styles'] += [entry.get('style'), entry.get('short_style')]
@@ -37,7 +38,10 @@ def main():
             from . import scout; scout.run()          # weekly: refresh topic bank from what's getting views now
         except Exception as e:
             print('scout skipped:', e)
-    topic = {'id': None, 'title': a.topic} if a.topic else pick_topic()
+    if a.topic and a.topic.strip().isdigit():          # pick a topic from the bank by its number (keeps its angle/format)
+        topic = next((t for t in load(ROOT / 'data/topics.json') if str(t.get('id')) == a.topic.strip()), None) or pick_topic()
+    else:
+        topic = {'id': None, 'title': a.topic} if a.topic else pick_topic()
     ep_dir = WORK / dt.datetime.utcnow().strftime('%Y%m%d'); ep_dir.mkdir(parents=True, exist_ok=True)
     print('== topic:', topic['title'])
 

@@ -102,7 +102,9 @@ EPISODE_SCHEMA = """{
             "short_title": str, "short_description": str},
  "thumbnail": {"image_prompt": str, "line1": str, "line2": str,   // line1+line2 = one plain sentence that names the topic and makes people curious,
                                                   // e.g. "WHAT AN IV DRIP" / "DOES INSIDE YOU"; max 4 words per line
-   "variants": [ {"image_prompt": str, "line1": str, "line2": str} ] },  // exactly 2 alternative thumbnails with a DIFFERENT concept each
+   "variants": [ {"image_prompt": str, "line1": str, "line2": str} ] },  // line1 = the topic in plain words (viewer knows what it is about);
+                                                  // line2 = an open question/twist that makes them NEED to click (never answers it);
+                                                  // image = one striking, curious picture of that exact subject  // exactly 2 alternative thumbnails with a DIFFERENT concept each
                                                   // (e.g. extreme close-up of the body part with a shocking detail / a character's shocked
                                                   // reaction / before-vs-after split) and different wording, for A/B testing
  "sources": [{"title": str, "url": str}]
@@ -218,7 +220,7 @@ Rules:
 - OPENING (hook scene / first 30 s): every shot is a drawn shot or a dramatic motion shot of the subject (no text-only kinds), the most striking image first, faster cuts (a long sentence gets 2 shots), "riser"/"impact" sfx on the reveal.
 - "see" (required): one concrete sentence describing exactly what is on screen — subject, action, emotion. Never empty, never generic.
 - Characters change with the story: new pose, expression, action in each drawn shot (worried, sleeping, fighting, celebrating...).
-- NO REPETITION: never the same kind within 5 consecutive shots; every drawn shot is a NEW drawing (new composition, new pose/action); text-only kinds are never back to back and never longer than one sentence. Vary camera moves, layouts, actions, colours.
+- NO REPETITION: never the same kind within 5 consecutive shots; a motion-graphics kind at most 4 times in the whole video and never with the same content/layout twice; every drawn shot is a NEW drawing (new composition, new pose/action); text-only kinds are never back to back and never longer than one sentence. Vary camera moves, layouts, actions, colours.
 - NO EMPTY SCREEN: the subject the narrator names must be visible in every shot (drawn or as motion graphics).
 - Kinds already used earlier in this video (avoid overusing them): {json.dumps(used)}
 - On-screen text max 6 words, never the whole sentence; 1 key word in CAPS. Many drawn shots need no text at all.
@@ -236,6 +238,8 @@ Return JSON: {{"scenes": [{{"id": scene id, "shots": [{{"at": sentence index, "c
 KINDS_OK = {'cartoon', 'illustration', 'slam', 'type', 'counter', 'meter', 'vessel', 'heart', 'organ', 'membrane', 'cells', 'battle', 'spread',
             'clock', 'journey', 'zoom', 'compare', 'list', 'fact', 'stickman', 'chart', 'kinetic'}
 
+MAX_PER_KIND = 4   # a motion-graphics template appears at most 4 times in a whole video (always with new content); drawn frames are always new
+
 def fix_shots(shots, n_sent, recent=None):
     """Enforce: valid kinds, first shot at 0, a kind never repeats within 3 shots (across scenes via `recent`)."""
     recent = recent if recent is not None else []
@@ -244,9 +248,11 @@ def fix_shots(shots, n_sent, recent=None):
         s_['at'] = min(max(int(s_.get('at', 0) or 0), 0), n_sent - 1)
         if s_.get('kind') not in KINDS_OK:
             s_['kind'] = 'cartoon'
-        if s_['kind'] in recent[-4:] or (s_['kind'] in TEXT_ONLY and recent and recent[-1] in TEXT_ONLY):
+        overused = s_['kind'] not in DRAWN and recent.count(s_['kind']) >= MAX_PER_KIND
+        if overused or s_['kind'] in recent[-4:] or (s_['kind'] in TEXT_ONLY and recent and recent[-1] in TEXT_ONLY):
             # swap to a drawn storyboard frame of the same moment (keeps the subject on screen)
-            alt = next((k for k in ('cartoon', 'illustration', 'organ', 'zoom') if k not in recent[-4:]), 'cartoon')
+            alt = next((k for k in ('cartoon', 'illustration', 'organ', 'zoom') if k not in recent[-4:]
+                        and (k in DRAWN or recent.count(k) < MAX_PER_KIND)), 'cartoon')
             s_['kind'] = alt
             if alt in DRAWN and not s_.get('illustration'): s_['illustration'] = s_.get('see') or s_.get('text') or ''
             if alt == 'organ': s_['params'] = {'organ': (s_.get('see') or ''), 'action': 'glow', 'label': s_.get('text')}
