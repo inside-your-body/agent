@@ -1,99 +1,436 @@
 {
  "https://www.pinterest.com/pin/1097541371726979511/": {
   "img": "https://i.pinimg.com/474x/37/67/16/376716c56dff67df1f1f15eb9b6d3a0b.jpg",
-  "title": "Dive into the realities of knee arthrosis, a common form of osteoarthritis that affects millions worldwide.  Learn about the wear and tear of cartilage, resulting in pain and stiffness in the knee joint. Our visuals explore the symptoms, causes, and effective ways to manage and alleviate discomfort.  Whether you're a fitness enthusiast, aging adult, or anyone in between, discover how to care for your knees to maintain mobility and quality of life."
+  "title": "Dive into the realities of knee arthrosis, a common form of osteoarthritis that affects millions worldwide.  Learn about the wear and tear of cartilage, resulting in pain and stiffness in the knee joint. Our visuals explore the symptoms, causes, and effective ways to manage and alleviate discomfort.  Whether you're a fitness enthusiast, aging adult, or anyone in between, discover how to care for your knees to maintain mobility and quality of life.",
+  "analysis": {
+   "palette": [
+    "#000000",
+    "#E8DCC4",
+    "#F4F1EA",
+    "#C9B28F",
+    "#8A6F52"
+   ],
+   "dark": true,
+   "typography": "Clean, light-to-medium geometric sans-serif (e.g., Helvetica Neue / Montserrat) with generous tracking, small caps for anatomical labels, thin leader lines",
+   "motion": "Slow cinematic orbit and push-in around the joint; bones fade in from black with soft rim-light sweeps; cartilage and meniscus layers peel apart or highlight with gentle glow pulses; the joint flexes smoothly to show articulation; labels draw on via thin line wipes with ease-in-out timing",
+   "mood": "Clinical, precise, calm, premium, educational",
+   "fit_topics": "Knee anatomy, osteoarthritis, cartilage and meniscus injuries, ACL/ligament tears, joint replacement surgery, sports medicine, physiotherapy and rehab, bone density and osteoporosis, orthopedic explainers"
+  }
  },
  "https://www.pinterest.com/pin/1097541371726979497/": {
   "img": "https://i.pinimg.com/474x/00/98/e4/0098e4795b6bc8c9f9b0366c4b182ae9.jpg",
-  "title": "𝐄𝐱𝐩𝐥𝐚𝐢𝐧𝐞𝐫 𝐀𝐧𝐢𝐦𝐚𝐭𝐢𝐨𝐧 𝐟𝐨𝐫 𝐚 𝐓𝐡𝐞𝐫𝐚𝐩𝐲 𝐀𝐩𝐩 | 𝐂𝐫𝐞𝐚𝐭𝐞𝐝 𝐛𝐲 𝐮𝐬  In the mental health space, clarity and connection matter.We partnered with a therapy app to create a thoughtful, easy-to-understand explainer animation.  📩 If your app or brand needs a high-converting explainer video , 𝐥𝐞𝐭’𝐬 𝐜𝐨𝐧𝐧𝐞𝐜𝐭.  #ExplainerAnimation #TherapyApp #MentalHealthMarketing #AnimatedVideos #2DAnimation #ProductExplainer #WellnessTech #AppDemoVideo"
+  "title": "𝐄𝐱𝐩𝐥𝐚𝐢𝐧𝐞𝐫 𝐀𝐧𝐢𝐦𝐚𝐭𝐢𝐨𝐧 𝐟𝐨𝐫 𝐚 𝐓𝐡𝐞𝐫𝐚𝐩𝐲 𝐀𝐩𝐩 | 𝐂𝐫𝐞𝐚𝐭𝐞𝐝 𝐛𝐲 𝐮𝐬  In the mental health space, clarity and connection matter.We partnered with a therapy app to create a thoughtful, easy-to-understand explainer animation.  📩 If your app or brand needs a high-converting explainer video , 𝐥𝐞𝐭’𝐬 𝐜𝐨𝐧𝐧𝐞𝐜𝐭.  #ExplainerAnimation #TherapyApp #MentalHealthMarketing #AnimatedVideos #2DAnimation #ProductExplainer #WellnessTech #AppDemoVideo",
+  "analysis": {
+   "palette": [
+    "#5B9BD5",
+    "#1F1B4D",
+    "#F2C75C",
+    "#E8667A",
+    "#E9B58A"
+   ],
+   "dark": false,
+   "typography": "Rounded geometric sans with friendly medium-to-bold weights; clean, open letterforms for captions and lower-thirds, with occasional bold sans for key stats",
+   "motion": "Flat vector characters with subtle secondary motion: gentle head tilts, blinking, breathing sway and cloth/hair drift. Parallax depth between a softly blurred background and the foreground figure, slow push-ins, smooth ease-in-out slides and pops for text callouts, icons and props like the diploma, with soft cuts or wipes between scenes",
+   "mood": "Warm, optimistic, approachable, confident, educational",
+   "fit_topics": "Patient education and health literacy, preventive care and wellness habits, mental health and stress management, women's and adolescent health, career and training in healthcare, vaccination and public-health awareness, explainers aimed at a broad general audience"
+  }
  },
  "https://www.pinterest.com/pin/1097541371726979465/": {
   "img": "https://i.pinimg.com/474x/83/6f/7b/836f7b6d78d2593b1807533176b6fc6e.jpg",
-  "title": ""
+  "title": "",
+  "analysis": {
+   "palette": [
+    "#041428",
+    "#0A3A66",
+    "#1E7FD1",
+    "#35C8FF",
+    "#BFF4FF"
+   ],
+   "dark": true,
+   "typography": "Light-to-regular technical sans with wide letter-spacing, small uppercase HUD labels and monospaced numeric readouts (futuristic, thin-stroke, sci-fi interface style)",
+   "motion": "A glowing wireframe body outline slowly rotates or scans on a holographic circular platform with rising light beams and drifting particles. HUD panels fade and slide in from the side, bar charts and waveforms animate in steps, radar sweeps and ring gauges tick up, numbers flicker and count, node-and-line molecule icons pulse and connect. Scan lines wipe over the figure, with soft glows, gentle parallax and smooth ease-in-out transitions.",
+   "mood": "Futuristic, clinical, high-tech, analytical, immersive",
+   "fit_topics": "Diagnostics and medical imaging, body scans and anatomy overviews, AI and digital health, genetics and molecular biology, vital signs and biometrics monitoring, preventive health check-ups, health-tech and research explainers"
+  }
  },
  "https://www.pinterest.com/pin/1097541371726979458/": {
   "img": "https://i.pinimg.com/474x/32/c8/c9/32c8c92b17e6f328e20e0575b5c68fb8.jpg",
-  "title": "Heart Health vector animation. Download this vector animation about cardiology, heartbeat, heart rate, critical medical condition, medical emergency, danger, caution, alarm, help sign, and more."
+  "title": "Heart Health vector animation. Download this vector animation about cardiology, heartbeat, heart rate, critical medical condition, medical emergency, danger, caution, alarm, help sign, and more.",
+  "analysis": {
+   "palette": [
+    "#FBFAF8",
+    "#FF4A14",
+    "#2EC4B6",
+    "#8A6FE8",
+    "#FBE9DC"
+   ],
+   "dark": false,
+   "typography": "Clean geometric sans-serif: light-weight dark plum for headings, bold rounded grey sans for brand/labels, with a bold sans label inside a gradient arrow tag",
+   "motion": "Elements pop in with soft springy scale-ups and gentle overshoot; pills and capsules drift and float with slight rotation; the stethoscope tube draws on as a line stroke; the heart pulses rhythmically while an ECG line traces across it; the paper card slides in and tilts slightly; smooth ease-in-out transitions with staggered timing",
+   "mood": "Friendly, clean, modern, reassuring, playful",
+   "fit_topics": "Heart health and cardiology, medication and pill adherence, routine check-ups and primary care, wellness tips, patient education, general healthcare and pharmacy explainers"
+  }
  },
  "https://www.pinterest.com/pin/1097541371726979455/": {
   "img": "https://i.pinimg.com/474x/ee/38/41/ee3841d8fa8ece26fccf91b2519df262.jpg",
-  "title": "Presenting a complex issue of patient-doctor relationship with the explainer video? Funny and challenging task, don’t you think? We've created this video as a support material for Edgard Eeckman. He’s using the animation to deliver his insights he acquired through the doctoral thesis on the agenda of education to physicians, other caregivers and to anyone related to patient-caregiver communication."
+  "title": "Presenting a complex issue of patient-doctor relationship with the explainer video? Funny and challenging task, don’t you think? We've created this video as a support material for Edgard Eeckman. He’s using the animation to deliver his insights he acquired through the doctoral thesis on the agenda of education to physicians, other caregivers and to anyone related to patient-caregiver communication.",
+  "analysis": {
+   "palette": [
+    "#BFE3F5",
+    "#3FB8A8",
+    "#1F4E79",
+    "#FFFFFF",
+    "#1B2A41"
+   ],
+   "dark": false,
+   "typography": "Rounded geometric sans (e.g. Nunito/Poppins style) in medium-to-bold weights, friendly lowercase-leaning headings with generous letter-spacing and high-contrast navy text on light blue",
+   "motion": "Smooth eased character loops with gentle squash-and-stretch and overlap on limbs and clothing; flat vector shapes slide and morph between scenes; music-note icons float, pop and fade; subtle parallax and slow camera push-ins; soft ground-line shadows; elements enter with bouncy scale-up and staggered timing",
+   "mood": "warm, playful, calm, reassuring, human",
+   "fit_topics": "Patient-doctor relationships and bedside manner, mental health and wellbeing, preventive care and healthy lifestyle, active ageing and exercise or dance therapy, music therapy, general wellness and health-literacy explainers aimed at a broad audience"
+  }
  },
  "https://www.pinterest.com/pin/1097541371726979449/": {
   "img": "https://i.pinimg.com/474x/8f/4b/ac/8f4bace9e679a5e52b17721a247b2d85.jpg",
-  "title": "We are proud to have partnered up with BMF on this casual and caring campaign for the Department of Health NSW, Australia."
+  "title": "We are proud to have partnered up with BMF on this casual and caring campaign for the Department of Health NSW, Australia.",
+  "analysis": {
+   "palette": [
+    "#3F57A8",
+    "#1F4FE0",
+    "#9EA9D8",
+    "#E8B7A8",
+    "#14183A"
+   ],
+   "dark": true,
+   "typography": "No text is visible in the frame. A friendly rounded geometric sans (medium to bold weight) in soft off-white would suit it, set with generous spacing and kept minimal so it doesn't compete with the illustration.",
+   "motion": "Slow, smooth eases with gentle parallax between layers. The diagonal moonlight beam would sweep or fade across the bed. The phone glow would pulse softly and its light could spread over the face and pillow. Pillow outlines and the hand-drawn line elements would wobble or draw on with a slight boil. Stars would twinkle, and the slider at the top could move to show time passing. Scene changes would use morphing shapes and soft cross-dissolves, with subtle grain throughout.",
+   "mood": "Quiet, nocturnal, introspective, calming, slightly uneasy",
+   "fit_topics": "Sleep hygiene and insomnia, screen time and blue light, circadian rhythm, doomscrolling and anxiety, digital wellbeing, mental health at night, bedtime routines, melatonin and sleep science"
+  }
  },
  "https://www.pinterest.com/pin/1097541371726979436/": {
   "img": "https://i.pinimg.com/474x/f8/02/ba/f802ba4dfdefd04bd70306cfe6914872.jpg",
-  "title": "Diagnosis: Motion Loops pack Medical information, Vital signs monitoring, Microscopic biology, Organic backgrounds, 3D Body parts, and more. Unique, custom-crafted, and perfectly looping animations you can customize, mix, blend, and render in resolutions up to 4K. Includes: - 83 assets - Video Loops: 4K and FullHD | MP4 and Bink 2 - Unreal Materials: Drag and Drop | Binks and Flipbooks - Sprite Sheet: 16x16 frames | 4K & 8K - Masks: 4K and FullHD for cut-out assets Get it..."
+  "title": "Diagnosis: Motion Loops pack Medical information, Vital signs monitoring, Microscopic biology, Organic backgrounds, 3D Body parts, and more. Unique, custom-crafted, and perfectly looping animations you can customize, mix, blend, and render in resolutions up to 4K. Includes: - 83 assets - Video Loops: 4K and FullHD | MP4 and Bink 2 - Unreal Materials: Drag and Drop | Binks and Flipbooks - Sprite Sheet: 16x16 frames | 4K & 8K - Masks: 4K and FullHD for cut-out assets Get it...",
+  "analysis": {
+   "palette": [
+    "#07130F",
+    "#0F2A21",
+    "#1F6B4F",
+    "#5FE3A1",
+    "#E8F5EE"
+   ],
+   "dark": true,
+   "typography": "Wide extended geometric sans for the title with a heartbeat/ECG line woven through the letterforms; small monospaced uppercase technical labels and glowing numeric readouts for data",
+   "motion": "Scanline sweeps reveal MRI slices and chest X-rays in sequence; thin leader lines draw on from the body wireframe to callout boxes; vital-sign numbers tick and flicker like a live monitor; ECG waveform pulses across the screen and morphs into the title; subtle glow pulses, parallax between panels, and HUD-style fade/slide-in of data windows",
+   "mood": "clinical, futuristic, tense, high-tech, analytical",
+   "fit_topics": "Diagnostics and medical imaging, heart and lung conditions, neurology and brain scans, vital signs monitoring, how tests like MRI/X-ray/ECG work, AI in healthcare, and serious-disease explainers needing an authoritative, data-driven tone"
+  }
  },
  "https://www.pinterest.com/pin/1097541371726979425/": {
   "img": "https://i.pinimg.com/474x/f5/05/29/f50529a31945a8bebacf5665c2d287a9.jpg",
-  "title": "What I Offer:  Mechanism of Action for New Drugs Drug Delivery Systems Cancer Treatment Animation MOA animation Medical explainer video Biotech animation Scientific animation Pharmacology animation Medical 3D animation Medical animation video Anatomy animation Oncology animation Immunology animation Neurology animation Cancer drug animation mRNA animation siRNA animation gene therapy animation Antibody animation Mode of action animation Clinical trial animation Patient education video Scientific research animation 3D pharma animation Medical illustration video   I also work on Medical & Surgical Animation, Pharmaceutical & Drug, Mechanism Animation, Scientific animation, Biotech animation, MOA animation, Drug animation, Immunotheraphy animation, 3D Explainer video."
+  "title": "What I Offer:  Mechanism of Action for New Drugs Drug Delivery Systems Cancer Treatment Animation MOA animation Medical explainer video Biotech animation Scientific animation Pharmacology animation Medical 3D animation Medical animation video Anatomy animation Oncology animation Immunology animation Neurology animation Cancer drug animation mRNA animation siRNA animation gene therapy animation Antibody animation Mode of action animation Clinical trial animation Patient education video Scientific research animation 3D pharma animation Medical illustration video   I also work on Medical & Surgical Animation, Pharmaceutical & Drug, Mechanism Animation, Scientific animation, Biotech animation, MOA animation, Drug animation, Immunotheraphy animation, 3D Explainer video.",
+  "analysis": {
+   "palette": [
+    "#B9CBD9",
+    "#E8EEF3",
+    "#F0C9CC",
+    "#D98A94",
+    "#C94A5A"
+   ],
+   "dark": false,
+   "typography": "Light, clean geometric sans-serif for small callout labels (thin weight, small caps-style tags in white boxes with thin connector lines); minimal text, wide letter spacing, designed to stay unobtrusive over the 3D render",
+   "motion": "Slow, smooth camera push-ins and gentle orbit around a translucent 3D body; layers peel back to reveal skeleton and organs with soft fades; callout labels draw on via thin leader lines that extend then pop in a small tag; the highlighted area (tumor) pulses or glows subtly in red; eased, cinematic dolly moves with shallow depth-of-field and soft bokeh backdrop",
+   "mood": "Clinical, calm, reassuring, informative, modern",
+   "fit_topics": "Oncology and tumor explanations, anatomy overviews, disease progression, surgical or treatment procedures, organ-specific conditions, digestive and thoracic health topics, patient education and medical device or pharma explainers"
+  }
  },
  "https://www.pinterest.com/pin/1097541371726979390/": {
   "img": "https://i.pinimg.com/474x/1a/e9/f6/1ae9f6947e4cecf89551f31225bc5f50.jpg",
-  "title": "🌍 Health is a right, not a privilege! On #UniversalHealthCoverageDay, let’s unite for accessible, affordable, and inclusive healthcare for all. Together, we can build stronger systems that leave no one behind. 💙💉 #HealthForAll #UHC #InclusiveCare   #universalhealthcare #medicareforall #healthcare #medicare"
+  "title": "🌍 Health is a right, not a privilege! On #UniversalHealthCoverageDay, let’s unite for accessible, affordable, and inclusive healthcare for all. Together, we can build stronger systems that leave no one behind. 💙💉 #HealthForAll #UHC #InclusiveCare   #universalhealthcare #medicareforall #healthcare #medicare",
+  "analysis": {
+   "palette": [
+    "#0A4FC4",
+    "#FFFFFF",
+    "#5B9BEA",
+    "#1E6FE0",
+    "#A9D0F7"
+   ],
+   "dark": true,
+   "typography": "No text in frame; pair with clean geometric sans (medium/bold weight, e.g. Montserrat or Poppins) in white for titles and captions, matching the thin-line, technical blueprint feel",
+   "motion": "Central holographic dotted globe rotates slowly and continuously while the blueprint grid drifts or pulses subtly in the background. White line-art icons (hospital, siren, IV stand, stethoscope-heart, DNA helix, microscope, pills, caduceus) pop in with staggered scale/fade, then orbit or float gently around the globe. Icons can glow or pulse in sequence to highlight each topic, with light connector lines drawing from the globe to the active icon and smooth ease-in-out transitions for scene changes.",
+   "mood": "clean, technological, trustworthy, global, clinical",
+   "fit_topics": "Global health and epidemiology, pandemics and outbreak response, healthcare systems and hospital infrastructure, medical research and genetics, pharmaceuticals and drug development, public health campaigns, telemedicine and health-tech, emergency care and preventive medicine overviews"
+  }
  },
  "https://www.pinterest.com/pin/1097541371726979387/": {
   "img": "https://i.pinimg.com/474x/c1/ff/be/c1ffbedadfc7a91cb3dbb5cc4f8a8033.jpg",
-  "title": ""
+  "title": "",
+  "analysis": {
+   "palette": [
+    "#E1EEFE",
+    "#FFFFFF",
+    "#2B3FC9",
+    "#E8694F",
+    "#C8D9F5"
+   ],
+   "dark": false,
+   "typography": "Rounded geometric sans (e.g. Poppins/Nunito style) in medium-to-bold weights, friendly and highly legible, with generous letter spacing and large clean headlines placed in the open upper space",
+   "motion": "Soft, smooth flat-vector animation: characters slide or pop up from the bottom edge with gentle ease-out and slight overshoot, subtle idle breathing and head-tilt loops, clipboard and stethoscope with minor secondary sway, text fading or sliding in from above in staggered reveals, quick clean wipe transitions between scenes",
+   "mood": "calm, trustworthy, friendly, professional, approachable",
+   "fit_topics": "General healthcare awareness, preventive care and checkups, doctor-patient communication, medical team introductions, hospital or clinic services, public health guidance, insurance and wellness explainers, patient education"
+  }
  },
  "https://www.pinterest.com/pin/1097541371726979344/": {
   "img": "https://i.pinimg.com/474x/ae/ef/ce/aeefce14fd7d095a4cd78d2f732b84cb.jpg",
-  "title": "#MedicalBackground, #MedicalVideo, #HealthcareBackground, #MedicalAnimation, #HospitalBackground, #AnatomyVideo, #SurgeryBackground, #DoctorTheme, #MedicalResearch, #HealthScience, #DNAAnimation, #HumanBodyVideo, #MedicalLoop, #ClinicalBackground, #MedicalLab, #VirusAnimation, #MedicalTechnology, #MedicineBackground, #HealthcareVideo, #MedicalPresentation"
+  "title": "#MedicalBackground, #MedicalVideo, #HealthcareBackground, #MedicalAnimation, #HospitalBackground, #AnatomyVideo, #SurgeryBackground, #DoctorTheme, #MedicalResearch, #HealthScience, #DNAAnimation, #HumanBodyVideo, #MedicalLoop, #ClinicalBackground, #MedicalLab, #VirusAnimation, #MedicalTechnology, #MedicineBackground, #HealthcareVideo, #MedicalPresentation",
+  "analysis": {
+   "palette": [
+    "#1E2326",
+    "#3A4044",
+    "#C98B84",
+    "#E8B7A8",
+    "#B9C2C7"
+   ],
+   "dark": true,
+   "typography": "Clean light-weight geometric sans-serif for labels and body (thin, widely tracked uppercase), paired with a medium-weight humanist sans for headings; subtle white text with soft glow, plus hand-drawn chalk-style chemical formulas as texture",
+   "motion": "Slow, cinematic camera push-in on the translucent torso; lungs fade in with a gentle breathing scale pulse (expand/contract); bronchial branches draw on progressively like growing lines; faint chemical formulas (H2O, molecular rings) drift and flicker in the background with soft parallax; labels and callouts slide in with eased fades and thin leader lines; particle or airflow streaks travel down the trachea into the lungs",
+   "mood": "Clinical, calm, scientific, ethereal, educational",
+   "fit_topics": "Respiratory health, asthma, COPD, lung cancer and smoking cessation, pneumonia and COVID-19, air pollution and air quality, breathing exercises, oxygen and gas exchange, anatomy and physiology lessons, pharmacology of inhalers and medication"
+  }
  },
  "https://www.pinterest.com/pin/1097541371726979328/": {
   "img": "https://i.pinimg.com/474x/74/7a/f4/747af4250dd56f8047edc8a9c72a0131.jpg",
-  "title": "1784 NAVER Care on Behance"
+  "title": "1784 NAVER Care on Behance",
+  "analysis": {
+   "palette": [
+    "#E6ECF5",
+    "#1E88E5",
+    "#2B2F3A",
+    "#FFFFFF",
+    "#BFD4F2"
+   ],
+   "dark": false,
+   "typography": "Clean rounded geometric sans-serif (e.g. Poppins or Nunito) in medium and semibold weights, with generous spacing and sentence-case labels",
+   "motion": "Smooth eased slides and gentle scale-ins, with characters entering from the sides. Subtle idle loops such as blinking, hand gestures and breathing. Soft light-cone fades from the lamp. Callouts and icons pop in with light overshoot. Flat shapes morph between scenes, and camera pushes are slow and minimal.",
+   "mood": "calm, trustworthy, friendly, clinical, reassuring",
+   "fit_topics": "Doctor-patient consultations, preventive care and checkups, explaining diagnoses and treatment options, medication adherence, telehealth onboarding, patient education, mental health check-ins, insurance and healthcare navigation",
+   "style_notes": "Flat vector illustration with minimal line detail, a restrained blue-and-charcoal palette, a pale blue-gray background, simplified faces and soft light accents"
+  }
  },
  "https://www.pinterest.com/pin/1097541371726979279/": {
   "img": "https://i.pinimg.com/474x/36/f9/66/36f96687d3ba477f6ea63716555b2270.jpg",
-  "title": "의료 인포그래픽 모션그래픽 영상 medical infographic motion"
+  "title": "의료 인포그래픽 모션그래픽 영상 medical infographic motion",
+  "analysis": {
+   "palette": [
+    "#E4E6F7",
+    "#2B2F77",
+    "#F2694F",
+    "#7C86D9",
+    "#4FA58A"
+   ],
+   "dark": false,
+   "typography": "Rounded geometric sans-serif (e.g. Poppins/Nunito style) in medium to semibold weights, with generous spacing and clean sentence-case labels that echo the soft, friendly flat-vector shapes",
+   "motion": "Gentle flat-vector animation: characters slide or fade into position with soft ease-in-out, subtle idle loops such as blinking, small head turns, and the paper or clipboard lifting slightly. Wall clock hand ticks, monitor screen flickers with data, and plants sway lightly. Smooth parallax camera pushes between doctor and patient, with shape-morph transitions and callout icons (brain, heart, charts) popping in with a light overshoot bounce.",
+   "mood": "Calm, trustworthy, friendly, modern, reassuring",
+   "fit_topics": "Patient education and consultations, preventive care and check-ups, mental health and neurology, chronic condition management, explaining test results or diagnoses, telehealth and clinic onboarding, general wellness and insurance explainers"
+  }
  },
  "https://www.pinterest.com/pin/1097541371726979269/": {
   "img": "https://i.pinimg.com/474x/1b/23/3e/1b233eb031821fbade47275e6e008dad.jpg",
-  "title": "PrescribeWellness - A Resource on Behance"
+  "title": "PrescribeWellness - A Resource on Behance",
+  "analysis": {
+   "palette": [
+    "#9A9CAB",
+    "#F4F4F6",
+    "#A24B9C",
+    "#E8845A",
+    "#3F8F9E"
+   ],
+   "dark": false,
+   "typography": "Clean rounded geometric sans-serif (medium to bold weight) with generous letter-spacing, sentence case, used sparingly for short captions and labels",
+   "motion": "Gentle parallax camera pushes across layered flat vector planes; characters get subtle looping idle motion (head tilts, hand gestures, blinks); background shelf items stay static or drift slightly for depth; smooth ease-in-out slides and soft fades between scenes; hand-gesture emphasis and speech cues pop in with light scale bounces; grain texture stays constant for a tactile feel",
+   "mood": "Calm, friendly, trustworthy, modern, editorial",
+   "fit_topics": "Medication safety and adherence, pharmacist consultations, prescription and over-the-counter guidance, drug interactions, patient-provider communication, primary care navigation, general wellness and health literacy"
+  }
  },
  "https://www.pinterest.com/pin/1097541371726979252/": {
   "img": "https://i.pinimg.com/474x/a2/fd/5f/a2fd5f1fb21c896c29e95b6e574af39c.jpg",
-  "title": "n this short tutorial, I’ll show you how to create a hologram effect in Adobe After Effects! It’s one of my favorite effects, and you can easily save it as a preset to reuse in any of your video projects 🎬 I'll demonstrate it using money as an example, but you can apply it to any footage or image.  🧩 Effects used:  Venetian Blinds  Turbulent Displace  Drop Shadow  Deep Glow"
+  "title": "n this short tutorial, I’ll show you how to create a hologram effect in Adobe After Effects! It’s one of my favorite effects, and you can easily save it as a preset to reuse in any of your video projects 🎬 I'll demonstrate it using money as an example, but you can apply it to any footage or image.  🧩 Effects used:  Venetian Blinds  Turbulent Displace  Drop Shadow  Deep Glow",
+  "analysis": {
+   "palette": [
+    "#020B1F",
+    "#0A2A55",
+    "#1FB6E8",
+    "#7FE9FF",
+    "#F2FBFF"
+   ],
+   "dark": true,
+   "typography": "Clean geometric bold sans-serif in all caps with wide tracking, glowing cyan neon outline/inner glow on headlines, small light-weight caps for labels",
+   "motion": "Elements fade in from darkness with neon glow pulses; the subject scans into a holographic wireframe via a horizontal scanline sweep with flicker and glitch; a dashed arrow animates downward to signal transformation; the background perspective grid drifts slowly while the hologram floats and rotates subtly with light-trail edge highlights",
+   "mood": "Futuristic, techy, sleek, high-tech, glowing",
+   "fit_topics": "Medical technology and innovation, anatomy and organ scans (heart, brain, bones), diagnostics and imaging (MRI/CT), genetics and DNA, AI in healthcare, digital health and wearables, virology and cell biology visualisations"
+  }
  },
  "https://www.pinterest.com/pin/1097541371726979147/": {
   "img": "https://i.pinimg.com/474x/76/79/bb/7679bb47e5854dc4c8bb64717bd74c95.jpg",
-  "title": "نعرف الجمهور بعلامتك، نجذب الزوار، ونحولهم لعملاء عبر استهداف دقيق ومحتوى مقنع وتحسين مستمر. نرسم لك المسار الصحيح.  #جرافكيا #Graphica #جرافيكا_للتسويق_الالكتروني #جرافيكا_للتسويق #جرافيكا_ديجيتال #شركة_تسويق #شركة_تسويق_الكتروني #تسويق_الكتروني #تسويق_رقمي #تسويق_سوشيال #إعلانات_رقمية #خدمات_تسويقية #إدارة_وسائل_التواصل #تحسين_محركات_البحث #براندنج #تصميم_جرافيك #تسويق_محتوى"
+  "title": "نعرف الجمهور بعلامتك، نجذب الزوار، ونحولهم لعملاء عبر استهداف دقيق ومحتوى مقنع وتحسين مستمر. نرسم لك المسار الصحيح.  #جرافكيا #Graphica #جرافيكا_للتسويق_الالكتروني #جرافيكا_للتسويق #جرافيكا_ديجيتال #شركة_تسويق #شركة_تسويق_الكتروني #تسويق_الكتروني #تسويق_رقمي #تسويق_سوشيال #إعلانات_رقمية #خدمات_تسويقية #إدارة_وسائل_التواصل #تحسين_محركات_البحث #براندنج #تصميم_جرافيك #تسويق_محتوى",
+  "analysis": {
+   "palette": [
+    "#0A2FA8",
+    "#E8C9B4",
+    "#F4E4D6",
+    "#1B3FC4",
+    "#FFFFFF"
+   ],
+   "dark": true,
+   "typography": "Bold geometric Arabic display type (kufi-inspired, wide and clean) in warm cream/peach, with a smaller, lighter secondary line below; minimal sans-serif for the footer URL pill",
+   "motion": "Headline words pop in with a quick scale-and-slide reveal, with the small blue play-triangle icon bursting open with radiating spark lines; subtle paper-grain texture drifts slowly; text lines stagger in on beat, then hold with a gentle float or parallax; clean wipe or push transitions between scenes",
+   "mood": "Bold, minimalist, confident, modern, editorial",
+   "fit_topics": "Short, punchy 'how does it work' health explainers: how vaccines, vitamins or medications work, mechanism-of-action videos, benefits of sleep, hydration or exercise, myth-versus-fact clips, and quick wellness tips for social media stories/reels"
+  }
  },
  "https://www.pinterest.com/pin/1097541371726979093/": {
   "img": "https://i.pinimg.com/474x/a5/9a/e0/a59ae0ab103393691201d62850f906b3.jpg",
-  "title": ""
+  "title": "",
+  "analysis": {
+   "palette": [
+    "#0A5BD6",
+    "#1E90FF",
+    "#0B2A6F",
+    "#FF9A3C",
+    "#FFD9A0"
+   ],
+   "dark": true,
+   "typography": "Clean light-to-medium geometric sans (e.g. Montserrat/Gotham style), uppercase thin labels with wide tracking, glowing orange callout text and hairline leader lines",
+   "motion": "Smooth slow-orbit camera around a translucent 3D body; skeleton and joints pulse with warm orange glow, layers peel from skin to muscle to bone via soft X-ray wipes; highlighted areas bloom and fade, callout lines draw on with gentle ease-in-out, running cycle loops seamlessly with subtle particle shimmer in the background",
+   "mood": "Clinical, futuristic, energetic, trustworthy, luminous",
+   "fit_topics": "Musculoskeletal health, joint pain and arthritis, osteoporosis and bone density, running and sports injuries, spine and posture, physiotherapy and rehabilitation, exercise benefits, orthopedic procedures"
+  }
  },
  "https://www.pinterest.com/pin/1097541371726979064/": {
   "img": "https://i.pinimg.com/474x/08/90/e6/0890e61e40edce5cb9edc604e54ce887.jpg",
-  "title": ""
+  "title": "",
+  "analysis": {
+   "palette": [
+    "#0A0F1A",
+    "#12304F",
+    "#8FB4D1",
+    "#D9ECF5",
+    "#C9825F"
+   ],
+   "dark": true,
+   "typography": "Clean, light-weight geometric sans-serif (thin to regular), wide letter-spacing, small caps labels with fine hairline leader lines, as in a medical-grade 3D visualization",
+   "motion": "Slow cinematic camera drift and parallax through the 3D neurons with shallow depth of field; electrical impulses travel as glowing pulses along axons and jump across myelin segments; soft bloom and lens-flare flicker at the soma; branching dendrites grow in organically; gentle fade and ease-in-out transitions, with labels fading in with thin callout lines",
+   "mood": "Scientific, ethereal, calm, futuristic, awe-inspiring",
+   "fit_topics": "Neurology and brain health, nerve signal transmission, multiple sclerosis and demyelination, neuropathy, Alzheimer's and dementia, sleep and cognition, pain pathways, mental health and neurotransmitters, anesthesia and neuropharmacology"
+  }
  },
  "https://www.pinterest.com/pin/1097541371726979018/": {
   "img": "https://i.pinimg.com/474x/bd/9b/9b/bd9b9b15b0939b4b0a1f5eb7eee1867e.jpg",
-  "title": ""
+  "title": "",
+  "analysis": {
+   "palette": [
+    "#02060D",
+    "#0B3C8C",
+    "#2F8FE0",
+    "#F2B8A2",
+    "#E8F4FF"
+   ],
+   "dark": true,
+   "typography": "Tiny monospaced / technical sans in light, widely tracked uppercase and numerals, styled like HUD telemetry (timestamps, coordinates, data readouts) rather than headline type",
+   "motion": "Slow scanning sweeps travel across the sagittal brain slice, with edges glowing and pulsing like thermal or MRI contrast. Subtle chromatic-aberration and film-grain flicker run throughout. HUD timestamp digits tick continuously and the bottom spectrum or waveform graphs jitter and redraw. Camera drifts with a gentle push-in or parallax, and data callouts blink on with thin leader lines before fading out.",
+   "mood": "Clinical, futuristic, eerie, contemplative, high-tech",
+   "fit_topics": "Neuroscience and brain health, sleep and circadian rhythm, mental health, headaches and migraines, stress and cortisol, dementia and aging, medical imaging and diagnostics, spinal and nervous-system topics"
+  }
  },
  "https://www.pinterest.com/pin/1097541371726978988/": {
   "img": "https://i.pinimg.com/474x/68/a9/65/68a965f48112e9070a8ae909a7f0455f.jpg",
-  "title": ""
+  "title": "",
+  "analysis": {
+   "palette": [
+    "#1B2733",
+    "#D9534A",
+    "#8FA3B3",
+    "#E8EEF2",
+    "#F2B8A8"
+   ],
+   "dark": true,
+   "typography": "Light, thin-weight humanist sans-serif in lowercase with small asterisk markers; thin hairline leader lines connect labels to organs, with generous letterspacing and a clinical, understated hierarchy",
+   "motion": "Slow orbiting camera around the translucent body; organs fade and glow in sequentially while hairline leader lines draw on and labels fade in. The lungs gently expand and contract with the breathing cycle, the diaphragm lowers and raises, and layers peel back (skin, ribs, muscle) to reveal deeper structures with soft depth-of-field transitions",
+   "mood": "clinical, calm, futuristic, educational, immersive",
+   "fit_topics": "Respiratory system anatomy, breathing mechanics, asthma, COPD, smoking and lung health, pneumonia, COVID-19, sleep apnea, and other organ-system or physiology explainers (cardiovascular, digestive) that benefit from a 3D translucent-body, labeled-callout treatment"
+  }
  },
  "https://www.pinterest.com/pin/1097541371726978981/": {
   "img": "https://i.pinimg.com/474x/b8/a0/7d/b8a07da04b435fa6788c94280109129a.jpg",
-  "title": "Transform Complex Medical Concepts into Engaging 3D Medical Animations! Enhance your medical presentations, educational content, or marketing materials with stunning 3D medical animations. I create high-quality, precise animations that simplify intricate concepts, making them accessible and visually captivating.  🩺 What I Offer:  Detailed 3D medical animations for healthcare, research, and education. Realistic anatomical visualizations for medical training and patient education. High-quality 3D modeling to showcase products, procedures, or innovations. My 3D medical animations are ideal for hospitals  📌 Pin this and elevate your medical content with professional 3D animations. Contact me today to get started!"
+  "title": "Transform Complex Medical Concepts into Engaging 3D Medical Animations! Enhance your medical presentations, educational content, or marketing materials with stunning 3D medical animations. I create high-quality, precise animations that simplify intricate concepts, making them accessible and visually captivating.  🩺 What I Offer:  Detailed 3D medical animations for healthcare, research, and education. Realistic anatomical visualizations for medical training and patient education. High-quality 3D modeling to showcase products, procedures, or innovations. My 3D medical animations are ideal for hospitals  📌 Pin this and elevate your medical content with professional 3D animations. Contact me today to get started!",
+  "analysis": {
+   "palette": [
+    "#16212b",
+    "#d9534f",
+    "#e8dcc2",
+    "#6fa3b5",
+    "#c97b84"
+   ],
+   "dark": true,
+   "typography": "Light, thin-weight humanist sans-serif in lowercase, small and widely spaced, with hairline leader lines and small asterisk markers for interactive callouts",
+   "motion": "Slow, smooth 3D camera orbits and push-ins around a translucent human silhouette. Organs fade in layer by layer (skin, then skeleton, then lungs). Ribs and diaphragm expand and contract in a gentle breathing loop. Thin callout lines draw on, then labels fade in with a soft ease. Airflow could be shown as glowing particles travelling through the nasal cavity and trachea.",
+   "mood": "Clinical, calm, immersive, educational, futuristic",
+   "fit_topics": "Respiratory system and breathing mechanics, lung health, asthma, COPD, smoking effects, sleep apnea, and other anatomy or physiology explainers for medical education"
+  }
  },
  "https://www.pinterest.com/pin/1097541371726978955/": {
   "img": "https://i.pinimg.com/474x/0d/3e/38/0d3e38bdf8c30171fb57f9ba0c3025a2.jpg",
-  "title": "👨🏻‍⚕️ The animated explainer video created for Deep structure illustrates an introduction to an AI-driven surgery. 📈Eunice, the AI inside Deep Structure is integrated into a medical app and is aimed to facilitate the recovery process for both the patients and the doctors."
+  "title": "👨🏻‍⚕️ The animated explainer video created for Deep structure illustrates an introduction to an AI-driven surgery. 📈Eunice, the AI inside Deep Structure is integrated into a medical app and is aimed to facilitate the recovery process for both the patients and the doctors.",
+  "analysis": {
+   "palette": [
+    "#C9CAD6",
+    "#4A6FB5",
+    "#F4F5F8",
+    "#E8845C",
+    "#26263A"
+   ],
+   "dark": false,
+   "typography": "Clean geometric or humanist sans-serif (medium to semibold weights) with generous letter-spacing and rounded terminals; calm, legible lower-thirds and captions rather than heavy display faces",
+   "motion": "Smooth eased parallax with depth-of-field rack focus: blurred foreground surgeons drift slowly while the sharp central doctor gently pushes in. Flat vector shapes slide and scale with soft ease-in/out, subtle idle loops (breathing, clipboard tilt, blinking), clean wipes and shape-morph transitions between scenes, and callout icons pop in with light overshoot.",
+   "mood": "Calm, clinical, reassuring, professional, modern",
+   "fit_topics": "Surgery and pre-/post-operative guidance, hospital procedures, patient safety, doctor-patient consultations, medical team workflows, diagnostics explainers, health system and insurance overviews, informed consent and treatment-plan education"
+  }
  },
  "https://www.pinterest.com/pin/1097541371726978950/": {
   "img": "https://i.pinimg.com/474x/8d/42/55/8d4255309b6063df505910932b982e17.jpg",
-  "title": "Does a blood transfusion break the fast?"
+  "title": "Does a blood transfusion break the fast?",
+  "analysis": {
+   "palette": [
+    "#BEE3EE",
+    "#2F9FB8",
+    "#E0554F",
+    "#F2CF7E",
+    "#1F3B3F"
+   ],
+   "dark": false,
+   "typography": "Rounded geometric sans (e.g. Nunito/Poppins style), friendly medium-to-bold weights, generous letter spacing, sentence case with no heavy condensing",
+   "motion": "Smooth eased flat-vector animation: characters make subtle idle movements (blinks, small head turns, breathing), liquids fill or drain with soft ease-in-out, tubes draw on with line-trim paths, props slide or pop in with gentle overshoot, slow parallax drift on the pale background, and soft cuts or morphing transitions between scenes",
+   "mood": "calm, friendly, reassuring, clean, approachable",
+   "fit_topics": "Blood donation, medical procedures and patient journeys, vaccinations, hospital or clinic visits, preventive care, chronic condition management, general public health education and wellness explainers"
+  }
  },
  "https://www.pinterest.com/pin/1097541371726978947/": {
   "img": "https://i.pinimg.com/474x/cc/f7/89/ccf7893f8808c21c2ac92acdf073ff7b.jpg",
-  "title": "Fast-paced kinetic typography reel and educational motion graphics design. Features clean grid background textures, dynamic text transitions, animated counter numbers, vector illustrations (brain, puzzle pieces, bar chart, target board), and sharp visual storytelling about decision-making and structured problem-solving skills.  🎨 Role: Motion Designer & Kinetic Typographer  🛠️ Tools: After Effects / Illustrator  📱 Format: Vertical Reel / Short-form Motion Graphics"
+  "title": "Fast-paced kinetic typography reel and educational motion graphics design. Features clean grid background textures, dynamic text transitions, animated counter numbers, vector illustrations (brain, puzzle pieces, bar chart, target board), and sharp visual storytelling about decision-making and structured problem-solving skills.  🎨 Role: Motion Designer & Kinetic Typographer  🛠️ Tools: After Effects / Illustrator  📱 Format: Vertical Reel / Short-form Motion Graphics",
+  "analysis": {
+   "palette": [
+    "#ECEDEE",
+    "#F2A33A",
+    "#C9C3B8",
+    "#3A3A3C",
+    "#D9D9DB"
+   ],
+   "dark": false,
+   "typography": "Bold neo-grotesque sans-serif with tight tracking and tabular figures; large glowing amber numerals, with light-weight sans for any supporting labels",
+   "motion": "The big number counts up with a rolling odometer or ticker effect while the brain scales in with a soft ease-out pop. The dashed circle draws on as a stroke path, then rotates slowly or pulses. The faint graph-paper grid drifts or parallaxes subtly in the background, and the amber glow breathes gently. Transitions use clean slide-and-fade cuts between stats.",
+   "mood": "Clean, clinical, data-driven, calm, modern",
+   "fit_topics": "Neuroscience and brain health, cognitive decline and dementia statistics, sleep and memory, mental health data, medical research findings, anatomy facts, and any explainer that leads with one striking number or count"
+  }
  },
  "https://www.pinterest.com/pin/1097541371726978944/": {
   "img": "https://i.pinimg.com/474x/a4/b9/8b/a4b98b1d937ede3d45dc5c54e302e613.jpg",
@@ -106,5 +443,105 @@
  "https://www.pinterest.com/pin/e1_AfqPShwDZelvoeqMDYPtss-91tupix0tYnBZKd6QtAZFu9VAjM9djg/": {
   "img": "https://i.pinimg.com/474x/62/63/17/626317ce3faaaa707d6ad2e4caadecce.jpg",
   "title": "Put your health first and get your back “back.” Find expert care close to home with Mayo Clinic Health System."
+ },
+ "https://www.pinterest.com/pin/1097541371727027054/": {
+  "img": "https://i.pinimg.com/474x/9f/69/4c/9f694cf1d157ba1061673558b8b5cffc.jpg",
+  "title": ""
+ },
+ "https://www.pinterest.com/pin/1097541371727026960/": {
+  "img": "https://i.pinimg.com/474x/e6/f4/2b/e6f42ba11ac3ebe04dad75c58e44b06a.jpg",
+  "title": ""
+ },
+ "https://www.pinterest.com/pin/1097541371727026947/": {
+  "img": "https://i.pinimg.com/474x/60/b3/2b/60b32b5391c4260eda1ec7ce52ba2096.jpg",
+  "title": ""
+ },
+ "https://www.pinterest.com/pin/1097541371727026731/": {
+  "img": "https://i.pinimg.com/474x/4a/0c/e7/4a0ce78ff9406ab883cfd1385cc9eaaf.jpg",
+  "title": ""
+ },
+ "https://www.pinterest.com/pin/1097541371727026720/": {
+  "img": "https://i.pinimg.com/474x/09/e2/fc/09e2fcdf84a58cb20e4e24e752374a24.jpg",
+  "title": "Cuál es la importancia del Estrecho de Ormuz en el mundo del petróleo?"
+ },
+ "https://www.pinterest.com/pin/1097541371727026695/": {
+  "img": "https://i.pinimg.com/474x/e9/75/88/e97588ead7fdc8dc0501415b820ab1f9.jpg",
+  "title": "🚨 Spoiler Alert 🚨 Russia sold it to America #geography #alaska #Russian #Russia #stpetersburg #usareels #usa🇺🇸 #history #britishempire #explore #canada🇨🇦 #seaotter"
+ },
+ "https://www.pinterest.com/pin/1097541371727026637/": {
+  "img": "https://i.pinimg.com/474x/f0/f3/bc/f0f3bc9c459d46b3cef5645abe6dcbd3.jpg",
+  "title": "A reel that captures the soul of Gujarat—from timeless crafts and temples to visionary growth and global leadership. Celebrate Gujarat Sthapana Divas with pride in every step, colour, and creation."
+ },
+ "https://www.pinterest.com/pin/1097541371727026621/": {
+  "img": "https://i.pinimg.com/474x/fd/82/ce/fd82ce75935a92710dbaa3570d41cd67.jpg",
+  "title": "La sorprendente FRAGILIDAD de IRÁN 🌍: Los desafíos ocultos y las vulnerabilidades estratégicas que se esconden detrás de su fortaleza. Desde las regiones vitales del petróleo hasta el crucial Estrecho de Ormuz. #Irán #Geopolítica #Geografía #MapasAnimados #Mapas #MedioOriente"
+ },
+ "https://www.pinterest.com/pin/1097541371727026574/": {
+  "img": "https://i.pinimg.com/474x/e1/2e/03/e12e0384cd299ca4641318acd1a7946f.jpg",
+  "title": "VOX Style Geolayers  Map Animation"
+ },
+ "https://www.pinterest.com/pin/1097541371727026387/": {
+  "img": "https://i.pinimg.com/474x/2c/c7/5c/2cc75c9d8ce3397c5f849360bd817fef.jpg",
+  "title": "VOX Style Map Animation | Geolayers Map Animation"
+ },
+ "https://www.pinterest.com/pin/1097541371727026358/": {
+  "img": "https://i.pinimg.com/474x/d0/b1/94/d0b1949b98b12049fdc6fed764e45de1.jpg",
+  "title": "And here comes the short clip from the explainer video created for A2B Sharing - the Netherlands-based start-up focused on mobile car-sharing services. It was produced together with our co-creative team - Saga."
+ },
+ "https://www.pinterest.com/pin/1097541371727026328/": {
+  "img": "https://i.pinimg.com/474x/4c/f4/2e/4cf42ea64679a9ae78444c3493e38ee3.jpg",
+  "title": "GeoLayers 3 Invasion Map Animation in After Effect"
+ },
+ "https://www.pinterest.com/pin/1097541371727026266/": {
+  "img": "https://i.pinimg.com/474x/0b/bd/79/0bbd795d7d68ad0551ba9d539a698d42.jpg",
+  "title": "P.S. If you’re new here, we help people like YOU build the business of your dreams. Want to see how? Watch our FREE demo webinar  (𝐥𝐢𝐧𝐤 𝐢𝐧 𝐛𝐢𝐨) and discover: 𝐇𝐨𝐰 𝐭𝐨 𝐋𝐚𝐮𝐧𝐜𝐡 𝐘𝐨𝐮𝐫 𝐁𝐮𝐬𝐢𝐧𝐞𝐬𝐬 𝐢𝐧 𝟏𝟓 𝐌𝐢𝐧𝐮𝐭𝐞𝐬 𝐨𝐫 𝐋𝐞𝐬𝐬 – no tech skills, no marketing experience required.   #creator #dreambig #value #personalgrowth #fitness #beyourself #breaktherules #potential #viralreels #entrepreneur #motivation #inspiration #mindset #success"
+ },
+ "https://www.pinterest.com/pin/1097541371727026252/": {
+  "img": "https://i.pinimg.com/474x/d2/0e/4a/d20e4aef5dfcc367e1f58df9b5020139.jpg",
+  "title": "Recent reel edit in after effects, Graphic design Ideas. #videoediting #edits #motiongraphics"
+ },
+ "https://www.pinterest.com/pin/1097541371727026222/": {
+  "img": "https://i.pinimg.com/474x/a1/1a/2b/a11a2b8b8219c7764f7529abb245088b.jpg",
+  "title": "Focusing intently, investing time, and pouring passion into every project. The satisfaction of bringing a vision to life is worth it."
+ },
+ "https://www.pinterest.com/pin/1097541371727026207/": {
+  "img": "https://i.pinimg.com/474x/da/c6/27/dac6275c00f8fd90a780afb0f7591f4a.jpg",
+  "title": "Al Ries, an American economist, is the one who invented the concept of positioning, the technique used by the largest companies in the world.  According to him, you don’t sell products but you sell the position that occupies in people’s minds.  Do you want to teach this concept to your business?  Comment with “POS” and we will send you our check-list!  #position #marketing #economy #brandstrategy #strategy #rivinity #businessowners #business #digitalmarketing"
+ },
+ "https://www.pinterest.com/pin/1097541371727026203/": {
+  "img": "https://i.pinimg.com/474x/35/1c/3c/351c3cc5907532087f9c66edba2eb422.jpg",
+  "title": "Turn simple visuals into powerful stories with smooth motion, clean transitions, and engaging edits. This motion graphic style is perfect for creators, brands, and editors who want to grab attention fast and keep viewers hooked.  ✨ Ideal for:  Content creators & influencers  Brand storytelling  Reels, ads & short-form videos  Pinterest & social media growth  Save this pin for editing inspiration and storytelling ideas that actually convert 👀🚀  #MotionGraphics #StorytellingDesign #VideoEditing #ContentCreation #VisualStorytelling #CreativeEditing #ReelsEditing #DigitalDesign #PinterestIdeas"
+ },
+ "https://www.pinterest.com/pin/1097541371727026191/": {
+  "img": "https://i.pinimg.com/474x/8c/a3/7e/8ca37e6549efc37994e9a3b5dcdd3a7e.jpg",
+  "title": "Fast-paced business storytelling edit 🚀  Inside this After Effects project file (AEP) 🎬 learn how to structure punchy case-study videos, animate brand references, and build momentum with clean edits.  Perfect for entrepreneurship, business content, and high-retention reels.  Project file available on EarnEdits 🔗  #AfterEffects 🎬 #VideoEditors 🚀 #MotionDesign"
+ },
+ "https://www.pinterest.com/pin/1097541371727026186/": {
+  "img": "https://i.pinimg.com/474x/5d/ff/31/5dff31a686efac245e2d0508dcc2c72d.jpg",
+  "title": ""
+ },
+ "https://www.pinterest.com/pin/1097541371727026172/": {
+  "img": "https://i.pinimg.com/474x/a0/55/21/a05521fe652af88a9f7c4083780a9690.jpg",
+  "title": "My personal project studying animation/motion. Hope you like it."
+ },
+ "https://www.pinterest.com/pin/1097541371727026163/": {
+  "img": "https://i.pinimg.com/474x/9f/53/89/9f5389a8c195a4e3ad67c901e4207883.jpg",
+  "title": "A short documentary-style reel exploring how a creative advertising concept comes to life — from idea to final visual.  This video focuses on storytelling, composition, and design thinking used in modern commercials. Perfect for video editors, designers, and creators who love behind-the-scenes processes and cinematic visuals.  Save this for creative inspiration 🎥✨"
+ },
+ "https://www.pinterest.com/pin/1097541371727026154/": {
+  "img": "https://i.pinimg.com/474x/61/83/91/6183918af7381e9c1558296474cb9ab4.jpg",
+  "title": "Motion Graphic Promo Reel / Short"
+ },
+ "https://www.pinterest.com/pin/1097541371727026149/": {
+  "img": "https://i.pinimg.com/474x/cc/f7/89/ccf7893f8808c21c2ac92acdf073ff7b.jpg",
+  "title": "Fast-paced kinetic typography reel and educational motion graphics design. Features clean grid background textures, dynamic text transitions, animated counter numbers, vector illustrations (brain, puzzle pieces, bar chart, target board), and sharp visual storytelling about decision-making and structured problem-solving skills.  🎨 Role: Motion Designer & Kinetic Typographer  🛠️ Tools: After Effects / Illustrator  📱 Format: Vertical Reel / Short-form Motion Graphics"
+ },
+ "https://www.pinterest.com/pin/1097541371727026147/": {
+  "img": "https://i.pinimg.com/474x/13/8b/de/138bde3f9dd4a6c2e1f16e18c1f95051.jpg",
+  "title": "Futuristic AI motion graphics animation created in After Effects. This cinematic tech edit explores artificial intelligence, digital innovation, and modern motion design style. Perfect inspiration for video editors, motion designers, and creative artists looking for AI-themed animation ideas.  #AIMotionGraphics #AfterEffects #MotionDesign #TechAnimation #VideoEditing #minimalediting #premierepro #visuals   Follow me on instagram - @honeyycomps_"
+ },
+ "https://www.pinterest.com/pin/1097541371727026144/": {
+  "img": "https://i.pinimg.com/474x/2c/bf/97/2cbf976d1ce36dbc333c7fb12b2db72a.jpg",
+  "title": "A short visual reel showcasing my video editing, graphics design, and motion graphics work. Includes cinematic edits, color grading, motion visuals, and creative design pieces. Tools: Premiere Pro, After Effects, DaVinci Resolve."
  }
 }
