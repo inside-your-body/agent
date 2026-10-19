@@ -222,7 +222,7 @@ const VesselShot: React.FC<MP> = ({b, t, vertical, len}) => {
       </>}
       <rect x={0} y={top - 50} width={L.W} height={50} fill="#3B0915" /><rect x={0} y={bot} width={L.W} height={50} fill="#3B0915" />
     </svg>
-    <Caption text={p.label || b.text} t={t} vertical={vertical} at={8} />
+    <Caption text={p.label || b.text} t={t} vertical={vertical} at={8} color="#FFFFFF" />
   </AbsoluteFill>;
 };
 

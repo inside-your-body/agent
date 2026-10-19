@@ -220,6 +220,9 @@ Rules:
 - OPENING (hook scene / first 30 s): every shot is a drawn shot or a dramatic motion shot of the subject (no text-only kinds), the most striking image first, faster cuts (a long sentence gets 2 shots), "riser"/"impact" sfx on the reveal.
 - "see" (required): one concrete sentence describing exactly what is on screen — subject, action, emotion. Never empty, never generic.
 - Characters change with the story: new pose, expression, action in each drawn shot (worried, sleeping, fighting, celebrating...).
+  Never the generic "character presenting with an open hand" pose. The human character is NOT in two consecutive shots — show the body part,
+  the agent or the process instead; when she appears she is DOING something specific (drinking, wincing, running, at the doctor...).
+- organ shots only for: brain, lungs, liver, stomach, kidney, intestine, tooth, tongue, bone, eye, skin, bladder (else use a cartoon frame).
 - NO REPETITION: never the same kind within 5 consecutive shots; a motion-graphics kind at most 4 times in the whole video and never with the same content/layout twice; every drawn shot is a NEW drawing (new composition, new pose/action); text-only kinds are never back to back and never longer than one sentence. Vary camera moves, layouts, actions, colours.
 - NO EMPTY SCREEN: the subject the narrator names must be visible in every shot (drawn or as motion graphics).
 - Kinds already used earlier in this video (avoid overusing them): {json.dumps(used)}
@@ -238,6 +241,7 @@ Return JSON: {{"scenes": [{{"id": scene id, "shots": [{{"at": sentence index, "c
 KINDS_OK = {'cartoon', 'illustration', 'slam', 'type', 'counter', 'meter', 'vessel', 'heart', 'organ', 'membrane', 'cells', 'battle', 'spread',
             'clock', 'journey', 'zoom', 'compare', 'list', 'fact', 'stickman', 'chart', 'kinetic'}
 
+ORGANS = ('brain', 'lung', 'liver', 'stomach', 'kidney', 'intestine', 'tooth', 'tongue', 'bone', 'eye', 'skin', 'bladder', 'heart')
 MAX_PER_KIND = 4   # a motion-graphics template appears at most 4 times in a whole video (always with new content); drawn frames are always new
 
 def fix_shots(shots, n_sent, recent=None):
@@ -251,12 +255,11 @@ def fix_shots(shots, n_sent, recent=None):
         overused = s_['kind'] not in DRAWN and recent.count(s_['kind']) >= MAX_PER_KIND
         if overused or s_['kind'] in recent[-4:] or (s_['kind'] in TEXT_ONLY and recent and recent[-1] in TEXT_ONLY):
             # swap to a drawn storyboard frame of the same moment (keeps the subject on screen)
-            alt = next((k for k in ('cartoon', 'illustration', 'organ', 'zoom') if k not in recent[-4:]
-                        and (k in DRAWN or recent.count(k) < MAX_PER_KIND)), 'cartoon')
-            s_['kind'] = alt
-            if alt in DRAWN and not s_.get('illustration'): s_['illustration'] = s_.get('see') or s_.get('text') or ''
-            if alt == 'organ': s_['params'] = {'organ': (s_.get('see') or ''), 'action': 'glow', 'label': s_.get('text')}
-            if alt == 'zoom': s_['params'] = {'label': s_.get('text'), 'target': s_.get('see') or ''}
+            # swap to a NEW drawn storyboard frame of exactly this moment (always unique, keeps the subject on screen)
+            s_['kind'] = 'cartoon'
+            s_['illustration'] = s_.get('see') or s_.get('illustration') or s_.get('text') or ''
+        if s_['kind'] == 'organ' and not any(o in str((s_.get('params') or {}).get('organ', '')).lower() for o in ORGANS):
+            s_['kind'] = 'cartoon'; s_['illustration'] = s_.get('see') or s_.get('text') or ''   # unknown organ -> draw it instead of a wrong one
         if s_['kind'] in DRAWN and not s_.get('illustration'): s_['illustration'] = s_.get('see') or ''
         if s_.get('focus') and s_['kind'] == 'cartoon': s_['params'] = {**(s_.get('params') or {}), 'focus': s_['focus']}
         out.append(s_); recent.append(s_['kind'])

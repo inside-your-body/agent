@@ -61,7 +61,7 @@ def cast_text(cast, ids):
     return ' '.join(f"{c['name']} looks like: {c['look']}." for c in cast if c['id'] in (ids or []))
 
 def cartoon_scene(prompt, cast, ids, refs, style_hint, out, vertical=False, quality='medium'):
-    p = (CARTOON.format(style=style_hint) + f" Storyboard frame, full scene with background, cinematic composition, the subject large and clearly readable: {prompt}. "
+    p = (CARTOON.format(style=style_hint) + f" Storyboard frame, full scene with background, cinematic composition, the subject large and clearly readable: {prompt}. Characters act out this exact moment with a fresh, specific pose and expression (never a generic presenting/open-palm pose). "
          + (f"Characters (keep them EXACTLY as in the reference images): {cast_text(cast, ids)}" if ids else ''))
     return edit(p, refs, out, size='1024x1536' if vertical else '1536x1024', quality=quality)
 
