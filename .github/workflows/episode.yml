@@ -53,9 +53,9 @@ jobs:
           name: episode-${{ github.run_number }}
           path: |
             work/*/final_*.mp4
-            work/*/thumbnail.jpg
-            work/*/episode.json
+            work/*/thumbnail*.jpg
             work/*/package.json
+            work/*/episode.json
             work/*/qa/*.jpg
             work/*/research.md
             work/raw_fail_*.txt
