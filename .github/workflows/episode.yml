@@ -63,6 +63,7 @@ jobs:
             work/*/assets/cast_*.png
             work/*/style_*.json
             work/*/gen/*.tsx
+            work/*/storyboard*
             work/*/gen/qa*/st/*.jpg
           retention-days: 14
       - name: Commit topic/history updates

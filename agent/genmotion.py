@@ -11,8 +11,10 @@ MAX_GEN_LONG, MAX_GEN_SHORT = 60, 10
 FPS = 30
 
 CONTRACT = """Write ONE self-contained React component file (TypeScript/TSX) for Remotion 4.
-- Imports allowed ONLY from 'react' and 'remotion' (useCurrentFrame, interpolate, spring, Easing, AbsoluteFill, Sequence). No other imports,
-  no images/files/fonts/URLs, no Math.random, no Date, no window/document, no state/effects/hooks except useCurrentFrame.
+- Imports allowed ONLY from 'react' and 'remotion' (useCurrentFrame, interpolate, spring, Easing, AbsoluteFill, Sequence, Img, staticFile).
+  Images: ONLY the provided asset files, as <Img src={staticFile('ep/…')} style={{position:'absolute', …}} />. When a cast character appears,
+  use its provided cut-out and bring it to life (walk/slide in, bob, squash & stretch, tilt, flip, react to what happens) — do not redraw the cast.
+  No other files/fonts/URLs, no Math.random, no Date, no window/document, no state/effects/hooks except useCurrentFrame.
 - `export default function Shot(p: {dur: number; w: number; h: number; vertical: boolean; theme: any; words: [string, number][]; text: string})`
   dur = shot length in frames (30 fps), w×h = canvas in px. theme has: bg, bg2, fg, muted, accent, accent2, accent3, head (font-family css), body (font-family css).
   words = narrator words with the frame (relative to this shot) when each is spoken — sync key actions to them.
@@ -22,7 +24,7 @@ CONTRACT = """Write ONE self-contained React component file (TypeScript/TSX) for
   All timing scales with dur (main action done by ~0.75*dur). Use a seeded pseudo-random: const rnd=(i:number)=>{const x=Math.sin(i*99.13)*43758.55;return x-Math.floor(x);}.
 - Rich and specific: at least 8 distinct drawn elements; biology must be correct; characters (if any) are simple cartoon shapes with faces/limbs that move.
 - On-screen text: at most 4 words total (optional), using theme.head font, never covering the subject.
-- Keep it under 260 lines. Valid TSX. Output ONLY the code in one ```tsx block."""
+- Keep it under 380 lines. Valid TSX. Output ONLY the code in one ```tsx block."""
 
 
 def _durations(ep, ep_dir, kind):
@@ -54,12 +56,16 @@ def _code(txt):
     return (m.group(1) if m else txt).strip()
 
 
-def _static_ok(code):
+def _static_ok(code, allowed=()):
     if 'export default' not in code: return 'missing export default'
     bad = [m for m in re.findall(r"from\s+['\"]([^'\"]+)['\"]", code) if m not in ('react', 'remotion')]
     if bad: return f'forbidden imports {bad}'
-    for k in ('Math.random', 'Date.now', 'new Date', 'window.', 'document.', 'fetch(', 'staticFile', '<Img', '<img'):
+    for k in ('Math.random', 'Date.now', 'new Date', 'window.', 'document.', 'fetch(', '<img', 'http://', 'https://'):
         if k in code: return f'forbidden: {k}'
+    files = re.findall(r"staticFile\(\s*['\"`]([^'\"`]+)['\"`]", code)
+    unknown = [f for f in files if f not in allowed]
+    if unknown: return f'unknown asset files {unknown} (only these exist: {list(allowed)})'
+    if 'staticFile(' in code and len(files) < code.count('staticFile('): return 'staticFile must use literal file paths'
     return None
 
 
@@ -86,7 +92,7 @@ def _index(gids):
 
 def _stills(items, theme, vertical, out_dir):
     """Render 2 stills per shot (35% and 75% of its time) through the QA gallery. Returns {gid: [paths], ...}, errors."""
-    slot = 150
+    slot = 240
     props = {'items': [{'id': g, 'dur': min(d, slot)} for g, d in items], 'slot': slot, 'theme': theme, 'vertical': vertical}
     pf = out_dir / 'gallery.json'; save(pf, props)
     frames, where = [], {}
@@ -140,7 +146,7 @@ Return JSON only: {"results": [{"id": str, "ok": bool, "problem": "short concret
         return {}
 
 
-def _prompt(lang, theme, brief, sentence, dur, words, vertical, others, fix=None, prev=None):
+def _prompt(lang, theme, brief, sentence, dur, words, vertical, others, fix=None, prev=None, assets=(), before=None):
     p = f"""You are a world-class motion designer making ONE shot of an animated health explainer ("Inside Your Body").
 Design language of THIS video (follow it strictly — shapes, line quality, texture, motion personality):
 {json.dumps(lang, ensure_ascii=False)}
@@ -148,23 +154,30 @@ Palette: bg {theme['bg']}, bg2 {theme['bg2']}, fg {theme['fg']}, accents {theme[
 Canvas: {'1080×1520 vertical' if vertical else '1920×1080'}, duration {dur} frames ({dur / FPS:.1f} s).
 The narrator says: "{sentence}"
 Word timings (word, frame): {json.dumps(words[:40])}
-What this shot must SHOW (the director's brief): {brief}
-Design it FROM SCRATCH for exactly this moment — a fresh composition, camera idea and animation that does NOT resemble these other shots
+Storyboard for this part (follow it): {brief}
+Asset files you may use (and only these): {json.dumps(list(assets), ensure_ascii=False)}
+Design it FROM SCRATCH for exactly this moment — a fresh composition and animation that does NOT resemble these other parts
 already designed for this video: {json.dumps(others[-25:], ensure_ascii=False)}
+{('CONTINUITY: this part directly continues the previous part of the same sequence. Start from where it ended (same set, same elements in the same places, same characters) and evolve it — the cut must feel seamless. Previous part code:' + chr(10) + '```tsx' + chr(10) + before[:9000] + chr(10) + '```') if before else 'This part opens a new sequence: establish its set clearly.'}
 {CONTRACT}"""
     if fix:
         p += f"\n\nYour previous version FAILED review: {fix}\nRewrite it to fix that (keep what worked). Previous code:\n```tsx\n{prev}\n```"
     return p
 
 
-def _gen_one(job):
+def _gen_one(job, before=None):
     gid, lang, theme, brief, sentence, dur, words, vertical, others, fix, prev = job
+    m = META.get(gid, {})
+    allowed = [a['file'] for a in m.get('assets', [])]
     try:
-        code = _code(llm.ask(_prompt(lang, theme, brief, sentence, dur, words, vertical, others, fix, prev), max_tokens=14000, retries=2))
+        code = _code(llm.ask(_prompt(lang, theme, brief, sentence, dur, words, vertical, others, fix, prev,
+                                     m.get('assets', []), before), max_tokens=20000, retries=2))
     except Exception as e:
         return gid, None, f'api: {e}'
-    err = _static_ok(code)
+    err = _static_ok(code, allowed)
     return gid, code, err
+
+META = {}
 
 
 def build(ep, style, short_style, ep_dir):
@@ -183,21 +196,42 @@ def build(ep, style, short_style, ep_dir):
             brief = b.get('design') or b.get('see') or sentence
             if n >= cap:
                 b['kind'] = 'cartoon'; b['illustration'] = b.get('see') or brief; continue
-            gid = f"g_{'v' if kind == 'short' else 'l'}{n:02d}"; n += 1
-            b.setdefault('params', {}); b['params']['gen'] = gid; b['params']['see'] = b.get('see')
+            if not b.get('params'): b['params'] = {}
+            gid = b['params'].get('gen') or f"g_{'v' if kind == 'short' else 'l'}{n:02d}"; n += 1
+            b['params']['gen'] = gid; b['params']['see'] = b.get('see')
+            act = b.get('act') or {}
+            if act:
+                brief = json.dumps({k: act.get(k) for k in ('sequence_idea', 'see', 'motion', 'continuity', 'text')}, ensure_ascii=False)
+                sentence = ' '.join(x[0] for x in _words(ep_dir, kind, t0, dur)) or sentence
             meta[gid] = dict(b=b, brief=brief, sentence=sentence, dur=dur, words=_words(ep_dir, kind, t0, dur), vertical=kind == 'short',
-                             lang=lang, theme=theme, others=list(others))
+                             lang=lang, theme=theme, others=list(others), assets=act.get('assets', []), scene=act.get('scene') or gid)
             others.append(brief[:90])
             if gid not in done:
                 jobs.append((gid, lang, theme, brief, sentence, dur, meta[gid]['words'], kind == 'short', list(others[:-1]), None, None))
-    print(f'genmotion: {len(meta)} shots to design ({len(jobs)} new)')
+    print(f'genmotion: {len(meta)} parts to design ({len(jobs)} new)')
+    META.clear(); META.update(meta)
     codes = dict(done)
-    def run(jobs):
-        with ThreadPoolExecutor(6) as ex:
-            for gid, code, err in ex.map(_gen_one, jobs):
+    def run(jobs, chain=False):
+        if not chain:
+            with ThreadPoolExecutor(6) as ex:
+                for gid, code, err in ex.map(_gen_one, jobs):
+                    if code and not err: codes[gid] = code
+                    else: print('gen fail', gid, err)
+            return
+        # parts of one sequence are designed in order (each sees the previous part's code); sequences run in parallel
+        groups = {}
+        for j in jobs: groups.setdefault(meta[j[0]]['scene'], []).append(j)
+        order = list(meta)
+        def seq(js):
+            for j in js:
+                i = order.index(j[0]); prev = order[i - 1] if i else None
+                before = codes.get(prev) if prev and meta[prev]['scene'] == meta[j[0]]['scene'] else None
+                gid, code, err = _gen_one(j, before)
                 if code and not err: codes[gid] = code
                 else: print('gen fail', gid, err)
-    run(jobs)
+        with ThreadPoolExecutor(6) as ex:
+            list(ex.map(seq, groups.values()))
+    run(jobs, chain=True)
     # syntax check + one repair round
     for rnd in range(2):
         for g, c in codes.items(): _write(g, c)
@@ -216,6 +250,8 @@ def build(ep, style, short_style, ep_dir):
     save(gdir / 'done.json', codes)
 
     # visual QA: stills -> blank/crash check -> Claude vision -> one repair -> re-check crash/blank
+    from . import assets as _assets
+    _assets.stage_for_render(ep_dir)
     def qa(gids, vision=True):
         bad = {}
         for vertical in (False, True):

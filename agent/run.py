@@ -96,27 +96,24 @@ def main():
             for f in (f'vo_{kind}.wav', f'segs_{kind}.json', f'words_{kind}.json'):
                 (ep_dir / f).unlink(missing_ok=True)
 
-    # 3b. the director designs one shot per sentence (after the narration is final)
-    if not ep.get('directed'):
-        shots = llm.direct(ep, 'long')
-        recent = []
-        for sc in ep['scenes']:
-            sc['beats'] = llm.fix_shots(shots.get(sc['id'], []) or [{'at': 0, 'kind': 'cartoon', 'illustration': ' '.join(sc['narration'][:2])}], len(sc['narration']), recent)
-        ss = llm.direct(ep, 'short')
-        ep['short']['beats'] = llm.fix_shots(ss.get('short', []) or [{'at': 0, 'kind': 'cartoon', 'illustration': ep['short']['narration'][0]}], len(ep['short']['narration']), [])
-        ep['directed'] = True; save(ep_dir / 'episode.json', ep)
-        from collections import Counter
-        print('shots:', Counter(b['kind'] for sc in ep['scenes'] for b in sc['beats']))
-
-    # 3c. a brand-new animation designed and coded from scratch for every key moment (no templates)
-    from . import genmotion
+    # 3b. STORYBOARD first: every sequence planned as continuous acts, reviewed by the creative director (automatic control)
+    from . import story, genmotion, assets
+    if not ep.get('storyboarded'):
+        sbs = []
+        for kind, th in (('long', style), ('short', short_style)):
+            sb = story.plan(ep, kind, th); sbs.append(sb); save(ep_dir / f'storyboard_{kind}.json', sb)
+            print(f'storyboard {kind}:', story.apply(ep, sb, kind), 'acts |', (sb.get('review') or '')[:200])
+        story.export(ep, sbs, style, ep_dir)
+        ep['storyboarded'] = True; save(ep_dir / 'episode.json', ep)
+    # 3c. the drawings the storyboard asked for (cast sheets, character poses, painted backdrops)
+    refs = story.assets(ep, style, short_style, ep_dir); save(ep_dir / 'episode.json', ep)
+    # 3d. one brand-new continuous animation per act, designed from scratch with the previous act in view; QA'd + repaired
     if not ep.get('gen_done'):
         genmotion.build(ep, style, short_style, ep_dir); ep['gen_done'] = True; save(ep_dir / 'episode.json', ep)
+    story.fallback_frames(ep, style, short_style, ep_dir, refs); save(ep_dir / 'episode.json', ep)
     genmotion.stage(ep_dir)
-
-    # 4. illustrations + thumbnail art
-    from . import assets
-    assets.build(ep, style, ep_dir, short_style)
+    from collections import Counter
+    print('parts:', Counter(b['kind'] for sc in ep['scenes'] for b in sc['beats']))
 
     # 5. render long + short, 6. audio mix, 7. QA
     from . import render, audio, qa

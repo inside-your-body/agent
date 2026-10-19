@@ -86,3 +86,6 @@ Short: title ≤ 60 chars + #Shorts, link to the full episode.
   Each is QA-checked (stills + art review) and redesigned once if it fails; failures become a new drawing, never a template.
 - Every video has its own DESIGN LANGUAGE (art style, shape language, line, texture, motion personality, camera, typography),
   clearly different from recent videos — drawings, animations and the Short all follow it.
+- WORKFLOW (owner's decision): script → storyboard for every sequence (continuous acts) → automatic creative-director review →
+  drawings the storyboard needs → one continuous animation per act, designed with the previous act in view → QA → publish automatically.
+  No human approval step: the agent controls quality itself.
