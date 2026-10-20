@@ -1,16 +1,32 @@
 {
- "episodes": [
-  {
-   "n": 1,
-   "topic": "What Smoking Does to Your Body",
-   "video_id": "jLo5jFDMq_8",
-   "style": "cream-paper-lineart",
-   "short_style": "neon-bio-hud",
-   "built_at": "2026-10-16T12:00:00"
-  }
- ],
- "used_styles": [
-  "cream-paper-lineart",
-  "neon-bio-hud"
- ]
+  "episodes": [
+    {
+      "n": 1,
+      "topic": "What Smoking Does to Your Body",
+      "video_id": "jLo5jFDMq_8",
+      "style": "cream-paper-lineart",
+      "short_style": "neon-bio-hud",
+      "built_at": "2026-10-16T12:00:00"
+    },
+    {
+      "n": 2,
+      "topic": "How Kidney Stones Form, Crystal by Crystal",
+      "video_id": "f6VqKJ2bdL0",
+      "short_id": "boCLjYg_7ZQ",
+      "style": "paper-ink+tint",
+      "short_style": "mono-red+tint",
+      "kit": "line",
+      "publish_at": "2026-10-20T20:00:00Z",
+      "built_at": "2026-10-20T10:02:32"
+    }
+  ],
+  "used_styles": [
+    "cream-paper-lineart",
+    "neon-bio-hud",
+    "paper-ink+tint",
+    "mono-red+tint"
+  ],
+  "used_kits": [
+    "line"
+  ]
 }
