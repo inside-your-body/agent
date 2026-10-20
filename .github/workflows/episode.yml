@@ -12,9 +12,13 @@ on:
       topic:
         description: 'Optional topic override (title or topic-bank number)'
         required: false
+      resume_run:
+        description: 'Optional: run id whose finished build (work artifact) should be rendered + published without rebuilding'
+        required: false
 
 permissions:
   contents: write
+  actions: read
 concurrency: episode
 
 env:
@@ -41,6 +45,10 @@ jobs:
       - name: Cache models
         uses: actions/cache@v4
         with: {path: work/tts_model, key: kokoro-v1}
+      - name: Reuse a finished build
+        if: inputs.resume_run != ''
+        uses: actions/download-artifact@v4
+        with: {name: work, path: work, run-id: '${{ inputs.resume_run }}', github-token: '${{ github.token }}'}
       - name: Build episode
         id: run
         env:
@@ -48,6 +56,7 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           YT_TOKEN_JSON: ${{ secrets.YT_TOKEN_JSON }}
         run: |
+          if [ -n "${{ inputs.resume_run }}" ] && [ -f work/current.json ]; then echo "go=1" >> $GITHUB_OUTPUT; echo "reusing build of run ${{ inputs.resume_run }}"; exit 0; fi
           ARGS="--stage build"
           if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.dry_run }}" = "true" ]; then ARGS="$ARGS --dry-run"; fi
           if [ -n "${{ inputs.topic }}" ]; then ARGS="$ARGS --topic \"${{ inputs.topic }}\""; fi
