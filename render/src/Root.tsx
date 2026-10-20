@@ -5,6 +5,7 @@ import {Props} from './theme';
 import {ProtoIV} from './ProtoIV';
 import {GenGallery} from './GenShot';
 import {SampleStone, ThumbStone, SAMPLE_FRAMES} from './SampleStone';
+import {StyleDemo, Thumb, DEMO_ORDER, DEMO_LEN} from './StyleDemo';
 
 const demo: Props = {kind: 'long', fps: 30, frames: 150, channel: 'Inside Your Body', title: 'demo', words: [],
   theme: {id: 'paper-ink', bg: '#F1EDE4', bg2: '#E6DFD1', fg: '#1B1B1B', muted: '#6B6457', accent: '#E3241B', accent2: '#E8B21C', accent3: '#22B573',
@@ -21,6 +22,10 @@ export const Root: React.FC = () => (
       calculateMetadata={({props}) => ({durationInFrames: (props as any).frames})} />
     <Composition id="SampleStone" component={SampleStone} width={1920} height={1080} fps={30} durationInFrames={SAMPLE_FRAMES} />
     <Composition id="ThumbStone" component={ThumbStone} width={1280} height={720} fps={30} durationInFrames={1} />
+    <Composition id="StyleDemo" component={StyleDemo} width={1920} height={1080} fps={30} durationInFrames={DEMO_ORDER.length * DEMO_LEN} />
+    <Composition id="Thumb1" component={Thumb as any} width={1920} height={1080} fps={30} durationInFrames={1} defaultProps={{v: 1}} />
+    <Composition id="Thumb2" component={Thumb as any} width={1920} height={1080} fps={30} durationInFrames={1} defaultProps={{v: 2}} />
+    <Composition id="Thumb3" component={Thumb as any} width={1920} height={1080} fps={30} durationInFrames={1} defaultProps={{v: 3}} />
     <Composition id="GenGallery" component={GenGallery as any} width={1920} height={1080} fps={30} durationInFrames={60}
       defaultProps={{items: [], slot: 60, theme: demo.theme, vertical: false}}
       calculateMetadata={({props}) => ({durationInFrames: Math.max(1, (props as any).items.length * (props as any).slot)})} />
