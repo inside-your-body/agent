@@ -20,7 +20,7 @@ def model():
     print('claude model:', _MODEL)
     return _MODEL
 
-def ask(prompt, system='', max_tokens=16000, web_search=False, retries=4, image_url=None):
+def ask(prompt, system='', max_tokens=16000, web_search=False, retries=4, image_url=None, effort='medium'):
     headers = {'x-api-key': os.environ['ANTHROPIC_API_KEY'], 'anthropic-version': '2023-06-01', 'content-type': 'application/json'}
     content = prompt
     if image_url:   # download ourselves (Pinterest blocks Anthropic's URL fetcher via robots.txt) and send base64
@@ -35,7 +35,7 @@ def ask(prompt, system='', max_tokens=16000, web_search=False, retries=4, image_
         body['tools'] = [{'type': 'web_search_20250305', 'name': 'web_search', 'max_uses': 8}]
     # Sonnet 5.5 thinks by default and thinking counts toward max_tokens -> keep it minimal.
     # Try the lowest setting first; fall back for models that don't know these fields.
-    variants = [{'thinking': {'type': 'between_tools'}, 'output_config': {'effort': 'medium'}},
+    variants = [{'thinking': {'type': 'between_tools'}, 'output_config': {'effort': effort}},
                 {'output_config': {'effort': 'low'}}, {}]
     for a in range(retries):
         try:

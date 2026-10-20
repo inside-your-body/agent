@@ -35,7 +35,7 @@ CONTRACT = """Write ONE self-contained React component file (TypeScript/TSX) for
 - RENDER SPEED (it renders thousands of frames on a small server): no SVG <filter>/feGaussianBlur/feTurbulence, no CSS filter/blur/backdrop-filter/
   drop-shadow/box-shadow on moving elements, no mix-blend-mode; at most ~120 animated elements; use simple gradients and opacity for glow.
 - Text: keep normal spaces between words (never join words); every word fully on screen.
-- Keep it under 380 lines. Valid TSX. Output ONLY the code in one ```tsx block."""
+- Keep it under 280 lines (tight, efficient code). Valid TSX. Output ONLY the code in one ```tsx block."""
 
 
 def _durations(ep, ep_dir, kind):
@@ -157,8 +157,9 @@ def _vision(batch):
         for p in paths[:2]:
             content.append({'type': 'image', 'source': {'type': 'base64', 'media_type': 'image/jpeg', 'data': base64.b64encode(p.read_bytes()).decode()}})
     content.append({'type': 'text', 'text': """You are the art director of an animated health channel. For each SHOT judge the two frames (early, late):
-FAIL it if: the subject the narrator talks about is not clearly recognisable, it looks broken/empty/garbled, elements overlap messily or are cut off,
-text is unreadable or covers the subject, or it looks amateurish/primitive. Otherwise PASS.
+FAIL it ONLY for real defects: it is broken/empty/garbled, the subject the narrator talks about is missing or unrecognisable,
+important elements are cut off or pile up into an unreadable mess, or text is unreadable/joined/covering the subject.
+Simple-but-clean is a PASS (we pay for every redo).
 Return JSON only: {"results": [{"id": str, "ok": bool, "problem": "short concrete fix if failed"}]}"""})
     try:
         txt = llm.ask(content, max_tokens=4000, retries=2)
@@ -195,7 +196,7 @@ def _gen_one(job, before=None):
     allowed = [a['file'] for a in m.get('assets', [])]
     try:
         code = _code(llm.ask(_prompt(lang, theme, brief, sentence, dur, words, vertical, others, fix, prev,
-                                     m.get('assets', []), before), max_tokens=20000, retries=2))
+                                     m.get('assets', []), before), max_tokens=14000, retries=2, effort='low'))
     except Exception as e:
         return gid, None, f'api: {e}'
     err = _static_ok(code, allowed)
@@ -297,6 +298,10 @@ def build(ep, style, short_style, ep_dir):
         return bad
     bad = qa(list(codes))
     print('genmotion QA: failed', len(bad), 'of', len(codes))
+    MAX_REDO = 12
+    if len(bad) > MAX_REDO:      # crashes/empties first, then the rest in order
+        keep = sorted(bad, key=lambda g: (0 if 'crashed' in bad[g] else 1, g))[:MAX_REDO]
+        bad = {g: bad[g] for g in keep}
     if bad:
         fixjobs = [(g, meta[g]['lang'], meta[g]['theme'], meta[g]['brief'], meta[g]['sentence'], meta[g]['dur'], meta[g]['words'],
                     meta[g]['vertical'], meta[g]['others'], prob, codes[g]) for g, prob in bad.items()]

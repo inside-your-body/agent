@@ -8,8 +8,8 @@ from .common import ROOT, load, save
 from . import llm, images
 
 RULES = (ROOT / 'config/rules.md').read_text()
-MAX_POSES, MAX_BACKDROPS = 44, 26
-MAX_POSES_SHORT, MAX_BACKDROPS_SHORT = 8, 5
+MAX_POSES, MAX_BACKDROPS = 24, 10
+MAX_POSES_SHORT, MAX_BACKDROPS_SHORT = 5, 2
 
 SCHEMA = """{"sequences": [{"scene_id": str, "idea": "the visual concept of the whole sequence in one sentence (its set, its main elements, how it evolves)",
   "acts": [{"from": first sentence index (int, in this scene), "see": "what is on screen during this act, concretely",
@@ -29,7 +29,7 @@ def _scenes(ep, kind):
 def plan(ep, kind, theme):
     lang = theme.get('lang') or {}
     scenes = _scenes(ep, kind)
-    rule = ('Long video: each act covers 2-5 consecutive sentences (≈10-20 s); about 3 acts per scene, 35-42 acts in total. ' if kind == 'long' else
+    rule = ('Long video: each act covers 2-5 consecutive sentences (≈10-20 s); about 3 acts per scene, 30-36 acts in total. ' if kind == 'long' else
             'Vertical Short (1080×1520 visual area): each act covers 1-3 sentences (fast), 4-7 acts in total. ')
     out = []
     chunks = [scenes[i:i + 4] for i in range(0, len(scenes), 4)] if kind == 'long' else [scenes]
@@ -50,7 +50,7 @@ Make the STORYBOARD for these sequences. {rule}
 - PATTERN INTERRUPTS in the visuals: every 60-90 s one act breaks the visual rhythm on purpose (sudden zoom 1000× into a cell, a split
   screen, a freeze-frame with a big typographic fact, a change of palette/lighting, a countdown, "myth vs fact" card) — matching the
   script's interrupt. Emotional beats get visuals that make the feeling land (awe = scale reveal, gross-out = close-up, tension = slow push-in).
-- Poses: ask only for poses you really use (0-2 per act). Backdrops only where a painted setting helps (about 1 in 3 acts).
+- Poses: ask only for poses you really use (0-2 per act). Backdrops only where a painted setting really helps (about 1 in 4 acts).
 Scenes (sentence indexes start at 0 in each scene): {json.dumps(ch, ensure_ascii=False)}
 Return JSON exactly: {SCHEMA}""", max_tokens=24000)
         out += res.get('sequences', [])
@@ -71,7 +71,7 @@ Return the full corrected storyboard JSON in the same schema plus "review": "wha
     return sb
 
 
-MAX_ACTS = {'long': 42, 'short': 8}
+MAX_ACTS = {'long': 36, 'short': 7}
 
 def _cap(sb, kind):
     """Too many acts = choppy + slow + expensive: merge neighbouring acts of a sequence until the total fits."""
