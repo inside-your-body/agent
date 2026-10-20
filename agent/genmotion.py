@@ -44,6 +44,10 @@ CONTRACT = """Write ONE self-contained React component file (TypeScript/TSX) for
   strong colours with clear outlines (stroke ≥5 px), never pale/washed-out fills or hairlines; one clear focal action per moment.
 - Full-bleed: the whole canvas painted in the style pack, the subject LARGE (40-70% of the frame) inside 8% safe margins,
   layered depth (background, subject, foreground particles), no big empty areas, nothing important tiny.
+- NEVER A HOLD: a new visual event at least every 3-4 s (something enters, transforms, the camera moves, a new label/number appears),
+  following the narration word by word; the composition at the end must clearly differ from the start. No frozen "title card" parts.
+- TEXT LAYOUT: one title zone (top or side); small labels/figure captions never touch or overlap the title or each other; no "Fig." label
+  if a title is already shown; nothing cropped by the frame edge unless it deliberately enters from off-screen.
 - Must ANIMATE the whole time: things enter, act, transform, react; secondary motion (drift, wobble, pulsing, particles, blinking) never stops.
   All timing scales with dur (main action done by ~0.75*dur).
 - On-screen text: kinetic typography of 1-4 KEY words synced to the exact spoken word (KType), never a full sentence, never covering the subject.
@@ -169,6 +173,17 @@ def _blank(path):
         return True
 
 
+def _same(paths):
+    """True when the two QA frames of a long part are nearly identical (a static hold)."""
+    try:
+        from PIL import Image, ImageChops, ImageStat
+        if len(paths) < 2: return False
+        a, b = [Image.open(p).convert('L').resize((160, 90)) for p in paths[:2]]
+        return sum(ImageStat.Stat(ImageChops.difference(a, b)).mean) < 2.0
+    except Exception:
+        return False
+
+
 def _vision(batch):
     """batch: [(gid, brief, [paths])] -> {gid: (ok, problem)}"""
     content = []
@@ -178,7 +193,7 @@ def _vision(batch):
             content.append({'type': 'image', 'source': {'type': 'base64', 'media_type': 'image/jpeg', 'data': base64.b64encode(p.read_bytes()).decode()}})
     content.append({'type': 'text', 'text': """You are the art director of an animated health channel. For each SHOT judge the two frames (early, late):
 FAIL it ONLY for real defects: it is broken/empty/garbled, the subject the narrator talks about is missing or unrecognisable,
-important elements are cut off or pile up into an unreadable mess, text is unreadable/joined/covering the subject,
+important elements are cut off or pile up into an unreadable mess, text is unreadable/joined/covering the subject, two texts overlap each other,
 or the frame is mostly empty with the subject tiny.
 Simple-but-clean is a PASS (we pay for every redo).
 Return JSON only: {"results": [{"id": str, "ok": bool, "problem": "short concrete fix if failed"}]}"""})
@@ -309,6 +324,8 @@ def build(ep, style, short_style, ep_dir):
                 s = st.get(g, {})
                 if s.get('error') or not s.get('paths') or all(_blank(p) for p in s['paths']):
                     bad[g] = 'it crashed or rendered an empty/flat frame'
+                elif meta[g]['dur'] > 150 and _same(s['paths']):
+                    bad[g] = 'it is a frozen hold: the late frame looks the same as the early one — add new events every 3-4 s following the narration'
                 else:
                     looks.append((g, meta[g]['brief'], s['paths']))
             if vision:
