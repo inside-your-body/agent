@@ -29,7 +29,7 @@ def _scenes(ep, kind):
 def plan(ep, kind, theme):
     lang = theme.get('lang') or {}
     scenes = _scenes(ep, kind)
-    rule = ('Long video: each act covers 2-5 consecutive sentences (≈8-20 s). ' if kind == 'long' else
+    rule = ('Long video: each act covers 2-5 consecutive sentences (≈10-20 s); about 3 acts per scene, 35-42 acts in total. ' if kind == 'long' else
             'Vertical Short (1080×1520 visual area): each act covers 1-3 sentences (fast), 4-7 acts in total. ')
     out = []
     chunks = [scenes[i:i + 4] for i in range(0, len(scenes), 4)] if kind == 'long' else [scenes]
@@ -60,7 +60,7 @@ Return JSON exactly: {SCHEMA}""", max_tokens=24000)
         rev = llm.ask_json(f"""You are the creative director of "Inside Your Body". Review this storyboard against the channel rules and the
 owner's instructions (continuous sequences, the subject always visible, no repeated compositions or templates, characters change,
 story told visually, hook in the first 30 s, professional motion design). Fix every weak act directly (rewrite see/motion/continuity),
-keep the same structure and sentence indexes. Rules: {RULES}
+keep the same structure, sentence indexes and number of acts (do NOT split acts — each act spans several sentences). Rules: {RULES}
 Script: {json.dumps(_scenes(ep, kind), ensure_ascii=False)}
 Storyboard: {json.dumps(sb, ensure_ascii=False)}
 Return the full corrected storyboard JSON in the same schema plus "review": "what you changed (2-4 sentences)".""", max_tokens=32000)
@@ -71,8 +71,27 @@ Return the full corrected storyboard JSON in the same schema plus "review": "wha
     return sb
 
 
+MAX_ACTS = {'long': 42, 'short': 8}
+
+def _cap(sb, kind):
+    """Too many acts = choppy + slow + expensive: merge neighbouring acts of a sequence until the total fits."""
+    seqs = sb['sequences']
+    while sum(len(q.get('acts') or []) for q in seqs) > MAX_ACTS[kind]:
+        q = max(seqs, key=lambda q: len(q.get('acts') or []))
+        acts = sorted(q['acts'], key=lambda a: int(a.get('from', 0) or 0))
+        if len(acts) < 2: break
+        j = min(range(1, len(acts)), key=lambda j: len(str(acts[j].get('see', ''))))   # merge the lightest act into its predecessor
+        a, b = acts[j - 1], acts[j]
+        a['see'] = f"{a.get('see', '')} Then: {b.get('see', '')}"
+        a['motion'] = f"{a.get('motion', '')} Then: {b.get('motion', '')}"
+        a['poses'] = (a.get('poses') or []) + (b.get('poses') or [])
+        a['backdrop'] = a.get('backdrop') or b.get('backdrop')
+        del acts[j]; q['acts'] = acts
+    return sb
+
 def apply(ep, sb, kind):
     """Turn storyboard acts into render beats (one 'gen' beat per act)."""
+    sb = _cap(sb, kind)
     by = {s.get('scene_id'): s for s in sb['sequences']}
     scenes = ep['scenes'] if kind == 'long' else [ep['short']]
     ids = [sc['id'] for sc in ep['scenes']] if kind == 'long' else ['short']

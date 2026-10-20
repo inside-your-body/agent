@@ -7,7 +7,7 @@ from .common import ROOT, load, save
 from . import llm
 
 GEN_DIR = ROOT / 'render/src/gen'
-MAX_GEN_LONG, MAX_GEN_SHORT = 60, 10
+MAX_GEN_LONG, MAX_GEN_SHORT = 44, 10
 FPS = 30
 
 CONTRACT = """Write ONE self-contained React component file (TypeScript/TSX) for Remotion 4.
@@ -32,6 +32,9 @@ CONTRACT = """Write ONE self-contained React component file (TypeScript/TSX) for
   riser, shield, heartbeat, tick, bong. One effect per meaningful event (a key word lands → pop/click; something appears → reveal/sparkle;
   liquid → drip/bubble; hit/crash → impact; build-up → riser; heart → heartbeat). 1-4 effects per part, at least 45 frames apart,
   never on every element — subtle and pleasant, never annoying. Empty array if nothing deserves a sound.
+- RENDER SPEED (it renders thousands of frames on a small server): no SVG <filter>/feGaussianBlur/feTurbulence, no CSS filter/blur/backdrop-filter/
+  drop-shadow/box-shadow on moving elements, no mix-blend-mode; at most ~120 animated elements; use simple gradients and opacity for glow.
+- Text: keep normal spaces between words (never join words); every word fully on screen.
 - Keep it under 380 lines. Valid TSX. Output ONLY the code in one ```tsx block."""
 
 
@@ -68,7 +71,7 @@ def _static_ok(code, allowed=()):
     if 'export default' not in code: return 'missing export default'
     bad = [m for m in re.findall(r"from\s+['\"]([^'\"]+)['\"]", code) if m not in ('react', 'remotion')]
     if bad: return f'forbidden imports {bad}'
-    for k in ('Math.random', 'Date.now', 'new Date', 'window.', 'document.', 'fetch(', '<img', 'http://', 'https://'):
+    for k in ('Math.random', 'Date.now', 'new Date', 'window.', 'document.', 'fetch(', '<img', 'http://', 'https://', '<filter', 'feGaussianBlur', 'feTurbulence', 'backdropFilter'):
         if k in code: return f'forbidden: {k}'
     files = re.findall(r"staticFile\(\s*['\"`]([^'\"`]+)['\"`]", code)
     unknown = [f for f in files if f not in allowed]

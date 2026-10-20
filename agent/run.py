@@ -25,7 +25,12 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--dry-run', action='store_true', help='build everything, do not upload')
     ap.add_argument('--topic', default=None)
+    ap.add_argument('--stage', default='all', choices=['all', 'build', 'finish'],
+                    help='build = everything up to the render (then shards render in parallel); finish = concat parts + audio + upload')
     a = ap.parse_args()
+    cur = load(WORK / 'current.json', {})
+    if a.stage == 'finish' and cur:
+        return finish_from(cur, a)
 
     # run daily via cron, but only make an episode every ~2 days
     h = load(ROOT / 'data/history.json')
@@ -44,6 +49,13 @@ def main():
     else:
         topic = {'id': None, 'title': a.topic} if a.topic else pick_topic()
     ep_dir = WORK / dt.datetime.utcnow().strftime('%Y%m%d'); ep_dir.mkdir(parents=True, exist_ok=True)
+    save(WORK / 'current.json', {'dir': ep_dir.name, 'topic': topic})
+    run_episode(a, topic, ep_dir)
+
+def finish_from(cur, a):
+    run_episode(a, cur['topic'], WORK / cur['dir'])
+
+def run_episode(a, topic, ep_dir):
     print('== topic:', topic['title'])
 
     # 1. research + script
@@ -117,6 +129,11 @@ def main():
 
     # 5. render long + short, 6. audio mix, 7. QA
     from . import render, audio, qa
+    if a.stage == 'build':          # parallel render shards take over from here (see agent/shard.py)
+        render.props(ep, style, ep_dir, 'long'); render.props(ep, short_style, ep_dir, 'short')
+        print('build stage done:', ep_dir); return
+    from . import shard
+    shard.concat(ep_dir)            # parts rendered by the shard jobs -> silent_long/short.mp4 (no-op when rendering here)
     long_mp4 = render.render(ep, style, ep_dir, kind='long')
     short_mp4 = render.render(ep, short_style, ep_dir, kind='short')
     long_final = audio.finish(long_mp4, ep_dir, 'long', style)
