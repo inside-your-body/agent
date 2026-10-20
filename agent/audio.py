@@ -91,7 +91,9 @@ def finish(video, ep_dir, kind, style):
     cache = {}
     def snd(name):
         if name not in cache:
-            x, sr = sf.read(SF2 / f'{name}.wav')
+            f = SF2 / f'{name}.wav'
+            if not f.exists(): f = SFX / f'{name}.wav'
+            x, sr = sf.read(f)
             if x.ndim > 1: x = x.mean(1)
             x = resample_poly(x, SR, sr) if sr != SR else x
             x = lp(x, 9000)                                   # soften: no harsh highs
@@ -100,44 +102,56 @@ def finish(video, ep_dir, kind, style):
         return cache[name]
     VAR = {'whoosh': 3, 'pop': 4, 'impact': 3}
     GAIN = {'whoosh': 0.13, 'pop': 0.22, 'impact': 0.28, 'tick': 0.14, 'reveal': 0.22, 'heartbeat': 0.35, 'drip': 0.25, 'bubble': 0.22,
-            'riser': 0.18, 'goo': 0.2, 'shield': 0.16, 'sparkle': 0.18, 'boom': 0.3, 'bong': 0.2, 'click': 0.15}
-    last_t, last_name, k = -9.0, None, 0
+            'riser': 0.18, 'goo': 0.2, 'shield': 0.16, 'sparkle': 0.18, 'boom': 0.3, 'bong': 0.2, 'click': 0.15,
+            'ding': 0.16, 'stamp': 0.22, 'swish': 0.13, 'zip': 0.13}
+    # VARIETY (owner's rule): never the same sound again and again. Each request picks the freshest sound of its family,
+    # a family member is rested >= 25 s, every sound has a per-video budget, and each play gets a slightly different pitch.
+    FAM = {'pop': ['pop', 'click', 'ding', 'tick'], 'click': ['click', 'pop', 'tick'], 'tick': ['tick', 'click'],
+           'reveal': ['reveal', 'sparkle', 'bong', 'ding'], 'sparkle': ['sparkle', 'reveal', 'ding'], 'bong': ['bong', 'ding', 'reveal'],
+           'impact': ['impact', 'stamp', 'boom'], 'boom': ['boom', 'impact', 'stamp'], 'stamp': ['stamp', 'impact'],
+           'whoosh': ['whoosh', 'swish', 'zip'], 'swish': ['swish', 'whoosh', 'zip'], 'zip': ['zip', 'swish', 'whoosh'],
+           'drip': ['drip', 'bubble', 'goo'], 'bubble': ['bubble', 'drip', 'goo'], 'goo': ['goo', 'bubble', 'drip'],
+           'riser': ['riser'], 'shield': ['shield', 'sparkle'], 'heartbeat': ['heartbeat'], 'ding': ['ding', 'sparkle', 'pop']}
+    CAP = {'pop': 7, 'whoosh': 7, 'click': 5, 'heartbeat': 2, 'riser': 3, 'boom': 2}
+    used, uses, k = {}, {}, 0
+    last_t = -9.0
+    def pick(req, te):
+        for nm in FAM.get(req, [req]):
+            if te - used.get(nm, -99) >= 25 and uses.get(nm, 0) < CAP.get(nm, 4): return nm
+        return None
+    def play(base, te, t_end):
+        nonlocal k, last_t
+        k += 1
+        nm = f'{base}{1 + k % VAR[base]}' if base in VAR else base
+        try: x = snd(nm)
+        except Exception: return
+        semis = [0, -2, 1, -1, 2, -3][(uses.get(base, 0) + k) % 6]          # each play sounds a little different
+        if semis and base not in ('heartbeat', 'riser'):
+            up, down = {-3: (6, 5), -2: (9, 8), -1: (18, 17), 1: (17, 18), 2: (8, 9)}[semis]
+            x = resample_poly(x, up, down)
+        g = GAIN.get(base, 0.2)
+        if base == 'riser': place(fx, x, max(0, te - len(x) / SR + 0.1), g)
+        elif base == 'heartbeat':
+            tt = te
+            while tt < min(t_end, te + 4): place(fx, x, tt, g); tt += 0.86
+        else: place(fx, x, max(0, te - (0.2 if base in ('whoosh', 'swish', 'zip') else 0)), g)
+        used[base] = te; uses[base] = uses.get(base, 0) + 1; last_t = te
     for i, b in enumerate(p['beats']):
         t = b['from'] / p['fps']; t_end = b['to'] / p['fps']
         if b.get('kind') == 'gen':
             # sounds designed together with the animation, synced to its own events
             for e in (b.get('sfx_events') or []):
-                base = e['s']; te = t + e['p'] * (t_end - t)
-                if te - last_t < 1.4: continue
-                nm = base
-                if base in VAR: k += 1; nm = f'{base}{1 + k % VAR[base]}'
-                try: x = snd(nm)
-                except Exception: continue
-                if base == 'riser': place(fx, x, max(0, te - len(x) / SR + 0.1), GAIN.get(base, 0.2))
-                elif base == 'heartbeat':
-                    tt = te
-                    while tt < min(t_end, te + 4): place(fx, x, tt, GAIN[base]); tt += 0.86
-                else: place(fx, x, max(0, te - (0.2 if base == 'whoosh' else 0)), GAIN.get(base, 0.2))
-                last_t, last_name = te, base
+                te = t + e['p'] * (t_end - t)
+                if te - last_t < 2.0: continue
+                nm = pick(e['s'], te)
+                if nm: play(nm, te, t_end)
             continue
         name = b.get('sfx')
         if name in (None, '', 'none'):
-            # default: an occasional soft whoosh on a cut, never dense
             if i > 0 and t - last_t > (4 if kind == 'short' else 9) and i % 3 == 0: name = 'whoosh'
             else: continue
-        if name == last_name and name not in ('tick', 'heartbeat') and t - last_t < 12: continue
-        base = name
-        if name in VAR: k += 1; name = f'{name}{1 + k % VAR[base]}'
-        try: x = snd(name)
-        except Exception: continue
-        g = GAIN.get(base, 0.2)
-        if base == 'riser': place(fx, x, max(0, t - len(x) / SR + 0.1), g)
-        elif base in ('heartbeat', 'tick'):
-            step = 0.86 if base == 'heartbeat' else 1.0
-            tt = t
-            while tt < min(t_end, t + 6): place(fx, x, tt, g); tt += step
-        else: place(fx, x, max(0, t - (0.2 if base == 'whoosh' else 0)), g)
-        last_t, last_name = t, base
+        nm = pick(name, t)
+        if nm: play(nm, t, t_end)
     env = np.convolve(np.abs(v), np.ones(int(0.2 * SR)) / int(0.2 * SR), 'same')
     duck = 1 - 0.6 * np.clip(env / 0.04, 0, 1)
     mix = v * 1.0 + mus * (0.15 if kind == 'long' else 0.2) * duck + fx * 0.55

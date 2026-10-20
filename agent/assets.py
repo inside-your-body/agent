@@ -113,6 +113,8 @@ def _compose(art, l1, l2, style, out):
 
 def thumbnail(ep, style, ep_dir):
     """Main thumbnail (uploaded) + up to 2 variants (thumbnail_b/c.jpg) for YouTube's Test & compare."""
+    if (ep_dir / 'thumbnail.jpg').exists():       # code-drawn thumbnails from the build stage (thumbgen) — no AI art
+        return ep_dir / 'thumbnail.jpg'
     th = ep.get('thumbnail', {})
     refs = [str(x) for x in sorted((ep_dir / 'assets').glob('cast_*.png'))[:2]]
     cast = images.cast_text(ep.get('cast') or [], [c['id'] for c in (ep.get('cast') or [])][:2])

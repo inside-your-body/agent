@@ -18,6 +18,7 @@ def mark_done(topic_id, entry):
     save(ROOT / 'data/topics.json', topics)
     h = load(ROOT / 'data/history.json'); h['episodes'].append(entry)
     h['used_styles'] += [entry.get('style'), entry.get('short_style')]
+    h.setdefault('used_kits', []).append(entry.get('kit'))
     h.setdefault('used_langs', []).extend([x for x in (entry.get('lang'), entry.get('short_lang')) if x])
     save(ROOT / 'data/history.json', h)
 
@@ -76,11 +77,11 @@ def run_episode(a, topic, ep_dir):
     # 2. style (Pinterest board refs -> new style spec, never one of the last used)
     from . import styles
     hist = load(ROOT / 'data/history.json')
-    style = load(ep_dir / 'style_long.json') if (ep_dir / 'style_long.json').exists() and load(ep_dir / 'style_long.json').get('lang') else \
-        styles.choose(topic['title'], ep, hist['used_styles'], ep_dir, recent_langs=hist.get('used_langs', [])[-8:])
-    short_style = load(ep_dir / 'style_short.json') if (ep_dir / 'style_short.json').exists() and load(ep_dir / 'style_short.json').get('lang') else \
+    style = load(ep_dir / 'style_long.json') if (ep_dir / 'style_long.json').exists() and load(ep_dir / 'style_long.json').get('kit') else \
+        styles.choose(topic['title'], ep, hist['used_styles'], ep_dir, recent_langs=hist.get('used_langs', [])[-8:], recent_kits=hist.get('used_kits', []))
+    short_style = load(ep_dir / 'style_short.json') if (ep_dir / 'style_short.json').exists() and load(ep_dir / 'style_short.json').get('kit') else \
         styles.choose(topic['title'] + ' short', ep, hist['used_styles'] + [style['id']], ep_dir, vertical=True, avoid=style,
-                      recent_langs=hist.get('used_langs', [])[-8:] + [style.get('lang')])
+                      recent_langs=hist.get('used_langs', [])[-8:] + [style.get('lang')], recent_kits=hist.get('used_kits', []))
 
     # 3. voice (fixed narrator) + word timings
     def voice(kind):
@@ -118,11 +119,15 @@ def run_episode(a, topic, ep_dir):
         story.export(ep, sbs, style, ep_dir)
         ep['storyboarded'] = True; save(ep_dir / 'episode.json', ep)
     # 3c. the drawings the storyboard asked for (cast sheets, character poses, painted backdrops)
-    refs = story.assets(ep, style, short_style, ep_dir); save(ep_dir / 'episode.json', ep)
+    refs = {}          # no AI drawings any more: every visual is code-drawn with the puppet kit
     # 3d. one brand-new continuous animation per act, designed from scratch with the previous act in view; QA'd + repaired
     if not ep.get('gen_done'):
         genmotion.build(ep, style, short_style, ep_dir); ep['gen_done'] = True; save(ep_dir / 'episode.json', ep)
-    story.fallback_frames(ep, style, short_style, ep_dir, refs); save(ep_dir / 'episode.json', ep)
+    if not (ep_dir / 'thumbnail.jpg').exists():     # thumbnail = code-drawn still with the hero (concept 1) + 2 test variants
+        from . import thumbgen
+        try: thumbgen.build(ep, style, ep_dir)
+        except Exception as e:
+            print('thumbnail gen failed', e); thumbgen.fallback(ep, ep_dir)
     genmotion.stage(ep_dir)
     from collections import Counter
     print('parts:', Counter(b['kind'] for sc in ep['scenes'] for b in sc['beats']))
@@ -165,7 +170,7 @@ def run_episode(a, topic, ep_dir):
         print('short comment not posted:', e)
     mark_done(topic['id'], {'topic': topic['title'], 'video_id': vid, 'short_id': svid,
                             'style': style['id'], 'short_style': short_style['id'], 'publish_at': at,
-                            'lang': style.get('lang'), 'short_lang': short_style.get('lang'),
+                            'kit': style.get('kit'), 'lang': style.get('lang'), 'short_lang': short_style.get('lang'),
                             'built_at': dt.datetime.utcnow().isoformat(timespec='seconds')})
     save(ep_dir / 'result.json', {'video': vid, 'short': svid, 'publish_at': at, 'pinned_comment': pkg['pinned_comment']})
     print('DONE', vid, svid, at)

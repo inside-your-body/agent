@@ -53,6 +53,14 @@ export const POSES: Record<string, Pose> = {
   point: {armL: [105, 98], armR: [-10, -5], legL: [96, 92], legR: [84, 88]},
   shrug: {armL: [150, 230], armR: [30, -50], legL: [96, 92], legR: [84, 88]},
   cheer: {armL: [-120, -100], armR: [-60, -80], legL: [100, 95], legR: [80, 85]},
+  holdHead: {armL: [-160, -80], armR: [-20, -100], legL: [96, 92], legR: [84, 88], head: 6},
+  holdChest: {lean: 6, armL: [105, 98], armR: [40, 200], legL: [96, 92], legR: [84, 88], head: 6},
+  holdBelly: {lean: 10, armL: [120, 10], armR: [60, 170], legL: [97, 92], legR: [83, 88], head: 10},
+  think: {armL: [105, 98], armR: [20, -125], legL: [96, 92], legR: [84, 88], head: -6},
+  drink: {armL: [105, 98], armR: [10, -130], legL: [96, 92], legR: [84, 88], head: -14},
+  wave: {armL: [105, 98], armR: [-40, -80], legL: [96, 92], legR: [84, 88]},
+  run: {lean: 14, armL: [60, -10], armR: [130, 200], legL: [50, 120], legR: [125, 80]},
+  tired: {lean: 18, armL: [100, 92], armR: [80, 88], legL: [96, 92], legR: [84, 88], head: 30},
 };
 export const mixPose = (a: Pose, b: Pose, t: number): Pose => {
   const m = (u?: number, v?: number) => (u ?? 0) + ((v ?? 0) - (u ?? 0)) * t;
@@ -136,7 +144,7 @@ export const Stone: React.FC<{x: number; y: number; s?: number; mood?: Mood; rot
 
 // ---------- Kinetic typography: words land on their cue frames (real text layout, never overlapping) ----------
 export const KType: React.FC<{words: string[]; at: number; x: number; y: number; size?: number; color?: string; accent?: number[];
-  gap?: number; font?: string; align?: 'middle' | 'start'; width?: number}> = ({words, at, x, y, size = 84, color = PAL.ink, accent = [], gap = 4,
+  gap?: number; font?: string; align?: 'middle' | 'start'; width?: number; accentColor?: string}> = ({words, at, x, y, size = 84, color = PAL.ink, accent = [], gap = 4, accentColor = PAL.coral,
   font = 'F_poppins', align = 'middle', width = 1700}) => {
   const f = useCurrentFrame();
   const left = align === 'middle' ? x - width / 2 : x;
@@ -146,7 +154,7 @@ export const KType: React.FC<{words: string[]; at: number; x: number; y: number;
         fontFamily: font, fontWeight: 800, fontSize: size, lineHeight: 1.15}}>
         {words.map((t, i) => {
           const p = pop(f, at + i * gap, 11, 210);
-          return <span key={i} style={{display: 'inline-block', color: accent.includes(i) ? PAL.coral : color, opacity: Math.min(1, p * 1.4),
+          return <span key={i} style={{display: 'inline-block', color: accent.includes(i) ? accentColor : color, opacity: Math.min(1, p * 1.4),
             transform: `translateY(${(1 - p) * size * 0.5}px) rotate(${(1 - p) * -6}deg)`, whiteSpace: 'nowrap'}}>{t}</span>;
         })}
       </div>

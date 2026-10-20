@@ -31,6 +31,17 @@ export const STYLES: Record<string, Sty> = {
     line: 3, lineColor: 'rgba(255,255,255,0.7)', glass: true, font: 'F_montserrat'},
 };
 
+// The pack for a video theme ({kit, kitTint}): registers the tinted pack as STYLES[<kit>_ep] and returns its key.
+export const kitKey = (t: any): string => {
+  const base = STYLES[t?.kit] ? t.kit : 'flat';
+  if (!t?.kitTint || !Object.keys(t.kitTint).length) return base;
+  const key = base + '_ep';
+  const tint = {...t.kitTint};
+  if (STYLES[base].lineOnly) delete tint.shirt;
+  STYLES[key] = {...STYLES[base], ...tint, id: key};
+  return key;
+};
+
 // ---------- background per style ----------
 export const StyleBg: React.FC<{s: Sty; w?: number; h?: number}> = ({s, w = 1920, h = 1080}) => {
   const f = useCurrentFrame();

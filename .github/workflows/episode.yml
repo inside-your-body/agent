@@ -1,9 +1,8 @@
 name: Make episode
 
 on:
-  # schedule is OFF until the test episode is approved
-  # schedule:
-  #   - cron: '0 6 * * *'       # daily 06:00 UTC; run.py makes an episode only every ~2 days (min 40 h gap)
+  schedule:
+    - cron: '47 15 * * *'      # daily 15:47 UTC; run.py makes an episode only every ~2 days (min 40 h gap); it publishes at 20:00 UTC (23:00 Istanbul)
   workflow_dispatch:
     inputs:
       dry_run:
@@ -75,7 +74,7 @@ jobs:
             work/*/storyboard*
             work/*/gen/*.tsx
             work/*/gen/qa*/st/*.jpg
-            work/*/assets/cast_*.png
+            work/*/thumbnail*.jpg
             work/cost.json
           retention-days: 14
 

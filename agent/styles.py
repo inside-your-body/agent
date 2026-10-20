@@ -63,7 +63,22 @@ FONTS = ['anton', 'inter', 'spacemono', 'bebas', 'montserrat', 'playfair', 'popp
 TRANSITIONS = ['slide', 'rise', 'zoom', 'fade', 'wipe', 'glitch', 'bounce', 'cut']
 PATTERNS = ['grid', 'dots', 'halftone', 'scan', 'gradient', 'paper', 'grain']
 
-def choose(topic, ep, used, ep_dir, vertical=False, avoid=None, recent_langs=None):
+KITS = {'flat': 'Flat 2D — bold flat colours, thick dark outlines, chunky friendly hero (owner favourite)',
+        'line': 'Line Art — black ink lines on cream paper, no fills, one warm accent, elegant serif type (owner favourite)',
+        'pop': 'Pop Art — yellow halftone, thick black outlines, comic bursts, loud condensed caps',
+        'swiss': 'Swiss — off-white grid, black + one red, strict geometric layout, huge bold caps',
+        'riso': 'Risograph — pink/teal/navy inks on paper, grain, slight misregistration, playful caps',
+        'glass': 'Glassmorphism — deep purple night, frosted glass panels, glowing cyan/pink'}
+KIT_W = {'flat': 3, 'line': 3, 'pop': 2, 'swiss': 1.5, 'riso': 1.5, 'glass': 1}
+KIT_FONT = {'flat': 'poppins', 'line': 'dmserif', 'pop': 'anton', 'swiss': 'inter', 'riso': 'archivoblack', 'glass': 'montserrat'}
+KIT_PAL = {'flat': ('#13233B', '#1C3150', '#F5EFE6', '#FF6B5B', '#FFC845', '#8FA3BF'), 'line': ('#F3EEE3', '#E9E2D3', '#1E1E1E', '#D9774E', '#1E1E1E', '#6B6457'),
+           'swiss': ('#F4F4F0', '#E6E6E1', '#111111', '#E3241B', '#111111', '#5A5A5A'), 'pop': ('#FFD23D', '#FFB800', '#111111', '#E8263A', '#1E5BFF', '#4A3B00'),
+           'riso': ('#F1E9DA', '#E8DCC6', '#2A2A6E', '#E0457A', '#00A6A6', '#5B5B8A'), 'glass': ('#1B1446', '#3B1C6B', '#FFFFFF', '#7CF3FF', '#FF7AD9', '#B9AEE0')}
+
+def choose(topic, ep, used, ep_dir, vertical=False, avoid=None, recent_langs=None, recent_kits=None):
+    import random as _r
+    recent_k = [k for k in (recent_kits or []) if k][-2:] + ([avoid.get('kit')] if avoid and avoid.get('kit') else [])
+    kit_cands = [k for k in KITS if k not in recent_k] or list(KITS)
     recent = [u for u in used if u][-5:]
     candidates = [k for k in BASE if k not in [r.split('+')[0] for r in recent]] or list(BASE)
     refs = {}
@@ -84,6 +99,10 @@ You may re-tint the chosen theme: return replacement hex colours ONLY if they ke
 "fontHead": one of {FONTS}|null, "fontBody": one of {FONTS}|null, "upper": bool|null,
 "transition": one of {TRANSITIONS}|null, "pattern": one of {PATTERNS}|null,
 "refs_used": [short description of the Pinterest refs whose typography/motion ideas you borrowed],
+"kit": one of {json.dumps({k: KITS[k] for k in kit_cands})} — the puppet/style pack that fits THIS topic best and is most likely to hook
+  viewers of viral health animations (favour flat and line, the owner's favourites, but never the same look as the previous video),
+"kit_tint": {{"bg": hex|null, "bg2": hex|null, "accent": hex|null, "accent2": hex|null, "shirt": hex|null}} — optional new colours for the pack so this
+  video does not look like the last one with the same pack (keep its character: line stays light paper, glass stays dark),
 "lang": {{"name": "2-4 word name of this video's DESIGN LANGUAGE",
   "art_style": "how every drawing/illustration in this video looks (medium, rendering, line, shading, texture) — 1-2 sentences",
   "shape_language": "geometric / blobby / hand-cut / technical... and how organs, cells and characters are built from it",
@@ -121,6 +140,22 @@ Borrow the TYPOGRAPHY and MOTION-GRAPHICS feel (font character, caps, transition
             theme['fontHead'] = random.choice([f for f in ('anton', 'bebas', 'archivoblack', 'fredoka', 'poppins', 'playfair') if f != avoid.get('fontHead')])
         if theme.get('transition') == avoid.get('transition'):
             theme['transition'] = random.choice([x for x in TRANSITIONS if x not in (avoid.get('transition'), 'cut')])
+    # puppet-kit style pack (everything is code-drawn motion graphics in this pack)
+    kit = (pick or {}).get('kit')
+    if kit not in kit_cands:
+        kit = _r.choices(kit_cands, weights=[KIT_W[k] for k in kit_cands])[0]
+    bg, bg2, fg, acc, acc2, mut = KIT_PAL[kit]
+    theme.update(kit=kit, bg=bg, bg2=bg2, fg=fg, accent=acc, accent2=acc2, accent3=acc2 if acc2 != fg else acc, muted=mut,
+                 fontHead=KIT_FONT[kit], fontBody='inter' if kit != 'line' else 'dmserif', upper=kit in ('pop', 'swiss', 'riso'))
+    tint = (pick or {}).get('kit_tint') if isinstance((pick or {}).get('kit_tint'), dict) else {}
+    tint = {k: v for k, v in tint.items() if k in ('bg', 'bg2', 'accent', 'accent2', 'shirt') and isinstance(v, str) and re.fullmatch(r'#[0-9A-Fa-f]{6}', v)}
+    if tint:
+        t2 = {**theme, **{k: v for k, v in tint.items() if k != 'shirt'}}
+        if contrast(fg, t2['bg']) >= 7 and contrast(t2['accent'], t2['bg']) >= 2.6 and contrast(mut, t2['bg']) >= 3:
+            theme.update({k: v for k, v in tint.items() if k != 'shirt'}); theme['kitTint'] = tint
+    lang_ = dict(theme.get('lang') or {})
+    lang_['art_style'] = KITS[kit] + ' — everything drawn in code with the channel puppet kit, no painted images'
+    theme['lang'] = lang_; theme['art_style'] = lang_['art_style']
     save(ep_dir / f"style_{'short' if vertical else 'long'}.json", {**theme, 'why': (pick or {}).get('why'), 'refs_used': (pick or {}).get('refs_used')})
-    print('style:', theme['id'])
+    print('style:', theme['id'], 'kit:', theme['kit'], theme.get('kitTint') or '')
     return theme

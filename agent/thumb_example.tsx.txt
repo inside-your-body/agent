@@ -1,0 +1,42 @@
+// ---------- thumbnails: big emotion + one clear visual question + 3-5 huge words ----------
+const Glow: React.FC<{x: number; y: number; r: number; c: string}> = ({x, y, r, c}) => <>
+  <radialGradient id={`g${x}${y}`}><stop offset="0%" stopColor={c} stopOpacity={0.9} /><stop offset="100%" stopColor={c} stopOpacity={0} /></radialGradient>
+  <circle cx={x} cy={y} r={r} fill={`url(#g${x}${y})`} /></>;
+const BigText: React.FC<{lines: [string, string][]; x: number; y: number; size: number; anchor?: 'start' | 'end' | 'middle'}> = ({lines, x, y, size, anchor = 'start'}) => <>
+  {lines.map(([t, c], i) => <text key={i} x={x} y={y + i * size * 1.02} textAnchor={anchor} fontFamily="F_anton" fontSize={size} fill={c}
+    stroke="#000" strokeWidth={size * 0.07} paintOrder="stroke" letterSpacing={1}>{t}</text>)}</>;
+
+export const Thumb: React.FC<{v: number}> = ({v}) => {
+  const s = STYLES.flat;
+  const hero = {...s, shirt: '#2E7DF6', skin: '#F6C7A1'};
+  if (v === 1) return <AbsoluteFill><svg width={1920} height={1080} viewBox="0 0 1920 1080">
+    <rect width={1920} height={1080} fill="#0B1E3A" />
+    <Glow x={520} y={560} r={620} c="#FF3B30" />
+    {/* x-ray window on the body with the stone circled */}
+    <Hero s={hero} x={500} y={1130} scale={3.5} pose={POSES.holdSide} mood="pain" glow={0} />
+    <circle cx={760} cy={720} r={150} fill="#0B1E3A" stroke="#fff" strokeWidth={12} />
+    <path d="M700 640 C760 620 820 660 810 720 C800 780 740 800 720 770" stroke="#FF6B6B" strokeWidth={40} fill="none" strokeLinecap="round" />
+    <SStone s={s} x={760} y={760} scale={0.55} mood="determined" />
+    <circle cx={760} cy={720} r={170} fill="none" stroke="#FFD23D" strokeWidth={14} strokeDasharray="30 18" />
+    <path d="M960 600 L1080 520" stroke="#FFD23D" strokeWidth={24} strokeLinecap="round" />
+    <path d="M1060 500 L1110 505 L1085 552Z" fill="#FFD23D" />
+    <BigText lines={[['3 MM STONE', '#FFFFFF'], ['WORST PAIN', '#FFD23D'], ['EVER?', '#FFD23D']]} x={1860} y={330} size={190} anchor="end" />
+  </svg></AbsoluteFill>;
+  if (v === 2) return <AbsoluteFill><svg width={1920} height={1080} viewBox="0 0 1920 1080">
+    <rect width={1920} height={1080} fill="#FFD23D" />
+    {Array.from({length: 18 * 10}).map((_, i) => <circle key={i} cx={(i % 18) * 110 + ((Math.floor(i / 18) % 2) * 55)} cy={Math.floor(i / 18) * 110} r={20} fill="#FFB800" />)}
+    <path d={Array.from({length: 26}).map((_, i) => { const a = i / 26 * Math.PI * 2, r = i % 2 ? 330 : 470; return `${i ? 'L' : 'M'}${560 + Math.cos(a) * r} ${560 + Math.sin(a) * r}`; }).join(' ') + 'Z'} fill="#E8263A" stroke="#111" strokeWidth={14} />
+    <SStone s={STYLES.pop} x={560} y={560} scale={3.3} mood="determined" rot={-10} />
+    <BigText lines={[['TINY STONE', '#111111'], ['HUGE PAIN', '#E8263A'], ['WHY?', '#1E5BFF']]} x={1880} y={300} size={200} anchor="end" />
+  </svg></AbsoluteFill>;
+  // v3: hero facing the villain, split by a crack
+  return <AbsoluteFill><svg width={1920} height={1080} viewBox="0 0 1920 1080">
+    <rect width={1920} height={1080} fill="#14263F" />
+    <rect x={0} y={0} width={1920} height={430} fill="#1F3A5F" />
+    <Glow x={1420} y={700} r={500} c="#FFC845" />
+    <Hero s={hero} x={430} y={1180} scale={3.4} pose={POSES.doubled} mood="pain" />
+    <SStone s={s} x={1420} y={720} scale={3.2} mood="determined" rot={8} />
+    {[0, 1, 2].map((i) => <path key={i} transform={`translate(${1000 + i * 120} ${640 + (i % 2) * 70}) scale(1.6)`} d="M10 -60 L-30 10 L0 10 L-10 60 L40 -10 L10 -10Z" fill="#FFD23D" stroke="#000" strokeWidth={5} />)}
+    <BigText lines={[['KIDNEY STONE', '#FFFFFF'], ['THE REAL CAUSE OF PAIN', '#FFC845']]} x={960} y={190} size={150} anchor="middle" />
+  </svg></AbsoluteFill>;
+};

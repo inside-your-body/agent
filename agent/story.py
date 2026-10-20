@@ -16,8 +16,7 @@ SCHEMA = """{"sequences": [{"scene_id": str, "idea": "the visual concept of the 
             "motion": "how it moves, step by step, synced to the words (what enters, transforms, reacts; camera)",
             "continuity": "which elements carry over from the previous act and how they changed",
             "text": "≤4 on-screen words or null",
-            "poses": [{"cast": cast id, "pose": "specific pose/action/expression for this act"}],
-            "backdrop": "a painted background/setting for this act (no characters), or null if the animation draws its own"}]}]}"""
+            "hero": "what the hero/characters do and feel in this act (pose + mood changes), or null"}]}]}"""
 
 
 def _scenes(ep, kind):
@@ -29,7 +28,7 @@ def _scenes(ep, kind):
 def plan(ep, kind, theme):
     lang = theme.get('lang') or {}
     scenes = _scenes(ep, kind)
-    rule = ('Long video: each act covers 2-5 consecutive sentences (≈10-20 s); about 3 acts per scene, 30-36 acts in total. ' if kind == 'long' else
+    rule = ('Long video: each act covers 2-4 consecutive sentences (≈8-15 s); about 3 acts per scene, 32-38 acts in total. ' if kind == 'long' else
             'Vertical Short (1080×1520 visual area): each act covers 1-3 sentences (fast), 4-7 acts in total. ')
     out = []
     chunks = [scenes[i:i + 4] for i in range(0, len(scenes), 4)] if kind == 'long' else [scenes]
@@ -37,7 +36,10 @@ def plan(ep, kind, theme):
         res = llm.ask_json(f"""You are the storyboard artist and motion director of the animated health channel "Inside Your Body".
 Channel rules: {RULES}
 Design language of this video: {json.dumps(lang, ensure_ascii=False)}
-Cast (2D cartoon characters, available as drawn cut-outs in any pose you ask for): {json.dumps(ep.get('cast', []), ensure_ascii=False)}
+Style pack: "{theme.get('kit', 'flat')}". Everything is CODE-DRAWN motion graphics with the channel's puppet kit — NO painted images.
+Puppets: the HERO (a cartoon person with poses stand/holdSide/doubled/point/shrug/cheer/holdHead/holdChest/holdBelly/think/drink/wave/run/tired
+and moods neutral/happy/pain/shock/worried/determined), stick figures, a stone/crystal character, a kidney character; organs, cells, germs,
+vessels, objects and diagrams are drawn in code in the same pack. Story cast (play them with these puppets): {json.dumps(ep.get('cast', []), ensure_ascii=False)}
 Make the STORYBOARD for these sequences. {rule}
 - Each sequence is ONE continuous motion-graphics piece: a set/world that the acts build on — elements stay, move, transform and react
   as the narration goes on (like a professional explainer), never a slideshow of unrelated pictures.
@@ -50,7 +52,8 @@ Make the STORYBOARD for these sequences. {rule}
 - PATTERN INTERRUPTS in the visuals: every 60-90 s one act breaks the visual rhythm on purpose (sudden zoom 1000× into a cell, a split
   screen, a freeze-frame with a big typographic fact, a change of palette/lighting, a countdown, "myth vs fact" card) — matching the
   script's interrupt. Emotional beats get visuals that make the feeling land (awe = scale reveal, gross-out = close-up, tension = slow push-in).
-- Poses: ask only for poses you really use (0-2 per act). Backdrops: a painted setting for about 2 of every 3 acts (the animation plays on top of it); none where the animation is a clean diagram.
+- EVERY SHORT SENTENCE IS ACTED OUT on screen (e.g. "the stone moves" → it travels; "it gets stuck" → it jams and the hero doubles over).
+- Acts stay short: never more than ~15 s of narration in one act.
 Scenes (sentence indexes start at 0 in each scene): {json.dumps(ch, ensure_ascii=False)}
 Return JSON exactly: {SCHEMA}""", max_tokens=24000)
         out += res.get('sequences', [])
@@ -71,7 +74,7 @@ Return the full corrected storyboard JSON in the same schema plus "review": "wha
     return sb
 
 
-MAX_ACTS = {'long': 36, 'short': 7}
+MAX_ACTS = {'long': 38, 'short': 7}
 
 def _cap(sb, kind):
     """Too many acts = choppy + slow + expensive: merge neighbouring acts of a sequence until the total fits."""
@@ -84,8 +87,7 @@ def _cap(sb, kind):
         a, b = acts[j - 1], acts[j]
         a['see'] = f"{a.get('see', '')} Then: {b.get('see', '')}"
         a['motion'] = f"{a.get('motion', '')} Then: {b.get('motion', '')}"
-        a['poses'] = (a.get('poses') or []) + (b.get('poses') or [])
-        a['backdrop'] = a.get('backdrop') or b.get('backdrop')
+        a['hero'] = ' Then: '.join(x for x in (a.get('hero'), b.get('hero')) if x) or None
         del acts[j]; q['acts'] = acts
     return sb
 

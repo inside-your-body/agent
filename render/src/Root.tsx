@@ -5,6 +5,8 @@ import {Props} from './theme';
 import {ProtoIV} from './ProtoIV';
 import {GenGallery} from './GenShot';
 import {SampleStone, ThumbStone, SAMPLE_FRAMES} from './SampleStone';
+import {PoseSheet} from './PoseSheet';
+import {GenThumb, ThumbT} from './ThumbGen';
 import {StyleDemo, Thumb, DEMO_ORDER, DEMO_LEN} from './StyleDemo';
 
 const demo: Props = {kind: 'long', fps: 30, frames: 150, channel: 'Inside Your Body', title: 'demo', words: [],
@@ -26,6 +28,9 @@ export const Root: React.FC = () => (
     <Composition id="Thumb1" component={Thumb as any} width={1920} height={1080} fps={30} durationInFrames={1} defaultProps={{v: 1}} />
     <Composition id="Thumb2" component={Thumb as any} width={1920} height={1080} fps={30} durationInFrames={1} defaultProps={{v: 2}} />
     <Composition id="Thumb3" component={Thumb as any} width={1920} height={1080} fps={30} durationInFrames={1} defaultProps={{v: 3}} />
+    <Composition id="PoseSheet" component={PoseSheet} width={1920} height={1080} fps={30} durationInFrames={1} />
+    <Composition id="GenThumb" component={GenThumb as any} width={1920} height={1080} fps={30} durationInFrames={1} defaultProps={{id: 't_main', kit: 'flat'}} />
+    <Composition id="ThumbT" component={ThumbT as any} width={1920} height={1080} fps={30} durationInFrames={1} defaultProps={{lines: ['KIDNEY STONE', 'WORST PAIN', 'EVER?'], title: 'kidney stone'}} />
     <Composition id="GenGallery" component={GenGallery as any} width={1920} height={1080} fps={30} durationInFrames={60}
       defaultProps={{items: [], slot: 60, theme: demo.theme, vertical: false}}
       calculateMetadata={({props}) => ({durationInFrames: Math.max(1, (props as any).items.length * (props as any).slot)})} />

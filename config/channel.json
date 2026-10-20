@@ -8,10 +8,10 @@
   },
   "schedule": {
     "every_days": 2,
-    "build_cron_utc": "0 6 * * *",
-    "publish_long_utc": "18:00",
-    "publish_short_utc": "21:00",
-    "audience": "English-speaking (US/UK). 18:00 UTC = 2 PM US Eastern (summer) / 7 PM UK / 21:00 Istanbul; Short 3 h later.",
+    "build_cron_utc": "47 15 * * *",
+    "publish_long_utc": "20:00",
+    "publish_short_utc": "20:30",
+    "audience": "Owner: publish 23:00-24:00 Istanbul. 20:00 UTC = 23:00 Istanbul / 4 PM US Eastern / 9 PM UK; Short 30 min later.",
     "mode": "auto_public",
     "min_hours_between_episodes": 40
   },

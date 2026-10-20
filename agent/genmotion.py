@@ -10,35 +10,50 @@ GEN_DIR = ROOT / 'render/src/gen'
 MAX_GEN_LONG, MAX_GEN_SHORT = 44, 10
 FPS = 30
 
+KIT_API = """THE CHANNEL'S PUPPET KIT (import it — characters must come from here so the cast looks the same in every video):
+  import {lerp, pop, ease, rnd, POSES, mixPose, Stick, Kidney, Stone, KType, Label, Drop} from '../kit/Kit';
+  import {STYLES, StyleBg, Riso, Hero, SStone} from '../kit/Styles';
+  const S = STYLES[p.theme.kit] || STYLES.flat;   // THIS video's style pack: colours S.bg S.bg2 S.ink S.accent S.accent2 S.skin S.shirt S.pants S.hair,
+                                                  // S.font (font-family name), S.upper (caps), S.lineOnly (pure line-art: no fills), S.line (outline width)
+  Everything is SVG: draw inside ONE <svg width={p.w} height={p.h} viewBox={`0 0 ${p.w} ${p.h}`}> filling an <AbsoluteFill>.
+  - <StyleBg s={S} w={p.w} h={p.h}/>  the style's background (texture/grid/halftone/blobs). Put it first. <Riso s={S}>…</Riso> wraps groups for the riso look.
+  - <Hero s={S} x y scale pose={POSES.x | mixPose(POSES.a, POSES.b, t)} mood flip? walk? blink? glow?/>  THE channel hero: a cartoon person
+    (feet at x,y; ~330 px tall at scale 1 — use scale 1.2-2.6 so he is BIG). poses: stand holdSide doubled point shrug cheer holdHead holdChest
+    holdBelly think drink wave run tired. moods: neutral happy pain shock worried determined. walk = phase in radians (f/4) makes legs swing.
+    Recolour with s={{...S, shirt: '#hex'}} for a second person. Animate him: mixPose between poses over frames, move x, bob y, flip, mood changes.
+  - <SStone s={S} x y scale rot mood/>  a character-like stone/crystal (kidney stone, gallstone, salt crystal...).
+  - <Stick x y s pose mood color/> simple stick figure (crowds, small people). <Kidney x y s mood hat sweat swell flip/> kidney character.
+  - <KType words={['BIG','WORDS']} at={frame} x y size color accent={[i]} accentColor={S.accent} font={S.font} align='middle'|'start' width/>  kinetic typography,
+    words pop in one after another from frame `at`, real layout (never overlaps). <Label x y tx ty text at color/> leader-line label.
+    <Drop x y s color o/> a liquid drop.
+  - helpers: lerp(f, f0, f1, from, to) eased & clamped; pop(f, at) spring 0→1; rnd(i) seeded random.
+  Draw organs, cells, vessels, molecules, objects YOURSELF with SVG paths in the style pack's look (same outline width/colours) — big and clear."""
+
 CONTRACT = """Write ONE self-contained React component file (TypeScript/TSX) for Remotion 4.
-- Imports allowed ONLY from 'react' and 'remotion' (useCurrentFrame, interpolate, spring, Easing, AbsoluteFill, Sequence, Img, staticFile).
-  Images: ONLY the provided asset files, as <Img src={staticFile('ep/…')} style={{position:'absolute', …}} />. When a cast character appears,
-  use its provided cut-out and bring it to life (walk/slide in, bob, squash & stretch, tilt, flip, react to what happens) — do not redraw the cast.
-  No other files/fonts/URLs, no Math.random, no Date, no window/document, no state/effects/hooks except useCurrentFrame.
+- Imports allowed ONLY from 'react', 'remotion' (useCurrentFrame, interpolate, spring, Easing, AbsoluteFill, Sequence) and the channel kit
+  ('../kit/Kit', '../kit/Styles'). NO images, NO AI drawings: everything is drawn in code (SVG) — this channel is pure motion graphics.
+  No files/fonts/URLs, no Math.random, no Date, no window/document, no state/effects/hooks except useCurrentFrame.
 - `export default function Shot(p: {dur: number; w: number; h: number; vertical: boolean; theme: any; words: [string, number][]; text: string})`
-  dur = shot length in frames (30 fps), w×h = canvas in px. theme has: bg, bg2, fg, muted, accent, accent2, accent3, head (font-family css), body (font-family css).
+  dur = shot length in frames (30 fps), w×h = canvas in px. p.theme.kit = this video's style pack id (see kit).
   words = narrator words with the frame (relative to this shot) when each is spoken — sync key actions to them.
-- Draw everything yourself with SVG (paths, shapes, gradients, filters) and absolutely positioned divs. Full-bleed: paint the whole canvas
-  (own background in the design language), the subject LARGE and centred in the safe area (8% margins).
-- Must ANIMATE the whole time: things enter, act, transform, react; secondary motion (drift, wobble, pulsing, particles) never stops.
-  All timing scales with dur (main action done by ~0.75*dur). Use a seeded pseudo-random: const rnd=(i:number)=>{const x=Math.sin(i*99.13)*43758.55;return x-Math.floor(x);}.
-- Rich and specific: at least 8 distinct drawn elements; biology must be correct; characters (if any) are simple cartoon shapes with faces/limbs that move.
-- On-screen text: at most 4 words total (optional), using theme.head font, never covering the subject.
-- MOTION GRAPHICS TELL THE STORY: animated diagrams, shapes, icons, particles, kinetic typography and transitions carry the explanation;
-  the cartoon cast/hero/stick figures appear only when this part calls for them. Key words appear as KINETIC TYPOGRAPHY in the design
-  language (animated in, synced to the exact spoken word, 1-4 words, never a full sentence).
+""" + KIT_API + """
+- EVERY SHORT SENTENCE IS ACTED OUT: what the narrator says happens on screen at that moment (the stone moves → it moves; it gets stuck →
+  it jams, squashes, the hero doubles over). Use the Hero / stick figures whenever a person, feeling or reaction is involved; otherwise
+  animated diagrams, objects and characters (organs/cells/germs with faces when it helps the story).
+- Full-bleed: the whole canvas painted in the style pack, the subject LARGE (40-70% of the frame) inside 8% safe margins,
+  layered depth (background, subject, foreground particles), no big empty areas, nothing important tiny.
+- Must ANIMATE the whole time: things enter, act, transform, react; secondary motion (drift, wobble, pulsing, particles, blinking) never stops.
+  All timing scales with dur (main action done by ~0.75*dur).
+- On-screen text: kinetic typography of 1-4 KEY words synced to the exact spoken word (KType), never a full sentence, never covering the subject.
 - SOUND DESIGN: also export the sound effects for the events in your animation, frames relative to this part (same timing as the visuals):
-  `export const SFX: {f: number; s: string}[] = [...]` with s one of: pop, click, whoosh, reveal, sparkle, bubble, drip, goo, impact, boom,
-  riser, shield, heartbeat, tick, bong. One effect per meaningful event (a key word lands → pop/click; something appears → reveal/sparkle;
-  liquid → drip/bubble; hit/crash → impact; build-up → riser; heart → heartbeat). 1-4 effects per part, at least 45 frames apart,
-  never on every element — subtle and pleasant, never annoying. Empty array if nothing deserves a sound.
-- COMPOSITION: fill the frame like a premium explainer — the subject large (40-70% of the canvas), layered depth (background plane,
-  mid-ground subject, foreground particles/details), no big empty areas, nothing important tiny. If a painted backdrop asset is provided,
-  use it full-bleed as the bottom layer (slow parallax/zoom) and animate the motion graphics on top of it.
-- RENDER SPEED (it renders thousands of frames on a small server): no SVG <filter>/feGaussianBlur/feTurbulence, no CSS filter/blur/backdrop-filter/
-  drop-shadow/box-shadow on moving elements, no mix-blend-mode; at most ~120 animated elements; use simple gradients and opacity for glow.
-- Text: keep normal spaces between words (never join words); every word fully on screen.
-- Keep it under 280 lines (tight, efficient code). Valid TSX. Output ONLY the code in one ```tsx block."""
+  `export const SFX: {f: number; s: string}[] = [...]` with s one of: pop, click, tick, ding, whoosh, swish, zip, reveal, sparkle, bong,
+  bubble, drip, goo, impact, stamp, boom, riser, shield, heartbeat. Pick the sound that fits THIS event (vary them — never the same one
+  for everything): word lands → pop/click/ding; something appears → reveal/sparkle; fast move → swish/zip/whoosh; liquid → drip/bubble/goo;
+  hit/jam → impact/stamp; build-up → riser. 1-3 effects per part, at least 45 frames apart, subtle, never annoying. [] if nothing deserves one.
+- RENDER SPEED (thousands of frames on a small server): no SVG <filter>/feGaussianBlur/feTurbulence, no CSS filter/blur/backdrop-filter/
+  box-shadow, no mix-blend-mode; at most ~120 animated elements; simple gradients and opacity for glow.
+- Text: keep normal spaces between words; every word fully on screen.
+- Keep it under 260 lines. Valid TSX. Output ONLY the code in one ```tsx block."""
 
 
 def _durations(ep, ep_dir, kind):
@@ -72,7 +87,7 @@ def _code(txt):
 
 def _static_ok(code, allowed=()):
     if 'export default' not in code: return 'missing export default'
-    bad = [m for m in re.findall(r"from\s+['\"]([^'\"]+)['\"]", code) if m not in ('react', 'remotion')]
+    bad = [m for m in re.findall(r"from\s+['\"]([^'\"]+)['\"]", code) if m not in ('react', 'remotion', '../kit/Kit', '../kit/Styles')]
     if bad: return f'forbidden imports {bad}'
     for k in ('Math.random', 'Date.now', 'new Date', 'window.', 'document.', 'fetch(', '<img', 'http://', 'https://', '<filter', 'feGaussianBlur', 'feTurbulence', 'backdropFilter'):
         if k in code: return f'forbidden: {k}'
@@ -83,7 +98,7 @@ def _static_ok(code, allowed=()):
     return None
 
 
-SFX_OK = {'pop', 'click', 'whoosh', 'reveal', 'sparkle', 'bubble', 'drip', 'goo', 'impact', 'boom', 'riser', 'shield', 'heartbeat', 'tick', 'bong'}
+SFX_OK = {'pop', 'click', 'whoosh', 'reveal', 'sparkle', 'bubble', 'drip', 'goo', 'impact', 'boom', 'riser', 'shield', 'heartbeat', 'tick', 'bong', 'ding', 'stamp', 'swish', 'zip'}
 
 def _sfx(code, dur):
     """Sound cues the animation exported -> [{'p': fraction of the part, 's': name}] (scaled to the real length at mix time)."""
@@ -177,14 +192,13 @@ Return JSON only: {"results": [{"id": str, "ok": bool, "problem": "short concret
 
 def _prompt(lang, theme, brief, sentence, dur, words, vertical, others, fix=None, prev=None, assets=(), before=None):
     p = f"""You are a world-class motion designer making ONE shot of an animated health explainer ("Inside Your Body").
-Design language of THIS video (follow it strictly — shapes, line quality, texture, motion personality):
+Style pack of THIS video: "{theme.get('kit', 'flat')}" (use STYLES[p.theme.kit]). Design language twist for this video (motion personality, camera, typography feel):
 {json.dumps(lang, ensure_ascii=False)}
 Palette: bg {theme['bg']}, bg2 {theme['bg2']}, fg {theme['fg']}, accents {theme['accent']}, {theme['accent2']}, {theme['accent3']}.
 Canvas: {'1080×1520 vertical' if vertical else '1920×1080'}, duration {dur} frames ({dur / FPS:.1f} s).
 The narrator says: "{sentence}"
 Word timings (word, frame): {json.dumps(words[:40])}
 Storyboard for this part (follow it): {brief}
-Asset files you may use (and only these): {json.dumps(list(assets), ensure_ascii=False)}
 Design it FROM SCRATCH for exactly this moment — a fresh composition and animation that does NOT resemble these other parts
 already designed for this video: {json.dumps(others[-25:], ensure_ascii=False)}
 {('CONTINUITY: this part directly continues the previous part of the same sequence. Start from where it ended (same set, same elements in the same places, same characters) and evolve it — the cut must feel seamless. Previous part code:' + chr(10) + '```tsx' + chr(10) + before[:9000] + chr(10) + '```') if before else 'This part opens a new sequence: establish its set clearly.'}
@@ -224,13 +238,13 @@ def build(ep, style, short_style, ep_dir):
             if b.get('kind') != 'gen': continue
             brief = b.get('design') or b.get('see') or sentence
             if n >= cap:
-                b['kind'] = 'cartoon'; b['illustration'] = b.get('see') or brief; continue
+                b['kind'] = 'gen'; b['text'] = b.get('text') or (b.get('see') or '')[:40]; continue      # kit fallback (no drawings)
             if not b.get('params'): b['params'] = {}
             gid = b['params'].get('gen') or f"g_{'v' if kind == 'short' else 'l'}{n:02d}"; n += 1
             b['params']['gen'] = gid; b['params']['see'] = b.get('see')
             act = b.get('act') or {}
             if act:
-                brief = json.dumps({k: act.get(k) for k in ('sequence_idea', 'see', 'motion', 'continuity', 'text')}, ensure_ascii=False)
+                brief = json.dumps({k: act.get(k) for k in ('sequence_idea', 'see', 'motion', 'hero', 'continuity', 'text')}, ensure_ascii=False)
                 sentence = ' '.join(x[0] for x in _words(ep_dir, kind, t0, dur)) or sentence
             meta[gid] = dict(b=b, brief=brief, sentence=sentence, dur=dur, words=_words(ep_dir, kind, t0, dur), vertical=kind == 'short',
                              lang=lang, theme=theme, others=list(others), assets=act.get('assets', []), scene=act.get('scene') or gid)
@@ -317,10 +331,10 @@ def build(ep, style, short_style, ep_dir):
             if e: codes.pop(g, None)
         still_bad = qa([g for g in fixed if g in codes], vision=False)
         for g in still_bad: codes.pop(g, None)
-    # final: unused / failed shots -> newly drawn storyboard frame
+    # final: failed shots -> the kit fallback scene (hero + key words in the style pack); never an AI drawing
     for g, m in meta.items():
         if g not in codes:
-            b = m['b']; b['kind'] = 'cartoon'; b['illustration'] = b.get('see') or m['brief']
+            b = m['b']; b['text'] = b.get('text') or ' '.join((b.get('see') or m['sentence']).split()[:4])
     for f in GEN_DIR.glob('g_*.tsx'):
         if f.stem not in codes: f.unlink()
     _index(sorted(codes))
@@ -330,7 +344,7 @@ def build(ep, style, short_style, ep_dir):
         ev = _sfx(c, meta[g]['dur'])
         if ev: meta[g]['b']['sfx_events'] = ev
     save(ep_dir / 'episode.json', ep)
-    print(f'genmotion: {len(codes)} new animations in the video, {len(meta) - len(codes)} became drawings')
+    print(f'genmotion: {len(codes)} new animations in the video, {len(meta) - len(codes)} use the kit fallback')
     return len(codes)
 
 

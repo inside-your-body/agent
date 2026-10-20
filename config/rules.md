@@ -97,3 +97,15 @@ Short: title ≤ 60 chars + #Shorts, link to the full episode.
 Hook · Open loops · Emotional triggers (surprise, awe, fun gross-out, tension, pride, nostalgia) · Pacing (short punchy runs + one longer
 sentence to land an idea) · Curiosity gap · Pattern interrupts every 60-90 s (shock fact, tone change, direct question, format switch) —
 in the script AND mirrored in the visuals.
+
+## Puppet-kit motion graphics (owner, 2026-10-20) — replaces all AI drawings
+- NO AI-painted images anywhere (scenes or thumbnails): everything is code-drawn motion graphics with the channel puppet kit
+  (render/src/kit): the Hero (poses + moods), stick figures, stone/kidney characters, kinetic typography, labels, drops.
+- Every short sentence is acted out on screen (the stone moves → it travels; it gets stuck → it jams, the hero doubles over).
+- Style pack per video from the owner's list (flat, line, pop, swiss, riso, glass); flat and line are the owner's favourites.
+  Claude picks the pack that fits the topic and what viewers of viral health animations like; never the same look as the previous video
+  (the last 2 packs are excluded, colours re-tinted). The Short uses a different pack from its long video.
+- Thumbnail = concept 1 (owner's pick): big hero showing the feeling on the affected body part, glow, an x-ray inset circle on the cause,
+  arrow, 3 lines of huge condensed caps (subject / twist / question). Two other concepts are kept as _b/_c for Test & compare.
+- Sound effects fit the moment and VARY: each sound family rotates (pop/click/ding, whoosh/swish/zip, impact/stamp/boom, drip/bubble/goo,
+  reveal/sparkle/bong), a sound rests ≥25 s, every sound has a per-video budget, each play is slightly re-pitched. Never annoying.
