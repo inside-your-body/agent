@@ -318,7 +318,7 @@ def build(ep, style, short_style, ep_dir):
         return bad
     bad = qa(list(codes))
     print('genmotion QA: failed', len(bad), 'of', len(codes))
-    MAX_REDO = 12
+    MAX_REDO = 18
     if len(bad) > MAX_REDO:      # crashes/empties first, then the rest in order
         keep = sorted(bad, key=lambda g: (0 if 'crashed' in bad[g] else 1, g))[:MAX_REDO]
         bad = {g: bad[g] for g in keep}
