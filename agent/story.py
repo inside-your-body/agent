@@ -8,8 +8,8 @@ from .common import ROOT, load, save
 from . import llm, images
 
 RULES = (ROOT / 'config/rules.md').read_text()
-MAX_POSES, MAX_BACKDROPS = 24, 10
-MAX_POSES_SHORT, MAX_BACKDROPS_SHORT = 5, 2
+MAX_POSES, MAX_BACKDROPS = 24, 22
+MAX_POSES_SHORT, MAX_BACKDROPS_SHORT = 5, 4
 
 SCHEMA = """{"sequences": [{"scene_id": str, "idea": "the visual concept of the whole sequence in one sentence (its set, its main elements, how it evolves)",
   "acts": [{"from": first sentence index (int, in this scene), "see": "what is on screen during this act, concretely",
@@ -50,7 +50,7 @@ Make the STORYBOARD for these sequences. {rule}
 - PATTERN INTERRUPTS in the visuals: every 60-90 s one act breaks the visual rhythm on purpose (sudden zoom 1000× into a cell, a split
   screen, a freeze-frame with a big typographic fact, a change of palette/lighting, a countdown, "myth vs fact" card) — matching the
   script's interrupt. Emotional beats get visuals that make the feeling land (awe = scale reveal, gross-out = close-up, tension = slow push-in).
-- Poses: ask only for poses you really use (0-2 per act). Backdrops only where a painted setting really helps (about 1 in 4 acts).
+- Poses: ask only for poses you really use (0-2 per act). Backdrops: a painted setting for about 2 of every 3 acts (the animation plays on top of it); none where the animation is a clean diagram.
 Scenes (sentence indexes start at 0 in each scene): {json.dumps(ch, ensure_ascii=False)}
 Return JSON exactly: {SCHEMA}""", max_tokens=24000)
         out += res.get('sequences', [])

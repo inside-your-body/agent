@@ -31,7 +31,8 @@ const Captions: React.FC<{words: Word[]; t: Theme; fps: number}> = ({words, t, f
   const pop = interpolate(time - c[0].s, [-0.05, 0.1], [0.85, 1], {...cl, easing: Easing.out(Easing.back(2))});
   return (
     <AbsoluteFill style={{top: 1580, height: 300, alignItems: 'center'}}>
-      <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0 20px', width: 960, transform: `scale(${pop})`}}>
+      <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0 20px', maxWidth: 960, transform: `scale(${pop})`,
+        background: 'rgba(10,12,20,0.78)', borderRadius: 28, padding: '14px 34px'}}>
         {c.map((w, i) => {
           const on = time >= w.s - 0.03;
           return <span key={i} style={{fontFamily: ff(t.fontHead), fontSize: 92, lineHeight: 1.1, textTransform: 'uppercase', fontWeight: 900,

@@ -32,6 +32,9 @@ CONTRACT = """Write ONE self-contained React component file (TypeScript/TSX) for
   riser, shield, heartbeat, tick, bong. One effect per meaningful event (a key word lands → pop/click; something appears → reveal/sparkle;
   liquid → drip/bubble; hit/crash → impact; build-up → riser; heart → heartbeat). 1-4 effects per part, at least 45 frames apart,
   never on every element — subtle and pleasant, never annoying. Empty array if nothing deserves a sound.
+- COMPOSITION: fill the frame like a premium explainer — the subject large (40-70% of the canvas), layered depth (background plane,
+  mid-ground subject, foreground particles/details), no big empty areas, nothing important tiny. If a painted backdrop asset is provided,
+  use it full-bleed as the bottom layer (slow parallax/zoom) and animate the motion graphics on top of it.
 - RENDER SPEED (it renders thousands of frames on a small server): no SVG <filter>/feGaussianBlur/feTurbulence, no CSS filter/blur/backdrop-filter/
   drop-shadow/box-shadow on moving elements, no mix-blend-mode; at most ~120 animated elements; use simple gradients and opacity for glow.
 - Text: keep normal spaces between words (never join words); every word fully on screen.
@@ -158,7 +161,8 @@ def _vision(batch):
             content.append({'type': 'image', 'source': {'type': 'base64', 'media_type': 'image/jpeg', 'data': base64.b64encode(p.read_bytes()).decode()}})
     content.append({'type': 'text', 'text': """You are the art director of an animated health channel. For each SHOT judge the two frames (early, late):
 FAIL it ONLY for real defects: it is broken/empty/garbled, the subject the narrator talks about is missing or unrecognisable,
-important elements are cut off or pile up into an unreadable mess, or text is unreadable/joined/covering the subject.
+important elements are cut off or pile up into an unreadable mess, text is unreadable/joined/covering the subject,
+or the frame is mostly empty with the subject tiny.
 Simple-but-clean is a PASS (we pay for every redo).
 Return JSON only: {"results": [{"id": str, "ok": bool, "problem": "short concrete fix if failed"}]}"""})
     try:
