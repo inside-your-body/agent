@@ -40,6 +40,8 @@ CONTRACT = """Write ONE self-contained React component file (TypeScript/TSX) for
 - EVERY SHORT SENTENCE IS ACTED OUT: what the narrator says happens on screen at that moment (the stone moves → it moves; it gets stuck →
   it jams, squashes, the hero doubles over). Use the Hero / stick figures whenever a person, feeling or reaction is involved; otherwise
   animated diagrams, objects and characters (organs/cells/germs with faces when it helps the story).
+- BOLD and READABLE on a phone: when the hero appears he is BIG (scale ≥1.7 on 16:9, ≥2.2 vertical); main shapes use the pack's
+  strong colours with clear outlines (stroke ≥5 px), never pale/washed-out fills or hairlines; one clear focal action per moment.
 - Full-bleed: the whole canvas painted in the style pack, the subject LARGE (40-70% of the frame) inside 8% safe margins,
   layered depth (background, subject, foreground particles), no big empty areas, nothing important tiny.
 - Must ANIMATE the whole time: things enter, act, transform, react; secondary motion (drift, wobble, pulsing, particles, blinking) never stops.
