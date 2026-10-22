@@ -8,7 +8,7 @@
   },
   "schedule": {
     "every_days": 2,
-    "build_cron_utc": "47 15 * * *",
+    "build_cron_utc": "7 11 * * *",
     "publish_long_utc": "20:00",
     "publish_short_utc": "20:30",
     "audience": "Owner: publish 23:00-24:00 Istanbul. 20:00 UTC = 23:00 Istanbul / 4 PM US Eastern / 9 PM UK; Short 30 min later.",

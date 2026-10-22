@@ -2,7 +2,7 @@ name: Make episode
 
 on:
   schedule:
-    - cron: '47 15 * * *'      # daily 15:47 UTC; run.py makes an episode only every ~2 days (min 40 h gap); it publishes at 20:00 UTC (23:00 Istanbul)
+    - cron: '7 11 * * *'       # daily 11:07 UTC (GitHub often starts scheduled runs hours late, so start early); run.py makes an episode only every ~2 days (min 40 h gap); it publishes at 20:00 UTC (23:00 Istanbul)
   workflow_dispatch:
     inputs:
       dry_run:
