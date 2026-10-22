@@ -109,3 +109,13 @@ in the script AND mirrored in the visuals.
   arrow, 3 lines of huge condensed caps (subject / twist / question). Two other concepts are kept as _b/_c for Test & compare.
 - Sound effects fit the moment and VARY: each sound family rotates (pop/click/ding, whoosh/swish/zip, impact/stamp/boom, drip/bubble/goo,
   reveal/sparkle/bong), a sound rests ≥25 s, every sound has a per-video budget, each play is slightly re-pitched. Never annoying.
+
+## Lessons from our analytics (Oct 23, 2026)
+- Best performer: the Short "How Kidney Stones Start Silently" — 64% average viewed, ~2x the revenue of a Short with the same views.
+  Shorts revenue follows retention: 64% viewed → ~8 TRY/1000 views; 39% → 4; 23% → 2.
+- HIDDEN / SILENT processes inside the body are our strongest angle ("starts silently", "slowly happening inside you", "hidden damage").
+  Frame every topic, title, Short and thumbnail around the hidden process when it is true to the facts.
+- US viewers = 18% of views but 57% of revenue (+ Canada, UK, Germany): write for them, title with what they search.
+- 90% of views come from the Shorts feed; long videos get few views (thumbnail CTR 1.1–2.1%) → premium clickable thumbnails,
+  keyword titles, and every Short must make viewers want the full story (the owner sets the Short's "Related video" in Studio).
+- Long-video viewers leave early (avg 1:54 of 10:50) → hook, open loops and a visual change every few seconds are mandatory.

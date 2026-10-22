@@ -153,7 +153,7 @@ Narration must total {WORDS_MIN}–{WORDS_MAX} words (≈ 8:30–9 minutes with 
 Use 10–14 scenes of 6–14 sentences. Every sentence must be something we can SHOW: an action, a place, a change, a number, a character.
 Max 8 numbers in the whole script; round them and make them vivid ("enough tubes to circle the Earth twice").
 Re-hook the viewer every 40–60 seconds with an open loop. Explain what happens — never lecture or tell the viewer what to do.
-Then write the Short (115–135 words, ≈ 45–50 s; the single most surprising moment told as a mini story; the second-to-last line sends
+Then write the Short (115–135 words, ≈ 45–50 s). SHORT RULES (our best Short kept 64% of viewers, worst only 23%): line 1 is a curiosity question or shocking claim that works in the FIRST SECOND (no setup, no 'did you know'); then ONE continuous mini story with a clear before → hidden process → reveal (the 'it happens silently inside you' feeling); every line raises the stakes; no list of facts, no slow middle; the single most surprising moment of the episode; the second-to-last line sends
 viewers to the full episode ("the whole story is in the full video, linked above"); the last line loops into the first)
 and the upload package. The description must include a "Chapters" section using the placeholder {{CHAPTERS}} which the system fills in.
 Schema (comments after // are explanations, do not output them):
@@ -316,7 +316,7 @@ open loops that carry viewers to the next scene. You may add 1–3 new scenes. K
 def expand_short(ep, target_words):
     sh = ep['short']; cur = _wc(sh['narration'])
     out = ask_json(f"""This YouTube Short script for "Inside Your Body" is too short ({cur} words). Rewrite it to {target_words}–{target_words + 12} words
-(40–46 seconds). Keep the hook as the first line, fast punchy sentences, and make the last line loop back into the first.
+(40–46 seconds). Keep the hook as the first line (a question or shocking claim that works in the first second), one continuous mini story (before → hidden process → reveal), fast punchy sentences, and make the last line loop back into the first.
 Current short JSON:
 {json.dumps(sh, ensure_ascii=False)}
 Return ONLY the full short JSON object with the same keys (narration list, beats with "at" sentence indexes, etc.).""", max_tokens=8000)

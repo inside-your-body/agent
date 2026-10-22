@@ -7,7 +7,8 @@ from . import llm
 SEEDS = ["what happens to your body when", "what happens inside your body", "what happens if you", "body explained animation",
          "how your body", "why does your body", "every body explained", "hour by hour body", "what if you never",
          "the real reason you", "science of your brain", "how a disease spreads", "what happens when you get sick",
-         "weird body facts", "health myths explained", "your body on"]
+         "weird body facts", "health myths explained", "your body on",
+         "silently in your body", "starts silently", "hidden inside your body", "you didn't know your body", "slowly damaging your body"]
 EVERY_DAYS = 7
 
 def _videos(yt, queries):
@@ -51,6 +52,7 @@ Here are videos getting the most views per day on YouTube right now (title, chan
 Our existing topics (do not repeat or closely duplicate): {json.dumps(existing, ensure_ascii=False)}
 
 Find what health/body themes and title patterns are pulling views (ignore music, games, kids, religion, non-health).
+OUR OWN DATA (Oct 2026): our best video by far was 'How Kidney Stones Start Silently' (64% of viewers watched to the end, double the revenue) — HIDDEN / SILENT processes inside the body ('X starts silently', 'what is slowly happening inside you', 'the hidden damage of Y') beat everything else. Prefer those angles. US/Canada/UK viewers bring most of the revenue: pick topics they search.
 Topics that already pulled millions of views are the best bets: propose 6 NEW topics that are our own version of those proven ideas (same curiosity, our story angle, never a copy), each with a curiosity-gap title (not copied from any video), a story angle
 for an 8–9 minute animated story, a format (timeline|journey|mystery|compilation|outbreak|habit|signs) and the evidence.
 Return JSON: {{"trends": "2-3 sentences", "topics": [{{"title": str, "angle": str, "format": str, "evidence": str}}]}}""",
