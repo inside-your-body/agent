@@ -18,15 +18,29 @@
       "kit": "line",
       "publish_at": "2026-10-20T20:00:00Z",
       "built_at": "2026-10-20T10:02:32"
+    },
+    {
+      "n": 3,
+      "topic": "How Does a Healthy Tooth Rot?",
+      "video_id": "KwX-lQED4Yw",
+      "short_id": "g88dvJK1Ts4",
+      "style": "playful-cartoon+tint",
+      "short_style": "bold-pop+tint",
+      "kit": "flat",
+      "publish_at": "2026-10-22T20:00:00Z",
+      "built_at": "2026-10-22T19:00:00"
     }
   ],
   "used_styles": [
     "cream-paper-lineart",
     "neon-bio-hud",
     "paper-ink+tint",
-    "mono-red+tint"
+    "mono-red+tint",
+    "playful-cartoon+tint",
+    "bold-pop+tint"
   ],
   "used_kits": [
-    "line"
+    "line",
+    "flat"
   ]
 }
