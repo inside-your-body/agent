@@ -1,43 +1,41 @@
-"""Thumbnails as code-drawn motion-graphics stills (no AI drawings). Owner's chosen concept (#1):
-a BIG cartoon hero showing the feeling on the affected body part, a glow behind him, an 'x-ray' inset circle zooming into the
-cause with a dashed highlight + arrow, and 2-3 lines of HUGE condensed text (≤3 words a line) — topic + an open question.
-Claude writes each thumbnail as a TSX component with the puppet kit; it is rendered at 1280×720, checked by vision, fixed once.
-Main = concept 1 (uploaded); _b/_c = two other concepts for YouTube's Test & compare."""
+"""Thumbnails as code-drawn stills (no AI images). Owner's rule (Oct 22): thumbnails must look PREMIUM and CLICKABLE like top adult
+science channels — never childish/cute. Three concepts are written by Claude as TSX, rendered at 1280x720, judged by vision
+(fails childish or broken ones), and the vision judge picks the MOST CLICKABLE one as the uploaded thumbnail; the other two are
+kept as _b/_c for YouTube's Test & compare."""
 import json, subprocess, base64, os
 from concurrent.futures import ThreadPoolExecutor
 from .common import ROOT, load, save
 from . import llm
 from .genmotion import _code, _static_ok, _syntax, GEN_DIR, KIT_API
 
-EXAMPLE = (ROOT / 'agent/thumb_example.tsx.txt').read_text()
+EXAMPLE = (ROOT / 'render/src/ThumbPro.tsx').read_text()
 
 CONCEPTS = [
-    "CONCEPT 1 (main, the owner's favourite): the hero HUGE on the left half (scale 3.2-4, face fully visible, strong emotion — pain/shock/worried),"
-    " hands on the affected body part; a soft accent glow behind him; an inset circle (r≈150, dark fill, white ring + dashed accent ring) placed on"
-    " that body part showing a tiny drawn close-up of the CAUSE (the organ/stone/germ/vessel...); a thick arrow from the circle to the text;"
-    " right side: 3 lines of huge text (Anton-like condensed: fontFamily 'F_anton', 170-200 px, black stroke ~7% of size, paintOrder stroke),"
-    " line 1 white = the subject, lines 2-3 yellow/accent = the twist or question.",
-    "CONCEPT 2: one GIANT expressive villain/object (the cause, with a face) filling the left half on a loud burst/halftone background,"
-    " right side 2-3 lines of huge text in contrasting colours ending with a question.",
-    "CONCEPT 3: the hero (big, reacting) face-to-face with the cause shown huge and glowing/dangerous; big 2-line headline across the top.",
+    "CONCEPT A — DRAMATIC SUBJECT: the subject of the video (organ, tooth, stone, cell, object...) HUGE and DETAILED like a premium"
+    " illustration (gradients, shading, specular highlight, cracks/texture, damage shown truthfully), cinematic dark background with a red"
+    " or teal rim glow; ONE thick red circle on the key detail + a red arrow to the words; right side 2-3 huge words (white + yellow).",
+    "CONCEPT B — HUMAN REACTION: a big close-up of an adult person's face/upper body drawn semi-realistically with gradients (NOT the"
+    " cartoon kit hero): real proportions, eyebrows/eyes/mouth showing pain, shock or disbelief, hand on the affected spot; next to it the"
+    " cause shown dramatic and detailed (or an x-ray cut-away on the body); 2-3 huge words.",
+    "CONCEPT C — CONTRAST: a split image — healthy vs destroyed / before vs after / normal vs what happens inside — both halves detailed and"
+    " lit dramatically, a red divider or arrow; 2-3 huge words (e.g. 'DAY 1' vs 'DAY 30', or one short shocking claim).",
 ]
 
 RULES = """Write ONE TSX file: `export default function Thumb(p: {kit: string})` rendering a 1920×1080 YouTube THUMBNAIL as a single still frame.
-- Imports ONLY from 'react', 'remotion' (AbsoluteFill) and the kit ('../kit/Kit', '../kit/Styles'). It is a STILL: do NOT use useCurrentFrame,
-  pop() or lerp() for appearance (everything fully visible), no Math.random, no images/URLs.
-- Wrap in <AbsoluteFill><svg width={1920} height={1080} viewBox="0 0 1920 1080">…</svg></AbsoluteFill>. Paint the whole background.
-- Thumbnail craft: readable on a phone at 160 px wide → max 3 short lines, ≤3 words each, huge; one clear focal point; strong contrast;
-  nothing important in the bottom-right 300×120 (YouTube timestamp); text never overlaps the hero's face or the inset; nothing cut off
-  except deliberate cropping of the hero's legs.
-- The hero comes from the kit (Hero + POSES + mood); use S = {...STYLES.flat, shirt: <bright colour>} or the video's pack if it reads well big.
-- Dark rich background (navy/near-black or a saturated colour) with a radial glow; colours: white, yellow #FFD23D, red #FF3B30 or the accent.
-""" + KIT_API.split('Everything is SVG')[0] + """
-Hero: <Hero s={S} x y scale pose mood />, poses: stand holdSide doubled point shrug cheer holdHead holdChest holdBelly think drink wave run tired;
-feet at (x,y), ~330 px tall at scale 1 (scale 3.5 → the head is ~ y-1150 above the feet: place feet BELOW the frame, e.g. y 1150-1250, so the
-head and torso fill the frame). SStone, Kidney, Stick, Drop also available. Draw anything else with SVG paths.
-Reference — the owner's approved thumbnail (concept 1 for a kidney-stone video):
+- Imports ONLY from 'react' and 'remotion' (AbsoluteFill). Draw EVERYTHING yourself with SVG (paths, gradients, radialGradient glows).
+  It is a STILL: no useCurrentFrame/animation, no Math.random, no images/URLs, no <filter>.
+- MUST LOOK PREMIUM AND ADULT, like the top science/explainer channels with millions of views — NEVER childish: no smiley/cute faces on
+  objects or organs, no googly eyes, no comic starbursts, no stick figures or the cartoon kit hero, no pastel kid colours, no clip-art.
+  Detailed shading (2-3 gradient stops), highlights, texture and real proportions; cinematic lighting (dark background + one strong
+  coloured glow); high contrast; ONE focal point big enough to read at 160 px wide.
+- WORDS: 2-4 words total in 1-3 lines, ≤10 characters a line, fontFamily 'F_anton', 190-240 px, white + yellow #FFD21F (or red #FF1E1E
+  for one word), black stroke ~6% of size with paintOrder="stroke". The words create a curiosity gap that only the video answers
+  (a shocking claim or question), and do NOT repeat the title. Never overlap words with the focal detail; nothing in the bottom-right
+  300×130 (timestamp); nothing cut off.
+- Optional: one thick red circle (stroke 14-18) on the key detail + a red curved arrow — the classic high-CTR cue.
+Reference — an approved premium thumbnail (tooth decay video). Match this LEVEL of finish, not its content:
 ```tsx
-""" + EXAMPLE[:5200] + """
+""" + EXAMPLE + """
 ```
 Output ONLY the code in one ```tsx block."""
 
@@ -59,17 +57,22 @@ def _render(ids, out_dir, kit):
     return res
 
 
+SCORES = {}
+
 def _judge(items):
     content = []
     for i, brief, p in items:
         content.append({'type': 'text', 'text': f'THUMB {i} — intended: {brief}'})
         content.append({'type': 'image', 'source': {'type': 'base64', 'media_type': 'image/jpeg', 'data': base64.b64encode(p.read_bytes()).decode()}})
     content.append({'type': 'text', 'text': """You are a YouTube thumbnail expert (health explainer channel). For each THUMB: FAIL it only for real defects —
-text cut off/overlapping/unreadable, words overlapping the face or the inset, the hero's face hidden/cut, a broken or empty-looking image,
-elements piled into a mess, or the subject not recognisable. Return JSON only: {"results": [{"id": str, "ok": bool, "problem": "concrete fix"}]}"""})
+text cut off/overlapping/unreadable, words covering the focal detail, a broken or empty-looking image, elements piled into a mess,
+the subject not recognisable, or it looks CHILDISH/cute/clip-art (smiley objects, kid cartoon style) instead of a premium adult science
+thumbnail. Also give each a clickability score 1-10 (would an adult scrolling YouTube click it?).
+Return JSON only: {"results": [{"id": str, "ok": bool, "click": int, "problem": "concrete fix"}]}"""})
     try:
         r = llm._repair(llm.ask(content, max_tokens=2000, retries=2))
         r = json.loads(r) if isinstance(r, str) else r
+        for x in r.get('results', []): SCORES[x['id']] = int(x.get('click') or 0)
         return {x['id']: (bool(x.get('ok')), x.get('problem') or '') for x in r.get('results', [])}
     except Exception as e:
         print('thumb QA failed', e); return {}
@@ -81,8 +84,8 @@ def build(ep, style, ep_dir):
     kit = style.get('kit', 'flat')
     brief_base = (f"Video title: {ep['title']}. Thumbnail idea from the writer: {json.dumps({k: th.get(k) for k in ('line1', 'line2', 'image_prompt')}, ensure_ascii=False)}. "
                   f"Variants: {json.dumps([{k: v.get(k) for k in ('line1', 'line2')} for v in (th.get('variants') or []) if isinstance(v, dict)][:2], ensure_ascii=False)}. "
-                  "Write the thumbnail TEXT yourself (2-3 lines, ≤3 words each, CAPS): line 1 names the subject in plain words, the last line is a "
-                  "curiosity twist/question that makes people NEED to click (like '3 MM STONE / WORST PAIN / EVER?'). Make the wording different per concept.")
+                  "Write the thumbnail WORDS yourself (2-4 words, CAPS): a shocking claim or question that makes adults NEED to click and that "
+                  "only the video answers (e.g. 'IT ROTS FROM INSIDE', 'WORST PAIN EVER?', 'YOUR BRAIN SHRINKS'). Different words per concept.")
     ids = ['t_main', 't_b', 't_c']
     briefs = {i: brief_base + '\n' + c for i, c in zip(ids, CONCEPTS)}
     codes, probs = {}, {}
@@ -118,10 +121,14 @@ def build(ep, style, ep_dir):
         for i, _, p in looks:
             ok, prob = verdict.get(i, (True, ''))
             if ok:
-                os.replace(p, ep_dir / f"thumbnail{'' if i == 't_main' else '_' + i[-1]}.jpg"); pending.discard(i)
+                os.replace(p, out_dir / f'ok_{i}.jpg'); pending.discard(i)
             else: probs[i] = prob
         todo = [(i, probs.get(i, 'failed'), codes.get(i)) for i in ids if i in pending]
         print(f'thumbs round {rnd}: done {sorted(set(ids) - pending)}, redo {[(i, probs.get(i, "")[:80]) for i in pending]}')
+    ok = sorted([i for i in ids if (out_dir / f'ok_{i}.jpg').exists()], key=lambda i: -SCORES.get(i, 0))
+    print('thumb click scores:', {i: SCORES.get(i) for i in ok})
+    for n, i in enumerate(ok):          # most clickable -> thumbnail.jpg (uploaded), the others -> _b, _c
+        os.replace(out_dir / f'ok_{i}.jpg', ep_dir / f"thumbnail{'' if n == 0 else '_' + 'bc'[n - 1]}.jpg")
     outs = sorted(ep_dir.glob('thumbnail*.jpg'))
     if not (ep_dir / 'thumbnail.jpg').exists():
         fallback(ep, ep_dir)
