@@ -131,6 +131,8 @@ SEO_RULES = """SEARCH (analytics: viewers find us with concrete searches like "t
   poetic paraphrase like "healthy tooth rot"). Put it in upload.main_keyword.
 - upload.title contains the main keyword word-for-word, front-loaded, ≤ 60 characters, still a plain clear question/statement
   (rewrite the topic-bank wording if it lacks the keyword).
+- Tags are the exact high-volume search phrases for the topic (what people really type, e.g. 'tooth decay', 'cavities', 'how cavities form'),
+  never invented jargon; at least 3 tags appear word-for-word in the title and the first 5 tags appear word-for-word in the description.
 - tags[0] = the main keyword; the first 5 tags are exact search phrases people type (short, lowercase); then related phrases (15–20 tags).
 - The first sentence of the description contains the main keyword naturally; the keyword appears 2-3 times in the description in total.
 - 3 hashtags: the main keyword (no spaces) first."""

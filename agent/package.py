@@ -30,6 +30,18 @@ def build(ep, ep_dir):
     for t in tags:
         if total + len(t) + 2 > 480: break
         keep.append(t); total += len(t) + 2
+    # SEO (TubeBuddy/vidIQ check exact tag phrases in title + description): the main keyword tag must be inside the title, and the
+    # top tags must appear word-for-word in the description -> add one natural 'In this video' line with the tags missing from it.
+    tl = up['title'].lower()
+    in_title = [t for t in keep if t.lower() in tl]
+    if not in_title:
+        core = up['title'].split(':')[0].split('?')[0].strip().lower()
+        if 3 <= len(core) <= 40: keep = [core] + keep[:-1] if len(keep) >= 20 else [core] + keep
+    missing = [t for t in keep[:10] if t.lower() not in desc.lower()]
+    if missing:
+        para = 'In this video: ' + ', '.join(missing) + '.'
+        cut = desc.find('\n\n')
+        desc = (desc[:cut] + '\n\n' + para + desc[cut:]) if cut > 0 else desc + '\n\n' + para
     hashtags = ' '.join('#' + h.lstrip('#') for h in up.get('hashtags', [])[:5])
     if hashtags and not any(('#' + h.lstrip('#')).lower() in desc.lower() for h in up.get('hashtags', [])[:2]): desc += '\n\n' + hashtags
     pkg = {'title': up['title'][:100], 'description': desc[:4900], 'tags': keep,
