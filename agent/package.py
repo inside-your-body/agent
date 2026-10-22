@@ -21,6 +21,11 @@ def build(ep, ep_dir):
     if ep.get('sources') and 'Sources' not in desc:
         desc += '\n\nSources\n' + '\n'.join(f"- {s['title']}: {s['url']}" for s in ep['sources'][:8])
     tags = list(dict.fromkeys([t.strip() for t in up.get('tags', []) if t.strip()]))
+    kw = (up.get('main_keyword') or '').strip().lower()
+    if kw:   # SEO: main keyword is the first tag, and tags that appear in the title come right after it
+        tags = [kw] + [t for t in tags if t.lower() != kw]
+    title_l = up['title'].lower()
+    tags = tags[:1] + sorted(tags[1:], key=lambda t: 0 if t.lower() in title_l else 1)
     total = 0; keep = []
     for t in tags:
         if total + len(t) + 2 > 480: break

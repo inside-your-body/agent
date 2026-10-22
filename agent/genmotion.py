@@ -11,7 +11,7 @@ MAX_GEN_LONG, MAX_GEN_SHORT = 44, 10
 FPS = 30
 
 KIT_API = """THE CHANNEL'S PUPPET KIT (import it — characters must come from here so the cast looks the same in every video):
-  import {lerp, pop, ease, rnd, POSES, mixPose, Stick, Kidney, Stone, KType, Label, Drop} from '../kit/Kit';
+  import {lerp, pop, ease, rnd, POSES, mixPose, Stick, Kidney, Stone, Headline, Label, Drop} from '../kit/Kit';
   import {STYLES, StyleBg, Riso, Hero, SStone} from '../kit/Styles';
   const S = STYLES[p.theme.kit] || STYLES.flat;   // THIS video's style pack: colours S.bg S.bg2 S.ink S.accent S.accent2 S.skin S.shirt S.pants S.hair,
                                                   // S.font (font-family name), S.upper (caps), S.lineOnly (pure line-art: no fills), S.line (outline width)
@@ -23,8 +23,12 @@ KIT_API = """THE CHANNEL'S PUPPET KIT (import it — characters must come from h
     Recolour with s={{...S, shirt: '#hex'}} for a second person. Animate him: mixPose between poses over frames, move x, bob y, flip, mood changes.
   - <SStone s={S} x y scale rot mood/>  a character-like stone/crystal (kidney stone, gallstone, salt crystal...).
   - <Stick x y s pose mood color/> simple stick figure (crowds, small people). <Kidney x y s mood hat sweat swell flip/> kidney character.
-  - <KType words={['BIG','WORDS']} at={frame} x y size color accent={[i]} accentColor={S.accent} font={S.font} align='middle'|'start' width/>  kinetic typography,
-    words pop in one after another from frame `at`, real layout (never overlaps). <Label x y tx ty text at color/> leader-line label.
+  - TEXT — the ONLY ways to put words on screen (raw <text>, text inside divs/spans and KType are REJECTED by the checker):
+    <Headline items={[{w: ['KEY','WORDS'], from: frame}, {w: ['NEXT','IDEA'], from: frame2}]} w={p.w} h={p.h} font={S.font}
+      color={S.ink} accentColor={S.accent} upper={S.upper}/>  — at most ONE <Headline> per shot. It owns the TOP 18% of the canvas
+      (keep that band free of everything else), shows ONE item at a time (the previous leaves before the next enters), 1-4 words each,
+      synced to the spoken word frames. Only this part's own words — never repeat the previous part's headline.
+    <Label x y tx ty text at color/>  — small leader-line label (≤3 per shot, ≤3 words each, never in the top band, never two near each other).
     <Drop x y s color o/> a liquid drop.
   - helpers: lerp(f, f0, f1, from, to) eased & clamped; pop(f, at) spring 0→1; rnd(i) seeded random.
   Draw organs, cells, vessels, molecules, objects YOURSELF with SVG paths in the style pack's look (same outline width/colours) — big and clear."""
@@ -50,7 +54,8 @@ CONTRACT = """Write ONE self-contained React component file (TypeScript/TSX) for
   if a title is already shown; nothing cropped by the frame edge unless it deliberately enters from off-screen.
 - Must ANIMATE the whole time: things enter, act, transform, react; secondary motion (drift, wobble, pulsing, particles, blinking) never stops.
   All timing scales with dur (main action done by ~0.75*dur).
-- On-screen text: kinetic typography of 1-4 KEY words synced to the exact spoken word (KType), never a full sentence, never covering the subject.
+- On-screen text: only <Headline> (1-4 key words, synced) and up to 3 <Label>s. NO OTHER TEXT, no emoji. Characters, icons and objects never overlap each other
+  unless one deliberately passes behind/in front of another; keep 40+ px gaps between separate elements.
 - SOUND DESIGN: also export the sound effects for the events in your animation, frames relative to this part (same timing as the visuals):
   `export const SFX: {f: number; s: string}[] = [...]` with s one of: pop, click, tick, ding, whoosh, swish, zip, reveal, sparkle, bong,
   bubble, drip, goo, impact, stamp, boom, riser, shield, heartbeat. Pick the sound that fits THIS event (vary them — never the same one
@@ -93,6 +98,11 @@ def _code(txt):
 
 def _static_ok(code, allowed=()):
     if 'export default' not in code: return 'missing export default'
+    if re.search(r'<text[\s>]', code) or '<KType' in code or '<tspan' in code:
+        return 'raw text is not allowed: put words ONLY in <Headline items=...> (one per shot) or <Label>'
+    if code.count('<Headline') > 1: return 'only ONE <Headline> per shot (give it several items instead)'
+    if code.count('<Label') > 3: return 'at most 3 <Label>s per shot'
+    if re.search(r'>\s*[A-Za-z][A-Za-z ,.!?%\'-]{2,}\s*<', code): return 'text written directly in JSX is not allowed: use <Headline> or <Label>'
     bad = [m for m in re.findall(r"from\s+['\"]([^'\"]+)['\"]", code) if m not in ('react', 'remotion', '../kit/Kit', '../kit/Styles')]
     if bad: return f'forbidden imports {bad}'
     for k in ('Math.random', 'Date.now', 'new Date', 'window.', 'document.', 'fetch(', '<img', 'http://', 'https://', '<filter', 'feGaussianBlur', 'feTurbulence', 'backdropFilter'):
@@ -140,13 +150,13 @@ def _index(gids):
 
 def _stills(items, theme, vertical, out_dir):
     """Render 2 stills per shot (35% and 75% of its time) through the QA gallery. Returns {gid: [paths], ...}, errors."""
-    slot = 240
+    slot = 480
     props = {'items': [{'id': g, 'dur': min(d, slot)} for g, d in items], 'slot': slot, 'theme': theme, 'vertical': vertical}
     pf = out_dir / 'gallery.json'; save(pf, props)
     frames, where = [], {}
     for i, (g, d) in enumerate(items):
         dd = min(d, slot)
-        for q in (0.35, 0.75):
+        for q in (0.2, 0.45, 0.7, 0.92):
             fr = i * slot + int(dd * q); frames.append(fr); where.setdefault(g, []).append(fr)
     if out_dir.exists(): shutil.rmtree(out_dir / 'st', ignore_errors=True)
     r = subprocess.run(['node', 'scripts/stills.mjs', str(pf), 'GenGalleryV' if vertical else 'GenGallery', str(out_dir / 'st'),
@@ -178,7 +188,7 @@ def _same(paths):
     try:
         from PIL import Image, ImageChops, ImageStat
         if len(paths) < 2: return False
-        a, b = [Image.open(p).convert('L').resize((160, 90)) for p in paths[:2]]
+        a, b = [Image.open(p).convert('L').resize((160, 90)) for p in (paths[0], paths[-1])]
         return sum(ImageStat.Stat(ImageChops.difference(a, b)).mean) < 2.0
     except Exception:
         return False
@@ -189,11 +199,11 @@ def _vision(batch):
     content = []
     for gid, brief, paths in batch:
         content.append({'type': 'text', 'text': f'SHOT {gid} — must show: {brief}'})
-        for p in paths[:2]:
+        for p in paths[:4]:
             content.append({'type': 'image', 'source': {'type': 'base64', 'media_type': 'image/jpeg', 'data': base64.b64encode(p.read_bytes()).decode()}})
-    content.append({'type': 'text', 'text': """You are the art director of an animated health channel. For each SHOT judge the two frames (early, late):
+    content.append({'type': 'text', 'text': """You are the art director of an animated health channel. For each SHOT judge its frames (in time order):
 FAIL it ONLY for real defects: it is broken/empty/garbled, the subject the narrator talks about is missing or unrecognisable,
-important elements are cut off or pile up into an unreadable mess, text is unreadable/joined/covering the subject, two texts overlap each other,
+important elements are cut off or pile up into an unreadable mess, text is unreadable/joined/covering the subject, two texts overlap each other, characters/icons/objects overlap or pile on each other by accident,
 or the frame is mostly empty with the subject tiny.
 Simple-but-clean is a PASS (we pay for every redo).
 Return JSON only: {"results": [{"id": str, "ok": bool, "problem": "short concrete fix if failed"}]}"""})
@@ -238,6 +248,7 @@ def _gen_one(job, before=None):
     return gid, code, err
 
 META = {}
+STATIC = {}
 
 
 def build(ep, style, short_style, ep_dir):
@@ -275,8 +286,8 @@ def build(ep, style, short_style, ep_dir):
         if not chain:
             with ThreadPoolExecutor(6) as ex:
                 for gid, code, err in ex.map(_gen_one, jobs):
-                    if code and not err: codes[gid] = code
-                    else: print('gen fail', gid, err)
+                    if code and not err: codes[gid] = code; STATIC.pop(gid, None)
+                    else: print('gen fail', gid, err); STATIC[gid] = (err, code)
             return
         # parts of one sequence are designed in order (each sees the previous part's code); sequences run in parallel
         groups = {}
@@ -287,8 +298,8 @@ def build(ep, style, short_style, ep_dir):
                 i = order.index(j[0]); prev = order[i - 1] if i else None
                 before = codes.get(prev) if prev and meta[prev]['scene'] == meta[j[0]]['scene'] else None
                 gid, code, err = _gen_one(j, before)
-                if code and not err: codes[gid] = code
-                else: print('gen fail', gid, err)
+                if code and not err: codes[gid] = code; STATIC.pop(gid, None)
+                else: print('gen fail', gid, err); STATIC[gid] = (err, code)
         with ThreadPoolExecutor(6) as ex:
             list(ex.map(seq, groups.values()))
     run(jobs, chain=True)
@@ -302,7 +313,8 @@ def build(ep, style, short_style, ep_dir):
         for g in list(errs) + missing:
             m = meta[g]
             fixjobs.append((g, m['lang'], m['theme'], m['brief'], m['sentence'], m['dur'], m['words'], m['vertical'], m['others'],
-                            ('compile error: ' + errs[g]) if g in errs else None, codes.get(g)))
+                            ('compile error: ' + errs[g]) if g in errs else (('rejected by the checker: ' + STATIC[g][0]) if g in STATIC and STATIC[g][1] else None),
+                            codes.get(g) or (STATIC.get(g) or (None, None))[1]))
             codes.pop(g, None)
         if rnd == 0: run(fixjobs)
     for g in list(codes):
@@ -335,7 +347,7 @@ def build(ep, style, short_style, ep_dir):
         return bad
     bad = qa(list(codes))
     print('genmotion QA: failed', len(bad), 'of', len(codes))
-    MAX_REDO = 18
+    MAX_REDO = 30
     if len(bad) > MAX_REDO:      # crashes/empties first, then the rest in order
         keep = sorted(bad, key=lambda g: (0 if 'crashed' in bad[g] else 1, g))[:MAX_REDO]
         bad = {g: bad[g] for g in keep}

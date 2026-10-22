@@ -98,7 +98,7 @@ EPISODE_SCHEMA = """{
  "scenes": [ {"id": "s1", "part": "hook|situation|journey|climax|resolution", "title": str,   // chapter title, 2-5 words
    "narration": [str, ...] } ],                   // short spoken sentences (one idea each)
  "short": {"narration": [str, ...]},
- "upload": {"title": str, "description": str, "tags": [str], "hashtags": [str], "pinned_comment": str,
+ "upload": {"main_keyword": str, "title": str, "description": str, "tags": [str], "hashtags": [str], "pinned_comment": str,
             "short_title": str, "short_description": str},
  "thumbnail": {"image_prompt": str, "line1": str, "line2": str,   // line1+line2 = one plain sentence that names the topic and makes people curious,
                                                   // e.g. "WHAT AN IV DRIP" / "DOES INSIDE YOU"; max 4 words per line
@@ -127,9 +127,13 @@ STORY_CRAFT = """STORYTELLING CRAFT (apply all six, every episode):
 6. PATTERN INTERRUPTS — every 60-90 seconds break the rhythm: a shocking one-line fact, a sudden change of tone (whisper → excitement), a direct question to the viewer, a surprising comparison or a format switch (countdown, myth vs fact, "zoom in 1000×")."""
 
 SEO_RULES = """SEARCH (analytics: viewers find us with concrete searches like "tonsil stones", "first cigarette"):
-- upload.title contains the exact phrase people type into YouTube search for this topic, front-loaded, ≤ 60 characters, still a plain clear question/statement.
-- The first 5 tags are exact search phrases people type (short, lowercase); then related phrases (15–20 tags total).
-- The first line of the description repeats the main search phrase naturally."""
+- First decide the MAIN KEYWORD: the most-searched common name of the topic (e.g. "tooth decay", "kidney stones", "flu" — not a
+  poetic paraphrase like "healthy tooth rot"). Put it in upload.main_keyword.
+- upload.title contains the main keyword word-for-word, front-loaded, ≤ 60 characters, still a plain clear question/statement
+  (rewrite the topic-bank wording if it lacks the keyword).
+- tags[0] = the main keyword; the first 5 tags are exact search phrases people type (short, lowercase); then related phrases (15–20 tags).
+- The first sentence of the description contains the main keyword naturally; the keyword appears 2-3 times in the description in total.
+- 3 hashtags: the main keyword (no spaces) first."""
 
 def write_episode(topic, notes, angle=None):
     return ask_json(f"""You are the head writer of the YouTube channel "Inside Your Body".

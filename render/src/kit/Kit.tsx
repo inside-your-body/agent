@@ -179,3 +179,36 @@ export const Label: React.FC<{x: number; y: number; tx: number; ty: number; text
 // ---------- liquid drops ----------
 export const Drop: React.FC<{x: number; y: number; s?: number; color?: string; o?: number}> = ({x, y, s = 1, color = PAL.urine, o = 1}) =>
   <path transform={`translate(${x} ${y}) scale(${s})`} d="M0 -22 Q16 2 0 14 Q-16 2 0 -22Z" fill={color} opacity={o} />;
+
+// ---------- THE ONLY headline of a shot: one fixed band, one item at a time (no stacking, ever) ----------
+// items: [{w: ['KEY','WORDS'], from: frame, to?: frame}] — an item leaves before the next one enters.
+export const Headline: React.FC<{items: {w: string[]; from: number; to?: number}[]; w?: number; h?: number; color?: string; accentColor?: string;
+  accent?: number; font?: string; upper?: boolean; band?: 'top' | 'bottom'}> = ({items, w = 1920, h = 1080, color = PAL.ink, accentColor = PAL.coral,
+  accent = -1, font = 'F_poppins', upper, band = 'top'}) => {
+  const f = useCurrentFrame();
+  const list = [...(items || [])].sort((a, b) => a.from - b.from);
+  let cur = -1;
+  list.forEach((it, i) => { if (f >= it.from) cur = i; });
+  if (cur < 0) return null;
+  const it = list[cur];
+  const next = list[cur + 1];
+  const end = Math.min(it.to ?? 1e9, next ? next.from - 2 : 1e9);
+  if (f > end) return null;
+  const out = lerp(f, end - 8, end, 1, 0);
+  const size = Math.round(Math.min(h * 0.085, w * 0.06));
+  const words = it.w.slice(0, 4).map((x) => (upper ? x.toUpperCase() : x));
+  const y = band === 'top' ? h * 0.04 : h * 0.80;
+  return (
+    <foreignObject x={w * 0.06} y={y} width={w * 0.88} height={size * 2.5}>
+      <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: `0 ${size * 0.28}px`, fontFamily: font, fontWeight: 800,
+        fontSize: size, lineHeight: 1.12, opacity: out}}>
+        {words.map((t, i) => {
+          const p = pop(f, it.from + i * 4, 11, 210);
+          const last = accent < 0 ? i === words.length - 1 : i === accent;
+          return <span key={i} style={{display: 'inline-block', color: last && words.length > 1 ? accentColor : color, opacity: Math.min(1, p * 1.4),
+            transform: `translateY(${(1 - p) * size * 0.5}px)`, whiteSpace: 'nowrap'}}>{t}</span>;
+        })}
+      </div>
+    </foreignObject>
+  );
+};
