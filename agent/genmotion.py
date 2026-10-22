@@ -46,7 +46,7 @@ CONTRACT = """Write ONE self-contained React component file (TypeScript/TSX) for
   layered depth (background, subject, foreground particles), no big empty areas, nothing important tiny.
 - NEVER A HOLD: a new visual event at least every 3-4 s (something enters, transforms, the camera moves, a new label/number appears),
   following the narration word by word; the composition at the end must clearly differ from the start. No frozen "title card" parts.
-- TEXT LAYOUT: one title zone (top or side); small labels/figure captions never touch or overlap the title or each other; no "Fig." label
+- TEXT LAYOUT: exactly ONE headline on screen at any moment (the previous one exits before the next enters); one title zone (top or side); small labels/figure captions never touch or overlap the title or each other; no "Fig." label
   if a title is already shown; nothing cropped by the frame edge unless it deliberately enters from off-screen.
 - Must ANIMATE the whole time: things enter, act, transform, react; secondary motion (drift, wobble, pulsing, particles, blinking) never stops.
   All timing scales with dur (main action done by ~0.75*dur).
@@ -218,7 +218,7 @@ Word timings (word, frame): {json.dumps(words[:40])}
 Storyboard for this part (follow it): {brief}
 Design it FROM SCRATCH for exactly this moment — a fresh composition and animation that does NOT resemble these other parts
 already designed for this video: {json.dumps(others[-25:], ensure_ascii=False)}
-{('CONTINUITY: this part directly continues the previous part of the same sequence. Start from where it ended (same set, same elements in the same places, same characters) and evolve it — the cut must feel seamless. Previous part code:' + chr(10) + '```tsx' + chr(10) + before[:9000] + chr(10) + '```') if before else 'This part opens a new sequence: establish its set clearly.'}
+{('CONTINUITY: this part directly continues the previous part of the same sequence. Start from where it ended (same set, same elements in the same places, same characters) and evolve it — the cut must feel seamless. TEXT RULE: the on-screen words of the previous part must animate OUT (within the first ~12 frames) BEFORE any new word appears in that zone — never draw a new title on top of or next to an old one; only ONE title/headline on screen at a time. Previous part code:' + chr(10) + '```tsx' + chr(10) + before[:9000] + chr(10) + '```') if before else 'This part opens a new sequence: establish its set clearly.'}
 {CONTRACT}"""
     if fix:
         p += f"\n\nYour previous version FAILED review: {fix}\nRewrite it to fix that (keep what worked). Previous code:\n```tsx\n{prev}\n```"
@@ -324,7 +324,7 @@ def build(ep, style, short_style, ep_dir):
                 s = st.get(g, {})
                 if s.get('error') or not s.get('paths') or all(_blank(p) for p in s['paths']):
                     bad[g] = 'it crashed or rendered an empty/flat frame'
-                elif meta[g]['dur'] > 150 and _same(s['paths']):
+                elif meta[g]['dur'] > 120 and _same(s['paths']):
                     bad[g] = 'it is a frozen hold: the late frame looks the same as the early one — add new events every 3-4 s following the narration'
                 else:
                     looks.append((g, meta[g]['brief'], s['paths']))
