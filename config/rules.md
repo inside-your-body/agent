@@ -119,3 +119,13 @@ in the script AND mirrored in the visuals.
 - 90% of views come from the Shorts feed; long videos get few views (thumbnail CTR 1.1–2.1%) → premium clickable thumbnails,
   keyword titles, and every Short must make viewers want the full story (the owner sets the Short's "Related video" in Studio).
 - Long-video viewers leave early (avg 1:54 of 10:50) → hook, open loops and a visual change every few seconds are mandatory.
+
+## POV FLAT format (owner, Oct 23, 2026) — overrides older visual rules above
+- NARRATION IN SECOND PERSON (POV): the viewer is the person it happens to — "It's 3 a.m. You wake up with a pain like a knife…",
+  "You take your first sip…", "Your liver has just noticed…". Present tense, short punchy sentences, cinematic moments, then zoom inside
+  the body ("Months ago, deep inside your kidney…"). Keep it scientifically accurate; never preach.
+- Visuals: the signature character MAX plays "you" (simple flat cartoon, assets/cast/max_sheet.png) on ONE flat background colour per
+  beat; objects/organs as simple flat cut-outs; the PROCESS explained by custom code motion graphics. No camera zoom. Kinetic key words.
+- The character is always complete (never cut by the frame) and text never touches the character (fixed character/text zones).
+- Thumbnail: MAX with a strong emotion + the subject circled in red + line 1 = the topic (what the video is about) + line 2 = what
+  you'll see / the hook.

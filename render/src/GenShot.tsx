@@ -1,3 +1,4 @@
+import {FlatShot} from './FlatShot';
 import React from 'react';
 import {AbsoluteFill, useCurrentFrame, interpolate} from 'remotion';
 import {Beat, Theme, ff} from './theme';
@@ -40,8 +41,10 @@ export const genProps = (b: Beat, t: Theme, len: number, vertical: boolean) => (
 export const GenShot: React.FC<{b: Beat; t: Theme; len: number; vertical: boolean; qa?: boolean}> = ({b, t, len, vertical, qa}) => {
   const C = GEN[(b.params || {}).gen];
   const fb = qa ? <AbsoluteFill style={{background: '#FF00FF'}} /> : <Fallback text={b.text || (b.params || {}).label || ''} t={t} vertical={vertical} />;
+  const ff2 = (b.params || {}).flat_fallback;
+  if (!C && ff2 && !qa) return <FlatShot p={ff2} words={b.words || []} len={len} vertical={vertical} />;
   if (!C) return <>{fb}</>;
-  return <Boundary fallback={fb}><AbsoluteFill><C {...genProps(b, t, len, vertical)} /></AbsoluteFill></Boundary>;
+  return <Boundary fallback={ff2 && !qa ? <FlatShot p={ff2} words={b.words || []} len={len} vertical={vertical} /> : fb}><AbsoluteFill><C {...genProps(b, t, len, vertical)} /></AbsoluteFill></Boundary>;
 };
 
 // QA gallery: every generated shot one after another (slot frames each) so stills can be checked before the real render.

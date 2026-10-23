@@ -109,25 +109,27 @@ def run_episode(a, topic, ep_dir):
             for f in (f'vo_{kind}.wav', f'segs_{kind}.json', f'words_{kind}.json'):
                 (ep_dir / f).unlink(missing_ok=True)
 
-    # 3b. STORYBOARD first: every sequence planned as continuous acts, reviewed by the creative director (automatic control)
-    from . import story, genmotion, assets
-    if not ep.get('storyboarded'):
-        sbs = []
-        for kind, th in (('long', style), ('short', short_style)):
-            sb = story.plan(ep, kind, th); sbs.append(sb); save(ep_dir / f'storyboard_{kind}.json', sb)
-            print(f'storyboard {kind}:', story.apply(ep, sb, kind), 'acts |', (sb.get('review') or '')[:200])
-        story.export(ep, sbs, style, ep_dir)
-        ep['storyboarded'] = True; save(ep_dir / 'episode.json', ep)
-    # 3c. the drawings the storyboard asked for (cast sheets, character poses, painted backdrops)
-    refs = {}          # no AI drawings any more: every visual is code-drawn with the puppet kit
-    # 3d. one brand-new continuous animation per act, designed from scratch with the previous act in view; QA'd + repaired
+    # 3b. POV FLAT storyboard (owner, Oct 23): one beat per sentence — MAX pose / objects / custom motion graphics
+    from . import flat, genmotion, assets
+    if not ep.get('flat_planned'):
+        reqs = {'poses': {}, 'props': {}}
+        for kind in ('long', 'short'):
+            r = flat.plan(ep, kind)
+            for k in reqs: reqs[k].update(r[k])
+        save(ep_dir / 'flat_requests.json', reqs)
+        ep['flat_planned'] = True; save(ep_dir / 'episode.json', ep)
+    # 3c. only the cut-outs the library does not have yet (reused across videos)
+    flat.make_assets(load(ep_dir / 'flat_requests.json', {'poses': {}, 'props': {}}), ep_dir)
+    flat.resolve(ep, ep_dir); save(ep_dir / 'episode.json', ep)
+    # 3d. a brand-new motion-graphics animation for every 'motion' beat; QA'd + repaired (fallback = a flat beat)
     if not ep.get('gen_done'):
         genmotion.build(ep, style, short_style, ep_dir); ep['gen_done'] = True; save(ep_dir / 'episode.json', ep)
-    if not (ep_dir / 'thumbnail.jpg').exists():     # thumbnail = code-drawn still with the hero (concept 1) + 2 test variants
-        from . import thumbgen
-        try: thumbgen.build(ep, style, ep_dir)
+    if not (ep_dir / 'thumbnail.jpg').exists():     # thumbnail = MAX + topic line + hook line (3 variants, most clickable uploaded)
+        from . import thumbmax
+        try: thumbmax.build(ep, ep_dir)
         except Exception as e:
-            print('thumbnail gen failed', e); thumbgen.fallback(ep, ep_dir)
+            print('thumbnail failed', e)
+            from . import thumbgen; thumbgen.fallback(ep, ep_dir)
     genmotion.stage(ep_dir)
     from collections import Counter
     print('parts:', Counter(b['kind'] for sc in ep['scenes'] for b in sc['beats']))
@@ -168,6 +170,8 @@ def run_episode(a, topic, ep_dir):
         youtube.pin_comment_text(yt, svid, 'Watch the full story here: https://youtu.be/' + vid)
     except Exception as e:
         print('short comment not posted:', e)
+    try: flat.merge_library()          # new MAX poses / objects join the shared library (committed with data/ and assets/)
+    except Exception as e: print('library merge failed', e)
     mark_done(topic['id'], {'topic': topic['title'], 'video_id': vid, 'short_id': svid,
                             'style': style['id'], 'short_style': short_style['id'], 'publish_at': at,
                             'kit': style.get('kit'), 'lang': style.get('lang'), 'short_lang': short_style.get('lang'),

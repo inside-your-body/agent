@@ -1,0 +1,18 @@
+{
+ "poses": {
+  "max_floor": {
+   "desc": "kneeling and curled on the floor holding his side, eyes squeezed shut in pain",
+   "ar": 1.0244
+  }
+ },
+ "props": {
+  "kidney": {
+   "desc": "a simple cartoon human kidney organ, bean shape, deep pink-red, side view",
+   "ar": 0.7886
+  },
+  "crystals": {
+   "desc": "three tiny sharp golden crystals stuck together into one small clump",
+   "ar": 0.9043
+  }
+ }
+}

@@ -1,3 +1,4 @@
+import {FlatShot} from './FlatShot';
 import React from 'react';
 import {AbsoluteFill, Img, staticFile, useCurrentFrame, useVideoConfig, interpolate, spring, Easing} from 'remotion';
 import {Beat, Theme, ff, alpha} from './theme';
@@ -386,6 +387,7 @@ const KINDS: Record<string, React.FC<BP>> = {
   chart: Chart, split: Split, checklist: Checklist, quote: Quote, body: BodyScene,
   ...MOTION, counter: MOTION.counter2,
   gen: (p: BP) => <GenShot {...p} />,
+  flat: (p: BP) => <FlatShot p={(p.b.params || {}) as any} words={p.b.words || []} len={p.len} vertical={p.vertical} />,
 };
 
 // ---------- transition wrapper ----------
@@ -399,7 +401,8 @@ export const BeatView: React.FC<BP> = (p) => {
   let style: React.CSSProperties = {opacity: Math.min(inK, outK)};
   const TR = ['slide', 'rise', 'zoom', 'fade', 'wipe', 'cut', 'bounce'];
   const h = Math.abs(Math.sin(p.b.from * 12.9898) * 43758.5453) % 1;
-  const tr = h < 0.5 ? t.transition : TR[Math.floor(h * 2 * TR.length) % TR.length];
+  let tr = h < 0.5 ? t.transition : TR[Math.floor(h * 2 * TR.length) % TR.length];
+  if ((p.b.kind === 'flat' || p.b.kind === 'gen') && !['fade', 'slide', 'cut'].includes(tr)) tr = h < 0.5 ? 'fade' : 'slide';   // owner: no zooms
   switch (tr) {
     case 'slide': style.transform = `translateX(${(1 - inK) * 120 - (1 - outK) * 120}px)`; break;
     case 'rise': style.transform = `translateY(${(1 - inK) * 80 - (1 - outK) * 60}px)`; break;

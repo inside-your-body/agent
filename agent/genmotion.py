@@ -17,12 +17,8 @@ KIT_API = """THE CHANNEL'S PUPPET KIT (import it — characters must come from h
                                                   // S.font (font-family name), S.upper (caps), S.lineOnly (pure line-art: no fills), S.line (outline width)
   Everything is SVG: draw inside ONE <svg width={p.w} height={p.h} viewBox={`0 0 ${p.w} ${p.h}`}> filling an <AbsoluteFill>.
   - <StyleBg s={S} w={p.w} h={p.h}/>  the style's background (texture/grid/halftone/blobs). Put it first. <Riso s={S}>…</Riso> wraps groups for the riso look.
-  - <Hero s={S} x y scale pose={POSES.x | mixPose(POSES.a, POSES.b, t)} mood flip? walk? blink? glow?/>  THE channel hero: a cartoon person
-    (feet at x,y; ~330 px tall at scale 1 — use scale 1.2-2.6 so he is BIG). poses: stand holdSide doubled point shrug cheer holdHead holdChest
-    holdBelly think drink wave run tired. moods: neutral happy pain shock worried determined. walk = phase in radians (f/4) makes legs swing.
-    Recolour with s={{...S, shirt: '#hex'}} for a second person. Animate him: mixPose between poses over frames, move x, bob y, flip, mood changes.
-  - <SStone s={S} x y scale rot mood/>  a character-like stone/crystal (kidney stone, gallstone, salt crystal...).
-  - <Stick x y s pose mood color/> simple stick figure (crowds, small people). <Kidney x y s mood hat sweat swell flip/> kidney character.
+  - (No people in these parts: MAX the character is shown in other beats. <Hero>/<Stick> are rejected.)
+  - <SStone s={S} x y scale rot/>  a stone/crystal (kidney stone, gallstone, salt crystal...). <Kidney x y s swell flip/> a kidney.
   - TEXT — the ONLY ways to put words on screen (raw <text>, text inside divs/spans and KType are REJECTED by the checker):
     <Headline items={[{w: ['KEY','WORDS'], from: frame}, {w: ['NEXT','IDEA'], from: frame2}]} w={p.w} h={p.h} font={S.font}
       color={S.ink} accentColor={S.accent} upper={S.upper}/>  — at most ONE <Headline> per shot. It owns the TOP 18% of the canvas
@@ -41,6 +37,10 @@ CONTRACT = """Write ONE self-contained React component file (TypeScript/TSX) for
   dur = shot length in frames (30 fps), w×h = canvas in px. p.theme.kit = this video's style pack id (see kit).
   words = narrator words with the frame (relative to this shot) when each is spoken — sync key actions to them.
 """ + KIT_API + """
+- THIS CHANNEL'S LOOK (POV FLAT): one flat background colour (S.bg or a soft flat colour), thick dark outlines (8 px), flat fills,
+  bold simple shapes — exactly like a clean flat cartoon; NO camera zoom/pan of the whole frame; NO people (no Hero/Stick: the
+  character MAX appears in other parts). Animate the SUBJECT itself professionally: organs, stones, cells, fluids, tubes, molecules,
+  numbers, comparisons — clear, big, satisfying motion design.
 - EVERY SHORT SENTENCE IS ACTED OUT: what the narrator says happens on screen at that moment (the stone moves → it moves; it gets stuck →
   it jams, squashes, the hero doubles over). Use the Hero / stick figures whenever a person, feeling or reaction is involved; otherwise
   animated diagrams, objects and characters (organs/cells/germs with faces when it helps the story).
@@ -100,6 +100,7 @@ def _static_ok(code, allowed=()):
     if 'export default' not in code: return 'missing export default'
     if re.search(r'<text[\s>]', code) or '<KType' in code or '<tspan' in code:
         return 'raw text is not allowed: put words ONLY in <Headline items=...> (one per shot) or <Label>'
+    if '<Hero' in code or '<Stick' in code: return 'no people in motion parts (people are shown in the MAX character beats): animate the subject itself'
     if code.count('<Headline') > 1: return 'only ONE <Headline> per shot (give it several items instead)'
     if code.count('<Label') > 3: return 'at most 3 <Label>s per shot'
     if re.search(r'>\s*[A-Za-z][A-Za-z ,.!?%\'-]{2,}\s*<', code): return 'text written directly in JSX is not allowed: use <Headline> or <Label>'

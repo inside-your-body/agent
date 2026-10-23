@@ -69,9 +69,10 @@ KITS = {'flat': 'Flat 2D — bold flat colours, thick dark outlines, chunky frie
         'swiss': 'Swiss — off-white grid, black + one red, strict geometric layout, huge bold caps',
         'riso': 'Risograph — pink/teal/navy inks on paper, grain, slight misregistration, playful caps',
         'glass': 'Glassmorphism — deep purple night, frosted glass panels, glowing cyan/pink'}
-KIT_W = {'flat': 3, 'line': 3, 'pop': 2, 'swiss': 1.5, 'riso': 1.5, 'glass': 1}
-KIT_FONT = {'flat': 'poppins', 'line': 'dmserif', 'pop': 'anton', 'swiss': 'inter', 'riso': 'archivoblack', 'glass': 'montserrat'}
-KIT_PAL = {'flat': ('#13233B', '#1C3150', '#F5EFE6', '#FF6B5B', '#FFC845', '#8FA3BF'), 'line': ('#F3EEE3', '#E9E2D3', '#1E1E1E', '#D9774E', '#1E1E1E', '#6B6457'),
+KITS['maxflat'] = 'Max Flat — the channel look: flat colour backgrounds, thick dark outlines, flat fills, the signature character MAX'
+KIT_W = {'maxflat': 1, 'flat': 3, 'line': 3, 'pop': 2, 'swiss': 1.5, 'riso': 1.5, 'glass': 1}
+KIT_FONT = {'maxflat': 'anton', 'flat': 'poppins', 'line': 'dmserif', 'pop': 'anton', 'swiss': 'inter', 'riso': 'archivoblack', 'glass': 'montserrat'}
+KIT_PAL = {'maxflat': ('#F2E1C3', '#E8D5B5', '#2B2B2B', '#B23A1C', '#2F3B52', '#6B5B45'), 'flat': ('#13233B', '#1C3150', '#F5EFE6', '#FF6B5B', '#FFC845', '#8FA3BF'), 'line': ('#F3EEE3', '#E9E2D3', '#1E1E1E', '#D9774E', '#1E1E1E', '#6B6457'),
            'swiss': ('#F4F4F0', '#E6E6E1', '#111111', '#E3241B', '#111111', '#5A5A5A'), 'pop': ('#FFD23D', '#FFB800', '#111111', '#E8263A', '#1E5BFF', '#4A3B00'),
            'riso': ('#F1E9DA', '#E8DCC6', '#2A2A6E', '#E0457A', '#00A6A6', '#5B5B8A'), 'glass': ('#1B1446', '#3B1C6B', '#FFFFFF', '#7CF3FF', '#FF7AD9', '#B9AEE0')}
 
@@ -140,15 +141,16 @@ Borrow the TYPOGRAPHY and MOTION-GRAPHICS feel (font character, caps, transition
             theme['fontHead'] = random.choice([f for f in ('anton', 'bebas', 'archivoblack', 'fredoka', 'poppins', 'playfair') if f != avoid.get('fontHead')])
         if theme.get('transition') == avoid.get('transition'):
             theme['transition'] = random.choice([x for x in TRANSITIONS if x not in (avoid.get('transition'), 'cut')])
-    # puppet-kit style pack (everything is code-drawn motion graphics in this pack)
-    kit = (pick or {}).get('kit')
-    if kit not in kit_cands:
+    # puppet-kit style pack — POV FLAT format (owner, Oct 23): always the Max Flat pack
+    kit = 'maxflat'
+    if kit not in KITS:
         kit = _r.choices(kit_cands, weights=[KIT_W[k] for k in kit_cands])[0]
     bg, bg2, fg, acc, acc2, mut = KIT_PAL[kit]
     theme.update(kit=kit, bg=bg, bg2=bg2, fg=fg, accent=acc, accent2=acc2, accent3=acc2 if acc2 != fg else acc, muted=mut,
-                 fontHead=KIT_FONT[kit], fontBody='inter' if kit != 'line' else 'dmserif', upper=kit in ('pop', 'swiss', 'riso'))
+                 fontHead=KIT_FONT[kit], fontBody='inter' if kit != 'line' else 'dmserif', upper=kit in ('pop', 'swiss', 'riso', 'maxflat'))
     tint = (pick or {}).get('kit_tint') if isinstance((pick or {}).get('kit_tint'), dict) else {}
     tint = {k: v for k, v in tint.items() if k in ('bg', 'bg2', 'accent', 'accent2', 'shirt') and isinstance(v, str) and re.fullmatch(r'#[0-9A-Fa-f]{6}', v)}
+    if kit == 'maxflat': tint = {}           # the flat format keeps one consistent channel look
     if tint:
         t2 = {**theme, **{k: v for k, v in tint.items() if k != 'shirt'}}
         if contrast(fg, t2['bg']) >= 7 and contrast(t2['accent'], t2['bg']) >= 2.6 and contrast(mut, t2['bg']) >= 3:
