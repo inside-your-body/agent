@@ -25,7 +25,7 @@ LOOK = ("Simple flat 2D cartoon exactly in the style of the reference character 
         "Fully transparent background: no backdrop, no floor, no shadow, no frame, no text. The WHOLE subject is inside the image with generous "
         "empty margin on every side (nothing touches or is cut by the image edges).")
 MAX = ("MAX from the reference sheet (oversized round head, dot eyes, thick expressive eyebrows, messy dark-brown hair, mustard-yellow hoodie, "
-       "dark jeans, white sneakers) — keep him EXACTLY the same, full body from the top of his hair to his shoes. ")
+       "dark jeans, white sneakers) — keep him EXACTLY the same, full body from the top of his hair to his shoes; exactly ONE MAX in the image. ")
 
 RULES = """VISUAL SYSTEM (POV FLAT): MAX plays "you". For EVERY sentence choose one beat:
 - "max": MAX acts the sentence (pose from the library, or a NEW pose described precisely: body action + facial expression + any small object he holds).
