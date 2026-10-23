@@ -37,7 +37,8 @@ jobs:
       - uses: actions/setup-node@v4
         with: {node-version: '20', cache: 'npm', cache-dependency-path: render/package-lock.json}
       - name: System deps
-        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg fonts-noto-color-emoji
+        timeout-minutes: 8
+        run: for i in 1 2 3; do timeout 150 sudo apt-get update -qq && timeout 300 sudo apt-get install -y -qq ffmpeg fonts-noto-color-emoji && break; sleep 10; done
       - name: Python deps
         run: pip install -r requirements.txt
       - name: Render deps
