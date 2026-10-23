@@ -1,0 +1,37 @@
+name: POV sample (30 s test)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sample:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11', cache: 'pip'}
+      - uses: actions/setup-node@v4
+        with: {node-version: '20', cache: 'npm', cache-dependency-path: render/package-lock.json}
+      - name: Deps
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg fonts-noto-color-emoji
+          pip install -r requirements.txt
+          cd render && npm ci && npx remotion browser ensure
+      - name: Make sample
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python -m agent.pov_sample
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pov-sample
+          path: |
+            work/pov/*.mp4
+            work/pov/*.png
+            work/cost.json
+          retention-days: 7
