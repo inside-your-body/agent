@@ -33,9 +33,9 @@ RULES = """VISUAL SYSTEM (POV FLAT): MAX plays "you". For EVERY sentence choose 
 - "motion": the PROCESS the sentence explains, as a professional custom motion-graphics animation (e.g. the stone sliding down the
   narrow ureter and jamming, crystals locking together layer by layer, a heart pumping, acid melting enamel). Use it for every key
   process and every number/comparison. Never people in motion beats (people = "max" beats).
-Rules: about 45% max, 30% motion, 25% prop; never the same pose twice in a row and no pose more than 3 times in a video; vary the
+Rules: one MAX per image (never two copies of him); about 45% max, 30% motion, 25% prop; never the same pose twice in a row and no pose more than 3 times in a video; vary the
 background colour (cream, sand, pink, blue, mint, lilac, peach; night/deep for night or dramatic moments); "keys" = 1-4 key words
-from the sentence (what the viewer must remember; the last one is highlighted); "fx" adds a small code-drawn effect next to MAX
+from the sentence (never the name MAX) (what the viewer must remember; the last one is highlighted); "fx" adds a small code-drawn effect next to MAX
 (pain, shock, sweat, idea, question, zzz, heart, none)."""
 
 SCHEMA = """{"beats": [{"scene_id": str, "at": sentence index in the scene (int), "type": "max"|"prop"|"motion",
@@ -99,7 +99,7 @@ def _apply(ep, kind, raw, lib):
             b = got.get(at) or {'type': 'prop' if at % 2 else 'max', 'keys': sent.split()[:2], 'bg': 'cream', 'fx': 'none'}
             t = b.get('type')
             if t == 'motion' and n_motion >= MAX_MOTION[kind]: t = 'prop' if b.get('props') else 'max'
-            keys = [str(k).upper() for k in (b.get('keys') or [])][:4] or [w.upper() for w in sent.split()[:2]]
+            keys = [str(k).upper() for k in (b.get('keys') or []) if str(k).strip().upper() not in ('MAX', "MAX'S")][:4] or [w.upper() for w in sent.split()[:2]]
             bg = b.get('bg') if b.get('bg') in PALETTE else 'cream'
             params = {'bg': PALETTE[bg], 'ink': '#FFFFFF' if bg in DARK else '#2B2B2B', 'keys': keys, 'fx': b.get('fx') or 'none',
                       'side': 'left' if n % 2 == 0 else 'right', 'cast': [], 'props': []}
