@@ -5,6 +5,11 @@ from . import llm, tts, timing
 
 def pick_topic():
     topics = load(ROOT / 'data/topics.json')
+    if CFG.get('format') == 'tl':      # timeline format: owner's own topics, then adaptations of proven viral videos
+        tl_ = lambda x: x.get('format') == 'timeline'
+        t = next((x for x in topics if x['status'] == 'next' and tl_(x)), None) or next((x for x in topics if x['status'] == 'todo' and tl_(x)), None) \
+            or next((x for x in topics if x['status'] in ('next', 'todo') and x.get('source') == 'user'), None)
+        if t: return t
     t = next((x for x in topics if x['status'] == 'next'), None) or next(x for x in topics if x['status'] == 'todo')
     return t
 
@@ -20,6 +25,7 @@ def mark_done(topic_id, entry):
     h['used_styles'] += [entry.get('style'), entry.get('short_style')]
     h.setdefault('used_kits', []).append(entry.get('kit'))
     h.setdefault('used_langs', []).extend([x for x in (entry.get('lang'), entry.get('short_lang')) if x])
+    if entry.get('music'): h.setdefault('used_music', []).append(entry['music'])
     save(ROOT / 'data/history.json', h)
 
 def main():
@@ -42,7 +48,9 @@ def main():
             print(f'last episode {gap:.0f} h ago -> skip today'); return
     if not a.topic:
         try:
-            from . import scout; scout.run()          # weekly: refresh topic bank from what's getting views now
+            from . import scout
+            if CFG.get('format') == 'tl': scout.run_viral()   # keep >= 4 viral-adapted timeline topics in the bank
+            else: scout.run()          # weekly: refresh topic bank from what's getting views now
         except Exception as e:
             print('scout skipped:', e)
     if a.topic and a.topic.strip().isdigit():          # pick a topic from the bank by its number (keeps its angle/format)
@@ -50,11 +58,75 @@ def main():
     else:
         topic = {'id': None, 'title': a.topic} if a.topic else pick_topic()
     ep_dir = WORK / dt.datetime.utcnow().strftime('%Y%m%d'); ep_dir.mkdir(parents=True, exist_ok=True)
+    if CFG.get('format') == 'tl':
+        save(WORK / 'current.json', {'dir': ep_dir.name, 'topic': topic, 'format': 'tl'})
+        return run_tl(a, topic, ep_dir)
     save(WORK / 'current.json', {'dir': ep_dir.name, 'topic': topic})
     run_episode(a, topic, ep_dir)
 
 def finish_from(cur, a):
+    if cur.get('format') == 'tl':
+        return run_tl(a, cur['topic'], WORK / cur['dir'])
     run_episode(a, cur['topic'], WORK / cur['dir'])
+
+def _at(hhmm, days=0):
+    from . import youtube
+    if not days: return youtube.publish_time(hhmm)
+    h, m = map(int, hhmm.split(':'))
+    t = (dt.datetime.utcnow() + dt.timedelta(days=days)).replace(hour=h, minute=m, second=0, microsecond=0)
+    return t.isoformat() + 'Z'
+
+SHORT_SLOTS = [('20:30', 0), ('16:00', 1), ('21:00', 1)]   # Short 1 with the episode, Shorts 2-3 on the day between episodes
+
+def run_tl(a, topic, ep_dir):
+    from . import tl, package, audio, shard
+    print('== topic (timeline format):', topic['title'])
+    if a.stage != 'finish':
+        tl.build(topic, ep_dir)
+        if a.stage == 'build':
+            print('build stage done:', ep_dir); return
+    ep = load(ep_dir / 'episode.json')
+    shard.concat(ep_dir)
+    long_final, shorts, track = tl.finish(ep, ep_dir)
+    pkg = package.build(ep, ep_dir)
+    credit = audio.credit(track)
+    pkg['description'] = (pkg['description'] + '\n\n' + credit)[:4900]
+    tags = ' '.join('#' + h.lstrip('#') for h in ep['upload'].get('hashtags', [])[:3])
+    spk = []
+    for k, f, st in shorts:
+        s = ep['shorts'][k]
+        title = (s.get('title') or ep['upload']['title'])[:90]
+        spk.append({'k': k, 'file': str(f), 'title': title + ' #Shorts',
+                    'description': s['lines'][0]['text'] + '\n\nThe full timeline: {FULL_URL}\n\n' + tags + '\n\n' + audio.credit(st)})
+    pkg['shorts'] = spk; save(ep_dir / 'package.json', pkg)
+    if a.dry_run:
+        print('dry run: outputs in', ep_dir); return
+    from . import youtube
+    yt = youtube.client()
+    for old in [x for x in os.environ.get('REPLACE_IDS', '').replace(',', ' ').split() if x]:
+        try: yt.videos().delete(id=old).execute(); print('deleted old upload', old)
+        except Exception as e: print('could not delete', old, e)
+    at = youtube.publish_time(CFG['schedule']['publish_long_utc'])
+    thumb = ep_dir / 'thumbnail.jpg'
+    vid = youtube.upload(yt, long_final, pkg['title'], pkg['description'], pkg['tags'], thumb if thumb.exists() else None, publish_at=at, synthetic=True)
+    try: youtube.add_to_playlist(yt, vid)
+    except Exception as e: print('playlist', e)
+    sids = []
+    for j, s in enumerate(spk):
+        hhmm, days = SHORT_SLOTS[j % len(SHORT_SLOTS)]
+        try:
+            svid = youtube.upload(yt, s['file'], s['title'], s['description'].replace('{FULL_URL}', 'https://youtu.be/' + vid), pkg['tags'][:10],
+                                  publish_at=_at(hhmm, days), synthetic=True)
+            sids.append(svid)
+            try: youtube.pin_comment_text(yt, svid, 'The full timeline is here: https://youtu.be/' + vid)
+            except Exception as e: print('short comment not posted:', e)
+        except Exception as e: print('short upload failed', j, e)
+    try: youtube.pin_comment_text(yt, vid, pkg['pinned_comment'])
+    except Exception as e: print('comment not posted (will work once public):', e)
+    mark_done(topic['id'], {'topic': topic['title'], 'video_id': vid, 'short_ids': sids, 'publish_at': at, 'format': 'tl', 'music': track,
+                            'built_at': dt.datetime.utcnow().isoformat(timespec='seconds')})
+    save(ep_dir / 'result.json', {'video': vid, 'shorts': sids, 'publish_at': at, 'pinned_comment': pkg['pinned_comment']})
+    print('DONE', vid, sids, at)
 
 def run_episode(a, topic, ep_dir):
     print('== topic:', topic['title'])

@@ -2,6 +2,7 @@
 // dark background, a glowing see-through body whose organs light up, a big timestamp, a timeline bar,
 // kinetic numbers/words and simple code-drawn icons. No images, no camera zoom.
 import React from 'react';
+import {Anatomy} from './kit/Anatomy';
 import {AbsoluteFill, useCurrentFrame, spring, interpolate, Sequence} from 'remotion';
 
 export const TL = {bg: '#0B1220', bg2: '#111C33', line: '#36E0D0', glow: '#36E0D0', warm: '#FF5A4E', gold: '#FFD23F', ink: '#E8F1FF', mute: '#5B6B8A',
@@ -52,15 +53,16 @@ export const BigStamp: React.FC<{text: string; at: number; f: number; x: number;
 };
 
 export const Words: React.FC<{words: string[]; at: number; f: number; x: number; y: number; size?: number; accent?: number; maxW?: number}> = ({words, at, f, x, y, size = 78, accent = -1, maxW = 820}) => {
-  let cx = x, cy = y;
-  return <g>{words.map((w, i) => {
-    const ww = w.length * size * 0.45;
-    if (cx > x && cx + ww > x + maxW) { cx = x; cy += size * 1.1; }
-    const t0 = at + i * 5; const p = sp(f, t0, 12, 200);
-    const el = f >= t0 && <text key={i} x={cx} y={cy + (1 - p) * 40} fontFamily="F_anton" fontSize={size} opacity={Math.min(1, p * 1.6)}
-      fill={i === (accent < 0 ? words.length - 1 : accent) ? TL.line : TL.ink}>{w}</text>;
-    cx += ww + size * 0.3;
-    return el;
+  // greedy wrap by estimate, real spacing by the browser (one <text> per line, a <tspan> per word)
+  const lines: number[][] = [[]]; let w = 0;
+  words.forEach((wd, i) => { const ww = wd.length * size * 0.5; if (w > 0 && w + ww > maxW) { lines.push([]); w = 0; } lines[lines.length - 1].push(i); w += ww + size * 0.3; });
+  const acc = accent < 0 ? words.length + accent : accent;
+  return <g>{lines.map((ln, li) => {
+    const t0 = at + ln[0] * 5; const p = sp(f, t0, 12, 200);
+    return <text key={li} x={x} y={y + li * size * 1.1 + (1 - Math.min(1, p)) * 30} fontFamily="F_anton" fontSize={size} xmlSpace="preserve">
+      {ln.map((i) => { const q = sp(f, at + i * 5, 12, 200);
+        return <tspan key={i} fill={i === acc ? TL.line : TL.ink} fillOpacity={f < at + i * 5 ? 0 : Math.min(1, q * 1.6)}>{words[i] + (i === ln[ln.length - 1] ? '' : '  ')}</tspan>; })}
+    </text>;
   })}</g>;
 };
 
@@ -147,14 +149,14 @@ export const SugarTimeline: React.FC<TLProps> = ({seg}) => {
   const s = seg && seg.length >= 7 ? seg : [0, 150, 360, 600, 810, 1000, 1200];
   const cur = s.filter((t) => f >= t).length - 1;          // current line 0..6
   const at = s[Math.max(0, cur)];
-  const focus: Organ = ['none', 'pancreas', 'brain', 'liver', 'stomach', 'heart', 'none'][cur] as Organ;
+  const focus: Organ = ['none', 'pancreas', 'brain', 'liver', 'none', 'heart', 'none'][cur] as Organ;
   const bodyOn = interpolate(f, [20, 50], [0, 1], cl);
   const PX = 1000;                                          // right panel x
   return <AbsoluteFill style={{background: `radial-gradient(circle at 30% 50%, #14223D 0%, ${TL.bg} 70%)`}}>
     <svg width={1920} height={1080} viewBox="0 0 1920 1080">
       {/* faint grid */}
       {Array.from({length: 13}).map((_, i) => <line key={i} x1={i * 160} y1={0} x2={i * 160} y2={1080} stroke="#FFFFFF" opacity={0.03} />)}
-      <g opacity={bodyOn}><Body x={500} y={490} s={0.86} focus={focus === 'tongue' ? 'none' : focus} f={f} at={at} /></g>
+      <g opacity={bodyOn}><Anatomy x={480} y={500} s={0.88} focus={focus === 'none' ? 'none' : (focus as any)} f={f} at={at} /></g>
 
       {/* line 0: sugar disappears */}
       {cur === 0 && <g>

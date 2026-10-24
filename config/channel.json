@@ -62,5 +62,6 @@
     ],
     "note": "Public RSS feeds, no login/API. Every run merges new pins into data/refs.json (analysed once by Claude vision) so the library keeps growing."
   },
-  "repo": "inside-your-body/agent"
+  "repo": "inside-your-body/agent",
+  "format": "tl"
 }

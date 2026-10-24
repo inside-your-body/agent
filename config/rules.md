@@ -129,3 +129,14 @@ in the script AND mirrored in the visuals.
 - The character is always complete (never cut by the frame) and text never touches the character (fixed character/text zones).
 - Thumbnail: MAX with a strong emotion + the subject circled in red + line 1 = the topic (what the video is about) + line 2 = what
   you'll see / the hook.
+
+## TIMELINE FORMAT (owner, Oct 24, 2026) — overrides ALL older format/visual rules above
+- Every video: "What happens inside your body if / when X", told on a timeline of time stamps (minutes → hours → days → weeks → months → years).
+- No characters, no MAX, no cartoon cast, no AI scene images. The look is fixed: dark navy background, a glowing see-through hologram body whose
+  organ lights up when we talk about it, big yellow time stamps, a timeline bar, one code-drawn widget per sentence (number counter, meter,
+  signal wave, comparison bars, icon, clock, checklist, microscope cells, organ close-up, question, myth vs fact, battery) and 2–4 big key words.
+- Topics: our own version of topics that ALREADY went viral on YouTube (proven demand), phrased the way people search, broad and clear
+  (e.g. "What Happens to Your Body When You Stop Eating Sugar"). One long video (8:30–9:15) every other day.
+- 3 Shorts per long video, each a different surprising slice of the same timeline, self-contained, sending viewers to the full video.
+- Thumbnail: one big clear photo-real image of the subject + one huge number/time ("30 DAYS", "24H") + 2–3 words naming the topic.
+- Music: real, calm documentary music (Kevin MacLeod, CC BY — credit line in every description); a different track than the last videos.

@@ -74,3 +74,80 @@ Return JSON: {{"trends": "2-3 sentences", "topics": [{{"title": str, "angle": st
                   'last_trends': res.get('trends'), 'last_added': [t['title'] for t in new]})
     save(ROOT / 'data/scout.json', state)
     print('scout added:', [t['title'] for t in new])
+
+
+# ---- viral adaptation scout (owner, Oct 24): find videos that already went viral and make OUR timeline version of them ----
+VIRAL_SEEDS = ["what happens to your body when you stop", "what happens to your body if you", "what happens if you stop eating",
+               "what happens when you quit", "what happens to your body after", "day by day what happens to your body",
+               "what happens if you don't sleep", "what happens to your body when you eat", "what happens if you drink",
+               "30 days without", "what happens to your brain when", "what happens inside your body when",
+               "hour by hour what happens", "what happens to your body every day you", "what happens if you never"]
+
+def _viral(yt, queries):
+    ids = {}
+    for q in queries:
+        for after in (None, (dt.datetime.now(dt.timezone.utc) - dt.timedelta(days=730)).strftime('%Y-%m-%dT%H:%M:%SZ')):
+            kw = dict(part='snippet', q=q, type='video', order='viewCount', maxResults=25, relevanceLanguage='en')
+            if after: kw['publishedAfter'] = after
+            try:
+                for i in yt.search().list(**kw).execute().get('items', []): ids[i['id']['videoId']] = q
+            except Exception as e: print('search failed', q, e)
+    vids, chans = [], {}
+    keys = list(ids)
+    for k in range(0, len(keys), 50):
+        for v in yt.videos().list(part='snippet,statistics,contentDetails', id=','.join(keys[k:k + 50])).execute().get('items', []):
+            m = re.search(r'(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$', v['contentDetails'].get('duration', 'PT0S'))
+            sec = int(m[1] or 0) * 3600 + int(m[2] or 0) * 60 + int(m[3] or 0)
+            vids.append({'id': v['id'], 'title': v['snippet']['title'], 'channel': v['snippet']['channelTitle'], 'cid': v['snippet']['channelId'],
+                         'views': int(v['statistics'].get('viewCount', 0)), 'minutes': round(sec / 60, 1)})
+    cids = list({v['cid'] for v in vids})
+    for k in range(0, len(cids), 50):
+        for c in yt.channels().list(part='statistics', id=','.join(cids[k:k + 50])).execute().get('items', []):
+            chans[c['id']] = int(c['statistics'].get('subscriberCount', 0) or 0)
+    for v in vids:
+        v['subs'] = chans.get(v.pop('cid'), 0); v['outlier'] = round(v['views'] / max(1000, v['subs']), 1)
+    vids = [v for v in vids if v['views'] >= 200_000]
+    return sorted(vids, key=lambda x: -(x['views'] * min(20, x['outlier']) ** 0.5))
+
+def run_viral(force=False, want=4):
+    topics = load(ROOT / 'data/topics.json')
+    fresh = [t for t in topics if t['status'] in ('todo', 'next') and t.get('format') == 'timeline']
+    if len(fresh) >= want and not force:
+        return
+    from .youtube import client
+    yt = client()
+    state = load(ROOT / 'data/scout.json', {})
+    n = state.get('viral_i', 0)
+    queries = [VIRAL_SEEDS[(n + i) % len(VIRAL_SEEDS)] for i in range(4)]       # 8 searches ≈ 800 quota units
+    vids = _viral(yt, queries)[:80]
+    existing = [t['title'] for t in topics]
+    res = llm.ask_json(f"""You find topics for "Inside Your Body" (English, adults; US/UK/Canada viewers). Our FORMAT for every video:
+"What happens inside your body if/when X", told on a TIMELINE (minutes → hours → days → weeks → months → years) with a glowing
+hologram body whose organs light up. The owner's strategy: take topics that ALREADY went viral on YouTube and make our own version.
+
+Viral videos found (title, channel, views, subscribers, outlier = views / subscribers, minutes):
+{json.dumps(vids, ensure_ascii=False)}
+
+Our existing topics (never repeat or closely duplicate): {json.dumps(existing, ensure_ascii=False)}
+
+Pick the {want + 2} best proven ideas that fit our format (a change over time inside the body — habits, quitting, foods, drinks, sleep,
+fasting, exercise, illness, substances; skip music, pranks, kids, religion, gore, sexual content and dangerous challenges).
+Prefer huge view counts and high outlier scores. Phrase each title the way people SEARCH, broad and clear, in our format, e.g.
+"What Happens to Your Body When You Stop Eating Sugar", "What Happens If You Don't Sleep for 3 Days", "What Happens to Your Body
+When You Drink Coffee Every Day". Not a copy of the original title.
+Return JSON: {{"topics": [{{"title": str, "angle": str, "stamps": "e.g. HOUR 1 > DAY 1 > WEEK 1 > MONTH 1 > YEAR 1",
+"ref_id": str, "ref_title": str, "ref_views": int}}]}}""", max_tokens=5000)
+    low = {t.lower() for t in existing}
+    new = [t for t in res.get('topics', []) if t.get('title') and t['title'].lower() not in low]
+    nid = max([t['id'] for t in topics if isinstance(t.get('id'), int)] + [0]) + 1
+    pos = max([i for i, t in enumerate(topics) if t.get('source') == 'user' and t['status'] != 'done'] + [
+        max([i for i, t in enumerate(topics) if t['status'] == 'done'] + [-1])]) + 1
+    for k, t in enumerate(new):
+        topics.insert(pos + k, {'id': nid + k, 'title': t['title'], 'angle': (t.get('angle') or '') + (' | stamps: ' + t['stamps'] if t.get('stamps') else ''),
+                                'format': 'timeline', 'status': 'todo', 'source': 'viral',
+                                'ref': {'title': t.get('ref_title'), 'views': t.get('ref_views'), 'url': 'https://youtu.be/' + str(t.get('ref_id', ''))}})
+    save(ROOT / 'data/topics.json', topics)
+    state.update({'viral_i': (n + 4) % len(VIRAL_SEEDS), 'viral_last': dt.datetime.utcnow().isoformat(timespec='seconds'),
+                  'viral_added': [t['title'] for t in new]})
+    save(ROOT / 'data/scout.json', state)
+    print('viral scout added:', [t['title'] for t in new])

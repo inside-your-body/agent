@@ -25,7 +25,7 @@ permissions:
 concurrency: episode
 
 env:
-  SHARDS: 7          # 6 parallel parts of the long video + 1 job for the Short
+  SHARDS: 8          # timeline format: 5 parallel parts of the long video + 3 Shorts
 
 jobs:
   build:             # research, script, voice, storyboard, drawings, new animations, render props
@@ -98,7 +98,7 @@ jobs:
     timeout-minutes: 300
     strategy:
       fail-fast: false
-      matrix: {shard: [0, 1, 2, 3, 4, 5, 6]}
+      matrix: {shard: [0, 1, 2, 3, 4, 5, 6, 7]}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

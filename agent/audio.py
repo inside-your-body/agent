@@ -1,7 +1,7 @@
 """Generated music bed (mood per style) + sparse SFX on beats + narration, ducked and loudness-normalised, muxed onto video."""
 import numpy as np, soundfile as sf
 from scipy.signal import butter, sosfilt, fftconvolve, resample_poly
-from .common import ROOT, CFG, load, sh
+from .common import ROOT, CFG, WORK, load, sh
 
 SR = 48000
 SFX = ROOT / 'render/public/sfx'
@@ -163,4 +163,38 @@ def finish(video, ep_dir, kind, style):
     sh(['ffmpeg', '-v', 'error', '-y', '-i', str(video), '-i', str(wav), '-map', '0:v', '-map', '1:a',
         '-af', f'loudnorm=I={lufs}:TP=-1.5:LRA=11', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-ar', '48000',
         '-shortest', '-movflags', '+faststart', str(out)])
+    return out
+
+
+# ---- real music bed (Kevin MacLeod / incompetech.com, CC BY 4.0 -> credit line goes into the description) ----
+MUSIC_LIB = ROOT / 'assets/music'
+TRACKS = {'floating_cities': 'Floating Cities', 'deliberate_thought': 'Deliberate Thought', 'clean_soul': 'Clean Soul',
+          'fluidscape': 'Fluidscape', 'inspired': 'Inspired', 'thinking_music': 'Thinking Music', 'investigations': 'Investigations',
+          'perspectives': 'Perspectives', 'lasting_hope': 'Lasting Hope', 'healing': 'Healing'}
+
+def credit(key):
+    return f'Music: "{TRACKS[key]}" by Kevin MacLeod (incompetech.com), licensed under Creative Commons: By Attribution 4.0 (creativecommons.org/licenses/by/4.0/)'
+
+def pick_track(avoid=()):
+    keys = [k for k in TRACKS if (MUSIC_LIB / f'{k}.mp3').exists()]
+    fresh = [k for k in keys if k not in list(avoid)[-4:]] or keys
+    return fresh[int(rng.integers(len(fresh)))]
+
+def library_music(dur, key):
+    """Track looped with 3 s crossfades to `dur`, RMS-normalised, 2 s fade in / 3 s fade out. Returns mono float array at SR."""
+    tmp = WORK / 'music_cache' / f'{key}.wav'; tmp.parent.mkdir(parents=True, exist_ok=True)
+    if not tmp.exists():
+        sh(['ffmpeg', '-v', 'error', '-y', '-i', str(MUSIC_LIB / f'{key}.mp3'), '-ac', '1', '-ar', str(SR), str(tmp)])
+    x, _ = sf.read(tmp)
+    x = x[int(0.5 * SR):] if len(x) > 2 * SR else x
+    N = int(dur * SR); xf = int(3 * SR); out = np.zeros(N); pos = 0
+    while pos < N:
+        seg = x.copy()
+        if pos > 0: seg[:xf] *= np.linspace(0, 1, xf)
+        seg[-xf:] *= np.linspace(1, 0, xf)
+        place(out, seg, pos / SR)
+        pos += len(x) - xf
+    out /= max(1e-6, np.sqrt(np.mean(out[:min(N, 60 * SR)] ** 2))) / 0.1
+    out[:2 * SR] *= np.linspace(0, 1, 2 * SR)[:len(out[:2 * SR])]
+    out[-3 * SR:] *= np.linspace(1, 0, 3 * SR)[-len(out[-3 * SR:]):]
     return out
