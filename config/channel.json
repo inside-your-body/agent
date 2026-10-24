@@ -49,7 +49,7 @@
   },
   "models": {
     "claude": "claude-sonnet-5-5",
-    "openai_image": "gpt-image-1"
+    "openai_image": "gpt-image-2.5-flare"
   },
   "audio": {
     "target_lufs": -14

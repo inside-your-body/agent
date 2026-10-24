@@ -5,18 +5,66 @@ from .common import CFG
 API = 'https://api.openai.com/v1/images/generations'
 EDIT_API = 'https://api.openai.com/v1/images/edits'
 
+# gpt-image-1 was shut down by OpenAI on 2026-10-23 -> try the current models in order (first that exists wins, remembered)
+MODELS = [m for m in [CFG['models'].get('openai_image')] if m and m != 'gpt-image-1'] + ['gpt-image-2.5-flare', 'gpt-image-2.5-sunburst', 'gpt-image-1.5']
+_OK = {'model': None, 'transparent': True}
+WHITE = ' Plain pure white background (#FFFFFF) all around the subject, nothing else in the background.'
+
+
+def _remove_white(path):
+    """Background removal for models without transparent output: near-white pixels connected to the border become transparent."""
+    import numpy as np
+    from PIL import Image
+    from scipy import ndimage
+    im = Image.open(path).convert('RGBA'); a = np.array(im)
+    white = (a[..., :3].min(axis=2) > 235)
+    lab, _ = ndimage.label(white)
+    border = set(np.unique(np.concatenate([lab[0], lab[-1], lab[:, 0], lab[:, -1]]))) - {0}
+    mask = np.isin(lab, list(border))
+    mask = ndimage.binary_dilation(mask, iterations=1) & (a[..., :3].min(axis=2) > 200)
+    a[..., 3] = np.where(mask, 0, 255)
+    Image.fromarray(a).save(path)
+
+
+def _post(url, transparent, data=None, json_body=None, files=None):
+    """POST to the images API trying models in order. Returns (response_json, used_white_bg)."""
+    models = [_OK['model']] if _OK['model'] else MODELS
+    last = None
+    for m in models:
+        for want_t in ([True, False] if (transparent and _OK['transparent']) else [False]):
+            body = dict(json_body or data or {}); body['model'] = m
+            if transparent and want_t: body['background'] = 'transparent'; body['output_format'] = 'png'
+            else: body.pop('background', None)
+            if transparent and not want_t: body['prompt'] = body['prompt'] + WHITE
+            hdr = {'Authorization': 'Bearer ' + os.environ['OPENAI_API_KEY']}
+            fl = [(k, (n, open(f, 'rb'), t)) for k, (n, f, t) in files] if files else None
+            r = requests.post(url, headers=hdr, data=body if files else None, json=None if files else body, files=fl, timeout=300)
+            if r.ok:
+                _OK['model'] = m
+                if transparent and not want_t: _OK['transparent'] = False
+                return r.json(), transparent and not want_t
+            txt = r.text[:400]; last = txt
+            if 'does not exist' in txt or 'model_not_found' in txt or 'not supported' in txt and 'model' in txt:
+                break                                    # next model
+            if 'background' in txt or 'transparent' in txt or 'output_format' in txt:
+                continue                                 # same model, white background + removal
+            raise RuntimeError(txt)
+    raise RuntimeError('no image model worked: ' + str(last))
+
+
 def gen(prompt, out, size='1024x1024', transparent=False, quality='medium', retries=3):
-    body = {'model': CFG['models']['openai_image'], 'prompt': prompt, 'size': size, 'quality': quality, 'n': 1}
-    if transparent: body['background'] = 'transparent'; body['output_format'] = 'png'
+    body = {'prompt': prompt, 'size': size, 'quality': quality, 'n': 1}
     for a in range(retries):
         try:
-            r = requests.post(API, headers={'Authorization': 'Bearer ' + os.environ['OPENAI_API_KEY']}, json=body, timeout=300)
-            r.raise_for_status()
-            from . import cost; cost.image(r.json().get('usage'), f"{pathlib.Path(out).name} {size} {quality}")
-            pathlib.Path(out).write_bytes(base64.b64decode(r.json()['data'][0]['b64_json']))
+            j, white = _post(API, transparent, json_body=body)
+            from . import cost; cost.image(j.get('usage'), f"{pathlib.Path(out).name} {size} {quality} {_OK['model']}")
+            pathlib.Path(out).write_bytes(base64.b64decode(j['data'][0]['b64_json']))
+            if white: _remove_white(out)
             return out
         except Exception as e:
-            print('image error', e, getattr(e, 'response', None) and e.response.text[:300]); time.sleep(8 * (a + 1))
+            print('image error', str(e)[:300])
+            if 'safety' in str(e): return None
+            time.sleep(8 * (a + 1))
     return None
 
 def illustration(prompt, style_hint, out):
@@ -32,22 +80,24 @@ def thumbnail_art(prompt, out, refs=None, cast_desc='', quality='high'):
     return edit(p, refs or [], out, size='1536x1024', quality=quality)
 
 def edit(prompt, refs, out, size='1536x1024', transparent=False, quality='medium', retries=2):
-    """gpt-image edits endpoint with reference images (keeps the cast consistent). Falls back to plain generation."""
+    """images/edits with reference images (keeps the cast consistent). Falls back to plain generation."""
     refs = [r for r in refs if r and pathlib.Path(r).exists()][:4]
     if refs:
-        data = {'model': CFG['models']['openai_image'], 'prompt': prompt, 'size': size, 'quality': quality, 'n': '1'}
-        if transparent: data['background'] = 'transparent'; data['output_format'] = 'png'
+        data = {'prompt': prompt, 'size': size, 'quality': quality, 'n': '1'}
         for a in range(retries):
             try:
-                files = [('image[]', (pathlib.Path(r).name, open(r, 'rb'), 'image/png')) for r in refs]
-                r = requests.post(EDIT_API, headers={'Authorization': 'Bearer ' + os.environ['OPENAI_API_KEY']}, data=data, files=files, timeout=300)
-                r.raise_for_status()
-                from . import cost; cost.image(r.json().get('usage'), f"{pathlib.Path(out).name} {size} {quality} edit")
-                pathlib.Path(out).write_bytes(base64.b64decode(r.json()['data'][0]['b64_json']))
+                files = [('image[]', (pathlib.Path(r).name, r, 'image/png')) for r in refs]
+                j, white = _post(EDIT_API, transparent, data=data, files=files)
+                from . import cost; cost.image(j.get('usage'), f"{pathlib.Path(out).name} {size} {quality} edit {_OK['model']}")
+                pathlib.Path(out).write_bytes(base64.b64decode(j['data'][0]['b64_json']))
+                if white: _remove_white(out)
                 return out
             except Exception as e:
-                print('image edit error', e, getattr(e, 'response', None) is not None and e.response.text[:300]); time.sleep(8 * (a + 1))
+                print('image edit error', str(e)[:300])
+                if 'safety' in str(e): return None
+                time.sleep(8 * (a + 1))
     return gen(prompt, out, size=size, transparent=transparent, quality=quality)
+
 
 CARTOON = ("2D animation still for a high-end animated science explainer, expressive faces. {style}. "
            "No text, no letters, no numbers, no watermark, not gory.")

@@ -25,12 +25,13 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: python -m agent.pov_flat
+        run: python -m agent.imgtest
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: pov-sample
           path: |
+            work/imgtest/*.png
             work/pov/*.mp4
             work/pov/*.png
             work/cost.json

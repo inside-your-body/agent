@@ -30,8 +30,11 @@ KIT_API = """THE CHANNEL'S PUPPET KIT (import it — characters must come from h
   Draw organs, cells, vessels, molecules, objects YOURSELF with SVG paths in the style pack's look (same outline width/colours) — big and clear."""
 
 CONTRACT = """Write ONE self-contained React component file (TypeScript/TSX) for Remotion 4.
-- Imports allowed ONLY from 'react', 'remotion' (useCurrentFrame, interpolate, spring, Easing, AbsoluteFill, Sequence) and the channel kit
-  ('../kit/Kit', '../kit/Styles'). NO images, NO AI drawings: everything is drawn in code (SVG) — this channel is pure motion graphics.
+- Imports allowed ONLY from 'react', 'remotion' (useCurrentFrame, interpolate, spring, Easing, AbsoluteFill, Sequence, Img, staticFile) and the
+  channel kit ('../kit/Kit', '../kit/Styles'). Everything is drawn in code (SVG) EXCEPT the MAX cut-out when one is provided below:
+  then show it with <Img src={staticFile('ep/…png')} style={{position:'absolute', left, top, height}} /> (width = height × aspect ratio),
+  COMPLETE inside the frame (height ≤ 75% of the canvas, never cropped, no zoom), and make the process visibly happen TO him
+  (particles flying into his nose, a glow in his belly, arrows to his body...). Animate him only by small moves (slide in, bob, shake).
   No files/fonts/URLs, no Math.random, no Date, no window/document, no state/effects/hooks except useCurrentFrame.
 - `export default function Shot(p: {dur: number; w: number; h: number; vertical: boolean; theme: any; words: [string, number][]; text: string})`
   dur = shot length in frames (30 fps), w×h = canvas in px. p.theme.kit = this video's style pack id (see kit).
@@ -100,6 +103,7 @@ def _static_ok(code, allowed=()):
     if 'export default' not in code: return 'missing export default'
     if re.search(r'<text[\s>]', code) or '<KType' in code or '<tspan' in code:
         return 'raw text is not allowed: put words ONLY in <Headline items=...> (one per shot) or <Label>'
+    if 'staticFile(' in code and not allowed: return 'no images in this part'
     if '<Hero' in code or '<Stick' in code: return 'no people in motion parts (people are shown in the MAX character beats): animate the subject itself'
     if code.count('<Headline') > 1: return 'only ONE <Headline> per shot (give it several items instead)'
     if code.count('<Label') > 3: return 'at most 3 <Label>s per shot'
@@ -227,6 +231,7 @@ Canvas: {'1080×1520 vertical' if vertical else '1920×1080'}, duration {dur} fr
 The narrator says: "{sentence}"
 Word timings (word, frame): {json.dumps(words[:40])}
 Storyboard for this part (follow it): {brief}
+{('MAX cut-out you MUST use (the only allowed image): ' + json.dumps(list(assets), ensure_ascii=False)) if assets else 'No images in this part (pure code drawing).'}
 Design it FROM SCRATCH for exactly this moment — a fresh composition and animation that does NOT resemble these other parts
 already designed for this video: {json.dumps(others[-25:], ensure_ascii=False)}
 {('CONTINUITY: this part directly continues the previous part of the same sequence. Start from where it ended (same set, same elements in the same places, same characters) and evolve it — the cut must feel seamless. TEXT RULE: the on-screen words of the previous part must animate OUT (within the first ~12 frames) BEFORE any new word appears in that zone — never draw a new title on top of or next to an old one; only ONE title/headline on screen at a time. Previous part code:' + chr(10) + '```tsx' + chr(10) + before[:9000] + chr(10) + '```') if before else 'This part opens a new sequence: establish its set clearly.'}

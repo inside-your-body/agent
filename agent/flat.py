@@ -16,7 +16,7 @@ from .cutout import trim, touches_edge
 SHEET = ROOT / 'assets/cast/max_sheet.png'
 LIB = ROOT / 'data/library.json'
 NEWLIB = WORK / 'newlib'              # new cut-outs made in this run (carried by the work artifact, merged into the repo at finish)
-MAX_NEW_POSES, MAX_NEW_PROPS = 12, 16
+MAX_NEW_POSES, MAX_NEW_PROPS = 24, 14
 MAX_MOTION = {'long': 24, 'short': 4}
 PALETTE = {'cream': '#F2E1C3', 'sand': '#E8D5B5', 'pink': '#F7D9D0', 'blue': '#DDEBF2', 'mint': '#DDF0E3', 'lilac': '#E9E0F3',
            'peach': '#FBE3CF', 'night': '#1F2A44', 'deep': '#2E1F3B'}
@@ -27,19 +27,22 @@ LOOK = ("Simple flat 2D cartoon exactly in the style of the reference character 
 MAX = ("MAX from the reference sheet (oversized round head, dot eyes, thick expressive eyebrows, messy dark-brown hair, mustard-yellow hoodie, "
        "dark jeans, white sneakers) — keep him EXACTLY the same, full body from the top of his hair to his shoes; exactly ONE MAX in the image. ")
 
-RULES = """VISUAL SYSTEM (POV FLAT): MAX plays "you". For EVERY sentence choose one beat:
-- "max": MAX acts the sentence (pose from the library, or a NEW pose described precisely: body action + facial expression + any small object he holds).
-- "prop": the object/organ the sentence names, as 1-2 simple flat objects (from the library or NEW, e.g. "a glass of water", "a red blood cell").
-- "motion": the PROCESS the sentence explains, as a professional custom motion-graphics animation (e.g. the stone sliding down the
-  narrow ureter and jamming, crystals locking together layer by layer, a heart pumping, acid melting enamel). Use it for every key
-  process and every number/comparison. Never people in motion beats (people = "max" beats).
-Rules: one MAX per image (never two copies of him); about 45% max, 30% motion, 25% prop; never the same pose twice in a row and no pose more than 3 times in a video; vary the
-background colour (cream, sand, pink, blue, mint, lilac, peach; night/deep for night or dramatic moments); "keys" = 1-4 key words
-from the sentence (never the name MAX) (what the viewer must remember; the last one is highlighted); "fx" adds a small code-drawn effect next to MAX
-(pain, shock, sweat, idea, question, zzz, heart, none)."""
+RULES = """VISUAL SYSTEM (POV FLAT): MAX plays "you" — the story HAPPENS TO MAX. For EVERY sentence choose one beat:
+- "max" (about 55%): MAX acts the sentence — every feeling, symptom, action and consequence is shown ON MAX (pose from the library,
+  or a NEW pose described precisely: body action + facial expression + any small object he holds, e.g. "sneezing hard into his elbow",
+  "touching his hot forehead with a thermometer in his mouth, shivering").
+- "motion" (about 30%): the PROCESS the sentence explains as a professional custom motion-graphics animation (e.g. virus particles
+  flying from a sneeze into MAX's nose, the stone sliding down the narrow ureter and jamming, a heart pumping). When the process
+  happens to MAX's body, ALSO give a pose: MAX's cut-out is placed in the animation and the effect happens to him.
+- "prop" (about 15%): a close-up of an object/organ (1-2 simple flat objects from the library or NEW); give a MAX pose too when he
+  holds or reacts to it.
+Rules: one MAX per image (never two copies of him); never the same pose twice in a row, no pose more than 4 times in a video; vary
+the background colour (cream, sand, pink, blue, mint, lilac, peach; night/deep for night or dramatic moments); "keys" = 1-4 key words
+from the sentence (never the name MAX; what the viewer must remember; the last one is highlighted); "fx" adds a small code-drawn
+effect next to MAX (pain, shock, sweat, idea, question, zzz, heart, none)."""
 
 SCHEMA = """{"beats": [{"scene_id": str, "at": sentence index in the scene (int), "type": "max"|"prop"|"motion",
-  "pose": library pose name or null, "new_pose": "precise description" or null,
+  "pose": library pose name or null, "new_pose": "precise description of a new MAX pose" or null,
   "props": [library prop name or "NEW: precise description"], "keys": [str], "fx": str, "bg": colour name,
   "design": "for motion beats: what the animation shows and how it moves, synced to the words"}]}"""
 
@@ -79,6 +82,11 @@ Return JSON exactly: {SCHEMA}""", max_tokens=16000)
     return _apply(ep, kind, out, lib)
 
 
+def _words(s):
+    import re
+    return [w for w in re.findall(r'[a-z]+', str(s).lower()) if len(w) > 3]
+
+
 def _slug(s, n=4):
     import re
     return '_'.join(re.findall(r'[a-z]+', s.lower())[:n]) or 'x'
@@ -104,22 +112,30 @@ def _apply(ep, kind, raw, lib):
             params = {'bg': PALETTE[bg], 'ink': '#FFFFFF' if bg in DARK else '#2B2B2B', 'keys': keys, 'fx': b.get('fx') or 'none',
                       'side': 'left' if n % 2 == 0 else 'right', 'cast': [], 'props': []}
             gid = f"a_{'v' if kind == 'short' else 'l'}{n:02d}"; n += 1
-            if t == 'motion':
-                n_motion += 1
-                beats.append({'at': at, 'kind': 'gen', 'see': b.get('design') or sent, 'design': b.get('design') or sent, 'text': ' '.join(keys),
-                              'act': {'see': b.get('design') or sent, 'motion': b.get('design') or sent, 'scene': gid, 'text': ' '.join(keys)},
-                              'params': {'gen': gid, 'flat_fallback': params}})
-                continue
-            if t == 'max':
+            def want_pose():
+                nonlocal last_pose
                 pose = b.get('pose') if b.get('pose') in lib['poses'] else None
                 if not pose and b.get('new_pose'):
-                    pose = 'max_' + _slug(b['new_pose'])
-                    if pose not in lib['poses'] and len(req['poses']) < MAX_NEW_POSES: req['poses'][pose] = b['new_pose']
-                    elif pose not in lib['poses']: pose = None
-                if pose and (pose == last_pose or pose_count.get(pose, 0) >= 3):
-                    pose = next((p for p in lib['poses'] if p != last_pose and pose_count.get(p, 0) < 3), None)
-                if pose:
-                    params['cast'] = [pose]; last_pose = pose; pose_count[pose] = pose_count.get(pose, 0) + 1
+                    pose = 'max_' + _slug(b['new_pose'], 5)
+                    if pose not in lib['poses'] and pose not in req['poses']:
+                        if len(req['poses']) < MAX_NEW_POSES: req['poses'][pose] = b['new_pose']
+                        else: pose = None
+                if pose and (pose == last_pose or pose_count.get(pose, 0) >= 4):
+                    pose = None
+                if pose: last_pose = pose; pose_count[pose] = pose_count.get(pose, 0) + 1
+                return pose
+            params['want'] = b.get('new_pose') or sent
+            if t == 'motion':
+                n_motion += 1
+                gp = want_pose() if (b.get('pose') or b.get('new_pose')) else None
+                if gp: params['gen_cast'] = gp
+                beats.append({'at': at, 'kind': 'gen', 'see': b.get('design') or sent, 'design': b.get('design') or sent, 'text': ' '.join(keys),
+                              'act': {'see': b.get('design') or sent, 'motion': b.get('design') or sent, 'scene': gid, 'text': ' '.join(keys)},
+                              'params': {'gen': gid, 'flat_fallback': params, 'gen_cast': params.pop('gen_cast', None)}})
+                continue
+            if t == 'max' or b.get('pose') or b.get('new_pose'):
+                pose = want_pose()
+                if pose: params['cast'] = [pose]
             for p in (b.get('props') or [])[:2]:
                 p = str(p)
                 if p in lib['props']: params['props'].append(p)
@@ -170,10 +186,31 @@ def resolve(ep, ep_dir):
                 shutil.copy(f, out / f'{kind}_{name}.png')
                 items.append({'src': f'ep/{kind}_{name}.png', 'ar': lib[kind][name]['ar']})
             params[key] = items
+    have = [k for k in lib['poses'] if _file('poses', k)]
+    used = {}
+    def best_pose(want, avoid):
+        ws = set(_words(want))
+        cands = [k for k in have if k != avoid] or have
+        if not cands: return None
+        return max(cands, key=lambda k: (len(ws & set(_words(lib['poses'][k]['desc'] + ' ' + k))) - 0.6 * used.get(k, 0)))
+    last = None
     for sc in ep['scenes'] + [ep['short']]:
         for b in sc.get('beats', []):
-            if b.get('kind') == 'flat': conv(b['params'])
-            elif (b.get('params') or {}).get('flat_fallback'): conv(b['params']['flat_fallback'])
+            par = b['params'] if b.get('kind') == 'flat' else (b.get('params') or {}).get('flat_fallback')
+            if par is None: continue
+            conv(par)
+            if not par.get('cast') and (b.get('kind') != 'flat' or not par.get('props')):
+                fb = best_pose(par.get('want') or ' '.join(par.get('keys', [])), last)     # MAX is (almost) always on screen
+                if fb:
+                    par['cast'] = [fb]; conv(par)
+            if par.get('cast'):
+                last = par['cast'][0]['src'].split('poses_')[-1][:-4]; used[last] = used.get(last, 0) + 1
+            gc = (b.get('params') or {}).get('gen_cast')
+            if b.get('kind') == 'gen' and gc and _file('poses', gc) and gc in lib['poses']:
+                shutil.copy(_file('poses', gc), out / f'poses_{gc}.png')
+                ar = lib['poses'][gc]['ar']
+                b.setdefault('act', {})['assets'] = [{'file': f'ep/poses_{gc}.png', 'type': f'MAX character cut-out, transparent PNG, aspect ratio w/h = {ar}',
+                                                      'what': 'MAX (the viewer, "you"): ' + lib['poses'][gc]['desc']}]
 
 
 def merge_library():

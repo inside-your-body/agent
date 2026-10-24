@@ -119,7 +119,8 @@ def run_episode(a, topic, ep_dir):
         save(ep_dir / 'flat_requests.json', reqs)
         ep['flat_planned'] = True; save(ep_dir / 'episode.json', ep)
     # 3c. only the cut-outs the library does not have yet (reused across videos)
-    flat.make_assets(load(ep_dir / 'flat_requests.json', {'poses': {}, 'props': {}}), ep_dir)
+    if a.stage != 'finish':          # assets are made once, in the build stage (never re-tried at finish)
+        flat.make_assets(load(ep_dir / 'flat_requests.json', {'poses': {}, 'props': {}}), ep_dir)
     flat.resolve(ep, ep_dir); save(ep_dir / 'episode.json', ep)
     # 3d. a brand-new motion-graphics animation for every 'motion' beat; QA'd + repaired (fallback = a flat beat)
     if not ep.get('gen_done'):
