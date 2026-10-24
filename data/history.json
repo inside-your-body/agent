@@ -1,46 +1,101 @@
 {
-  "episodes": [
-    {
-      "n": 1,
-      "topic": "What Smoking Does to Your Body",
-      "video_id": "jLo5jFDMq_8",
-      "style": "cream-paper-lineart",
-      "short_style": "neon-bio-hud",
-      "built_at": "2026-10-16T12:00:00"
-    },
-    {
-      "n": 2,
-      "topic": "How Kidney Stones Form, Crystal by Crystal",
-      "video_id": "f6VqKJ2bdL0",
-      "short_id": "boCLjYg_7ZQ",
-      "style": "paper-ink+tint",
-      "short_style": "mono-red+tint",
-      "kit": "line",
-      "publish_at": "2026-10-20T20:00:00Z",
-      "built_at": "2026-10-20T10:02:32"
-    },
-    {
-      "n": 3,
-      "topic": "How Does a Healthy Tooth Rot?",
-      "video_id": "KwX-lQED4Yw",
-      "short_id": "g88dvJK1Ts4",
-      "style": "playful-cartoon+tint",
-      "short_style": "bold-pop+tint",
-      "kit": "flat",
-      "publish_at": "2026-10-22T20:00:00Z",
-      "built_at": "2026-10-22T19:00:00"
-    }
-  ],
-  "used_styles": [
-    "cream-paper-lineart",
-    "neon-bio-hud",
-    "paper-ink+tint",
-    "mono-red+tint",
-    "playful-cartoon+tint",
-    "bold-pop+tint"
-  ],
-  "used_kits": [
-    "line",
-    "flat"
-  ]
+ "episodes": [
+  {
+   "n": 1,
+   "topic": "What Smoking Does to Your Body",
+   "video_id": "jLo5jFDMq_8",
+   "style": "cream-paper-lineart",
+   "short_style": "neon-bio-hud",
+   "built_at": "2026-10-16T12:00:00"
+  },
+  {
+   "n": 2,
+   "topic": "How Kidney Stones Form, Crystal by Crystal",
+   "video_id": "f6VqKJ2bdL0",
+   "short_id": "boCLjYg_7ZQ",
+   "style": "paper-ink+tint",
+   "short_style": "mono-red+tint",
+   "kit": "line",
+   "publish_at": "2026-10-20T20:00:00Z",
+   "built_at": "2026-10-20T10:02:32"
+  },
+  {
+   "n": 3,
+   "topic": "How Does a Healthy Tooth Rot?",
+   "video_id": "KwX-lQED4Yw",
+   "short_id": "g88dvJK1Ts4",
+   "style": "playful-cartoon+tint",
+   "short_style": "bold-pop+tint",
+   "kit": "flat",
+   "publish_at": "2026-10-22T20:00:00Z",
+   "built_at": "2026-10-22T19:00:00"
+  },
+  {
+   "topic": "How Does the Flu Spread From Person to Person?",
+   "video_id": "0hiYCbUQxI8",
+   "short_id": "mF-aSxWWgDE",
+   "style": "neon-hud+tint",
+   "short_style": "clinical-clean+tint",
+   "publish_at": "2026-10-24T20:00:00Z",
+   "kit": "maxflat",
+   "lang": {
+    "name": "Contagion Trace Surveillance",
+    "art_style": "Max Flat — the channel look: flat colour backgrounds, thick dark outlines, flat fills, the signature character MAX — everything drawn in code with the channel puppet kit, no painted images",
+    "shape_language": "Technical and geometric: people are faceless capsule-and-circle silhouettes, lungs and airways built from smooth vector tubes, virus particles as spiked circles; rooms shown as top-down floorplan wireframes with hotspot rings marking infection zones.",
+    "line_quality": "Thin, precise, uniform technical strokes that trace on like plotted paths, with dashed connector lines linking infected to exposed people and small reticle brackets around subjects.",
+    "texture": "Faint drifting scan-grid, subtle CRT flicker and fine noise over deep charcoal; soft green glow bloom on highlighted elements.",
+    "motion_personality": "Mechanical and eased: outlines draw on, hotspot dots ripple outward in concentric pulses, counters tick up with ease-out, data labels type on, and scenes change with scan-line wipes.",
+    "camera": "Slow push-ins and parallax drift over layered top-down maps and room plans, occasional split-screen comparing transmission routes (cough, touch, air), and tracking-shot zooms from a room down to a single droplet.",
+    "typography_feel": "Wide-tracked all-caps monospaced labels typed on like telemetry, paired with large condensed numerals for statistics that count up, with one key word per caption underlined in amber."
+   },
+   "short_lang": {
+    "name": "Soft Sneeze Storybook",
+    "art_style": "Max Flat — the channel look: flat colour backgrounds, thick dark outlines, flat fills, the signature character MAX — everything drawn in code with the channel puppet kit, no painted images",
+    "shape_language": "Blobby and rounded: people are pill-bodied characters with dot eyes, droplets are plump teardrops, virus particles are soft scalloped circles, lungs and rooms are built from pillowy rounded rectangles and circles.",
+    "line_quality": "Mostly no outlines; occasional soft rounded-cap strokes in navy for arrows, motion puffs and dotted droplet trails showing the path from sneezer to neighbor.",
+    "texture": "Light riso paper grain, subtle halftone dots in shadows, slight ink misregistration on colour layers, and a pale dotted background pattern.",
+    "motion_personality": "Bouncy and friendly: characters squash and stretch, droplets pop out with overshoot and drift in lazy arcs, shapes morph between scenes, idle breathing and blinking loops keep everything alive.",
+    "camera": "Mostly flat front-on 2D vertical framing with gentle parallax between foreground and background layers, quick punch-in zooms on key moments like a sneeze or a handshake, and simple split panels comparing cough, touch and shared air.",
+    "typography_feel": "Large rounded Poppins semibold sentence-case captions in navy, a few words per beat, key word highlighted in a coral blob behind it, bouncing in with light overshoot."
+   },
+   "built_at": "2026-10-24T15:54:21"
+  }
+ ],
+ "used_styles": [
+  "cream-paper-lineart",
+  "neon-bio-hud",
+  "paper-ink+tint",
+  "mono-red+tint",
+  "playful-cartoon+tint",
+  "bold-pop+tint",
+  "neon-hud+tint",
+  "clinical-clean+tint"
+ ],
+ "used_kits": [
+  "line",
+  "flat",
+  "maxflat"
+ ],
+ "used_langs": [
+  {
+   "name": "Contagion Trace Surveillance",
+   "art_style": "Max Flat — the channel look: flat colour backgrounds, thick dark outlines, flat fills, the signature character MAX — everything drawn in code with the channel puppet kit, no painted images",
+   "shape_language": "Technical and geometric: people are faceless capsule-and-circle silhouettes, lungs and airways built from smooth vector tubes, virus particles as spiked circles; rooms shown as top-down floorplan wireframes with hotspot rings marking infection zones.",
+   "line_quality": "Thin, precise, uniform technical strokes that trace on like plotted paths, with dashed connector lines linking infected to exposed people and small reticle brackets around subjects.",
+   "texture": "Faint drifting scan-grid, subtle CRT flicker and fine noise over deep charcoal; soft green glow bloom on highlighted elements.",
+   "motion_personality": "Mechanical and eased: outlines draw on, hotspot dots ripple outward in concentric pulses, counters tick up with ease-out, data labels type on, and scenes change with scan-line wipes.",
+   "camera": "Slow push-ins and parallax drift over layered top-down maps and room plans, occasional split-screen comparing transmission routes (cough, touch, air), and tracking-shot zooms from a room down to a single droplet.",
+   "typography_feel": "Wide-tracked all-caps monospaced labels typed on like telemetry, paired with large condensed numerals for statistics that count up, with one key word per caption underlined in amber."
+  },
+  {
+   "name": "Soft Sneeze Storybook",
+   "art_style": "Max Flat — the channel look: flat colour backgrounds, thick dark outlines, flat fills, the signature character MAX — everything drawn in code with the channel puppet kit, no painted images",
+   "shape_language": "Blobby and rounded: people are pill-bodied characters with dot eyes, droplets are plump teardrops, virus particles are soft scalloped circles, lungs and rooms are built from pillowy rounded rectangles and circles.",
+   "line_quality": "Mostly no outlines; occasional soft rounded-cap strokes in navy for arrows, motion puffs and dotted droplet trails showing the path from sneezer to neighbor.",
+   "texture": "Light riso paper grain, subtle halftone dots in shadows, slight ink misregistration on colour layers, and a pale dotted background pattern.",
+   "motion_personality": "Bouncy and friendly: characters squash and stretch, droplets pop out with overshoot and drift in lazy arcs, shapes morph between scenes, idle breathing and blinking loops keep everything alive.",
+   "camera": "Mostly flat front-on 2D vertical framing with gentle parallax between foreground and background layers, quick punch-in zooms on key moments like a sneeze or a handshake, and simple split panels comparing cough, touch and shared air.",
+   "typography_feel": "Large rounded Poppins semibold sentence-case captions in navy, a few words per beat, key word highlighted in a coral blob behind it, bouncing in with light overshoot."
+  }
+ ]
 }
