@@ -244,8 +244,8 @@ Lines: {json.dumps([l['text'] for l in s['lines']], ensure_ascii=False)}""", max
 
 # ---------------- thumbnails ----------------
 THUMB_STYLE = """Style (the channel's approved look, owner's reference): dark navy-blue background with a soft blue glow; one big, clear,
-photo-real / glossy 3D medical illustration of the subject with dramatic studio lighting and a glowing rim (e.g. a tooth going from
-healthy -> decaying -> rotten with bright orange arrows between the stages); HUGE bold condensed sans-serif headline at the top in
+photo-real / glossy 3D medical illustration of THIS video's subject with dramatic studio lighting and a glowing rim (often the
+organ or object changing from before -> after, with bright orange arrows between the stages); HUGE bold condensed sans-serif headline at the top in
 white with the key word in bright yellow, thick black outline/shadow, perfectly spelled; high contrast, very clean, easy to read on a phone."""
 
 
