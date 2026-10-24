@@ -54,7 +54,7 @@ export const BigStamp: React.FC<{text: string; at: number; f: number; x: number;
 export const Words: React.FC<{words: string[]; at: number; f: number; x: number; y: number; size?: number; accent?: number; maxW?: number}> = ({words, at, f, x, y, size = 78, accent = -1, maxW = 820}) => {
   let cx = x, cy = y;
   return <g>{words.map((w, i) => {
-    const ww = w.length * size * 0.52;
+    const ww = w.length * size * 0.45;
     if (cx > x && cx + ww > x + maxW) { cx = x; cy += size * 1.1; }
     const t0 = at + i * 5; const p = sp(f, t0, 12, 200);
     const el = f >= t0 && <text key={i} x={cx} y={cy + (1 - p) * 40} fontFamily="F_anton" fontSize={size} opacity={Math.min(1, p * 1.6)}
@@ -188,7 +188,7 @@ export const SugarTimeline: React.FC<TLProps> = ({seg}) => {
           {[[-50, 10], [10, -10], [50, 30], [-10, 40]].map(([x, y], i) => <circle key={i} cx={x} cy={y} r={20 * interpolate(f, [at + 20, at + 150], [1, 0.35], cl)} fill={TL.gold} stroke="#fff" strokeWidth={3} />)}
         </g>
         <Words words={['LIVER', 'FAT', 'STARTS', 'TO', 'SHRINK']} at={at + 40} f={f} x={PX + 40} y={760} size={70} />
-        <text x={PX + 40} y={820} fontFamily="F_inter" fontWeight={700} fontSize={26} letterSpacing={3} fill={TL.mute}>STUDY: 10 DAYS OF LOW FRUCTOSE</text>
+        <text x={PX + 40} y={880} fontFamily="F_inter" fontWeight={700} fontSize={26} letterSpacing={3} fill={TL.mute}>STUDY: 10 DAYS OF LOW FRUCTOSE</text>
       </g>}
       {/* line 4: week 3 — taste resets */}
       {cur === 4 && <g>

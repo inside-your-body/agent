@@ -33,6 +33,8 @@ jobs:
           path: |
             work/imgtest/*.png
             work/pov/*.mp4
+            work/pov/*.wav
+            work/pov/*.json
             work/pov/*.png
             work/cost.json
           retention-days: 7
