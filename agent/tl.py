@@ -8,7 +8,7 @@ from .common import ROOT, WORK, CFG, load, save, sh
 from . import llm, tts
 
 FPS = 30
-N_SHORTS = 3
+N_SHORTS = 2
 ICONS = ['apple', 'bed', 'bone', 'bottle', 'brain', 'check', 'cigarette', 'clock', 'coffee', 'cross', 'dna', 'doctor', 'eye', 'food', 'glass', 'heart',
          'kidney', 'liver', 'lungs', 'money', 'moon', 'phone', 'pill', 'run', 'salt', 'scale', 'shield', 'sit', 'smoke', 'stomach', 'stress', 'sugar',
          'sun', 'syringe', 'thermometer', 'tooth', 'virus', 'warning', 'water',

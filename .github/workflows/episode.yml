@@ -25,7 +25,7 @@ permissions:
 concurrency: episode
 
 env:
-  SHARDS: 8          # timeline format: 5 parallel parts of the long video + 3 Shorts
+  SHARDS: 8          # timeline format: 6 parallel parts of the long video + 2 Shorts
 
 jobs:
   build:             # research, script, voice, storyboard, drawings, new animations, render props
