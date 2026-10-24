@@ -64,6 +64,15 @@ def _repair(txt):
     for cand in (t, re.sub(r',\s*([}\]])', r'\1', re.sub(r'(?m)^\s*//.*$|(?<=[,\[{])\s*//[^\n]*', '', t))):
         try: return json.loads(cand)
         except Exception as e: err = e
+    # several JSON objects (e.g. the model 'corrects' itself): keep the biggest valid one
+    dec, objs, k = json.JSONDecoder(), [], 0
+    while True:
+        k = txt.find('{', k)
+        if k < 0: break
+        try:
+            o, end = dec.raw_decode(txt, k); objs.append(o); k = end
+        except Exception: k += 1
+    if objs: return max(objs, key=lambda o: len(json.dumps(o)))
     print('json parse error', err)
     return None
 

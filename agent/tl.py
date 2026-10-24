@@ -102,7 +102,15 @@ Return ONLY {{"scenes": [{{"title": str, "stage": str|null, "organ": str, "lines
 
 def board_lines(lines, context, recent=()):
     """Storyboard: one visual widget + 2-4 key words (+ organ) per sentence."""
-    out = llm.ask_json(f"""You storyboard an "Inside Your Body" video: a hologram body (one organ lights up) + one code-drawn widget + 2-4 big
+    try: out = _board_ask(lines, context)
+    except Exception as e:
+        print('storyboard failed, fallback visuals:', e); out = {}
+    got = {b.get('i'): b for b in out.get('beats', []) if isinstance(b, dict)}
+    return [got.get(i, {}) for i in range(len(lines))]
+
+
+def _board_ask(lines, context):
+    return llm.ask_json(f"""You storyboard an "Inside Your Body" video: a hologram body (one organ lights up) + one code-drawn widget + 2-4 big
 key words per sentence. Video: {context}
 {VISUALS}
 Rules: the widget must literally show what the sentence says (its number, object, organ, change); use the sentence's real numbers;
@@ -110,8 +118,6 @@ Rules: the widget must literally show what the sentence says (its number, object
 vary the widget types; labels are short (≤30 chars).
 Sentences (index: text): {json.dumps({i: (t['text'] if isinstance(t, dict) else t) for i, t in enumerate(lines)}, ensure_ascii=False)}
 Return JSON: {{"beats": [{{"i": int, "organ": ORGAN, "visual": {{...}}, "words": [str]}}]}} — one per sentence, same order.""", max_tokens=16000)
-    got = {b.get('i'): b for b in out.get('beats', []) if isinstance(b, dict)}
-    return [got.get(i, {}) for i in range(len(lines))]
 
 
 def _fix_visual(v, words, organ):
