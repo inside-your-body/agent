@@ -1,4 +1,4 @@
-name: POV sample (30 s test)
+name: Format sample (60 s test)
 
 on:
   workflow_dispatch:
@@ -25,7 +25,7 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: python -m agent.imgtest
+        run: python -m agent.tl_sample
       - uses: actions/upload-artifact@v4
         if: always()
         with:

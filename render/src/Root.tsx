@@ -12,6 +12,7 @@ import {Pov, povMeta} from './Pov';
 import {PovFlat, povFlatMeta} from './PovFlat';
 import {ThumbMax} from './ThumbMax';
 import {MaxDemo, MaxSheetDemo} from './MaxDemo';
+import {SugarTimeline, sugarMeta} from './Timeline';
 import {StyleDemo, Thumb, DEMO_ORDER, DEMO_LEN} from './StyleDemo';
 
 const demo: Props = {kind: 'long', fps: 30, frames: 150, channel: 'Inside Your Body', title: 'demo', words: [],
@@ -39,6 +40,7 @@ export const Root: React.FC = () => (
     <Composition id="ThumbMax" component={ThumbMax as any} width={1920} height={1080} fps={30} durationInFrames={1} defaultProps={{line1: "KIDNEY STONES", line2: "HOW THEY GROW SILENTLY", bg: "#0F2A4A", glow: "#2F7DD1"}} />
     <Composition id="MaxDemo" component={MaxDemo} width={1920} height={1080} fps={30} durationInFrames={480} />
     <Composition id="MaxSheetDemo" component={MaxSheetDemo} width={1920} height={1080} fps={30} durationInFrames={1} />
+    <Composition id="SugarTimeline" component={SugarTimeline as any} width={1920} height={1080} fps={30} durationInFrames={1500} calculateMetadata={sugarMeta as any} defaultProps={{seg: [], frames: 1500}} />
     <Composition id="ThumbPro" component={ThumbPro} width={1920} height={1080} fps={30} durationInFrames={1} />
     <Composition id="GenThumb" component={GenThumb as any} width={1920} height={1080} fps={30} durationInFrames={1} defaultProps={{id: 't_main', kit: 'flat'}} />
     <Composition id="ThumbT" component={ThumbT as any} width={1920} height={1080} fps={30} durationInFrames={1} defaultProps={{lines: ['KIDNEY STONE', 'WORST PAIN', 'EVER?'], title: 'kidney stone'}} />
