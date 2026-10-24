@@ -4,9 +4,9 @@ from . import images, flat
 
 def main():
     out = WORK / 'imgtest'; out.mkdir(parents=True, exist_ok=True)
-    desc = 'MAX sneezing into his elbow, eyes squeezed shut.'
-    tests = [('fullsheet', [str(flat.SHEET)]), ('ref_half', [str(ROOT / 'assets/cast/max_ref.png')]), ('noref', [])]
-    for name, refs in tests:
+    tests = [('sneeze', [str(flat.SHEET)], 'MAX sneezing into his elbow, eyes squeezed shut.'), ('pain', [str(flat.SHEET)], 'MAX doubled over holding his side in sharp pain.'),
+             ('half_pain', [str(ROOT / 'assets/cast/max_ref.png')], 'MAX doubled over holding his side in sharp pain.')]
+    for name, refs, desc in tests:
         for model in ['gpt-image-2.5-flare', 'gpt-image-2.5-sunburst', 'gpt-image-1.5']:
             images._OK['model'] = model; images._OK['transparent'] = True
             p = out / f'{name}_{model}.png'

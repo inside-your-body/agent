@@ -22,8 +22,8 @@ PALETTE = {'cream': '#F2E1C3', 'sand': '#E8D5B5', 'pink': '#F7D9D0', 'blue': '#D
            'peach': '#FBE3CF', 'night': '#1F2A44', 'deep': '#2E1F3B'}
 DARK = {'night', 'deep'}
 LOOK = ("Simple flat 2D cartoon exactly in the style of the reference character sheet: thick clean dark outlines, flat colours, minimal shading. "
-        "Fully transparent background: no backdrop, no floor, no shadow, no frame, no text. The WHOLE subject is inside the image with generous "
-        "empty margin on every side (nothing touches or is cut by the image edges).")
+        "Fully transparent background: no backdrop, no floor, no shadow, no frame, no text. The entire figure fits inside the picture with "
+        "generous empty margin on every side.")
 MAX = ("MAX from the reference sheet (oversized round head, dot eyes, thick expressive eyebrows, messy dark-brown hair, mustard-yellow hoodie, "
        "dark jeans, white sneakers) — keep him EXACTLY the same, full body from the top of his hair to his shoes; exactly ONE MAX in the image. ")
 
@@ -160,7 +160,7 @@ def make_assets(req, ep_dir):
         raw = ep_dir / f'raw_{name}.png'
         for attempt in range(2):
             prompt = LOOK + ' ' + (MAX + 'MAX ' + desc if kind == 'poses' else 'Object: ' + desc) + \
-                     (' Leave even more empty space around it.' if attempt else '')
+                     (' Make the figure smaller in the picture with even more empty space around it.' if attempt else '')
             images.edit(prompt, [str(SHEET)], raw, size='1024x1536' if kind == 'poses' else '1024x1024', transparent=True, quality='medium')
             if raw.exists() and not touches_edge(raw): break
         if not raw.exists(): return None

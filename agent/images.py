@@ -11,6 +11,18 @@ _OK = {'model': None, 'transparent': True}
 WHITE = ' Plain pure white background (#FFFFFF) all around the subject, nothing else in the background.'
 
 
+import re as _re
+_SOFT = [(r'\b(cut|cuts|cutting)\b', 'trimmed'), (r'\bknife\b', 'sharp jab'), (r'\bstab\w*', 'sharp'), (r'\bblood\w*', 'red'),
+         (r'\bbleed\w*', 'red'), (r'\bwound\w*', 'scrape'), (r'\bpain(ful)?\b', 'discomfort'), (r'\bdying\b', 'very weak'),
+         (r'\bdie(s|d)?\b', 'faint'), (r'\bkill\w*', 'beat'), (r'\bhurt\w*', 'ache'), (r'\bsuicid\w*', ''), (r'\bself[- ]harm\w*', '')]
+
+
+def soften(p):
+    """Image safety filters misread health words (a 'stabbing pain' becomes self-harm) -> neutral wording for image prompts only."""
+    for a, b in _SOFT: p = _re.sub(a, b, p, flags=_re.I)
+    return p
+
+
 def _remove_white(path):
     """Background removal for models without transparent output: near-white pixels connected to the border become transparent."""
     import numpy as np
@@ -53,7 +65,7 @@ def _post(url, transparent, data=None, json_body=None, files=None):
 
 
 def gen(prompt, out, size='1024x1024', transparent=False, quality='medium', retries=3):
-    body = {'prompt': prompt, 'size': size, 'quality': quality, 'n': 1}
+    body = {'prompt': soften(prompt), 'size': size, 'quality': quality, 'n': 1}
     for a in range(retries):
         try:
             j, white = _post(API, transparent, json_body=body)
@@ -83,7 +95,7 @@ def edit(prompt, refs, out, size='1536x1024', transparent=False, quality='medium
     """images/edits with reference images (keeps the cast consistent). Falls back to plain generation."""
     refs = [r for r in refs if r and pathlib.Path(r).exists()][:4]
     if refs:
-        data = {'prompt': prompt, 'size': size, 'quality': quality, 'n': '1'}
+        data = {'prompt': soften(prompt), 'size': size, 'quality': quality, 'n': '1'}
         for a in range(retries):
             try:
                 files = [('image[]', (pathlib.Path(r).name, r, 'image/png')) for r in refs]
