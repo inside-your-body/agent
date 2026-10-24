@@ -59,6 +59,36 @@
     "typography_feel": "Large rounded Poppins semibold sentence-case captions in navy, a few words per beat, key word highlighted in a coral blob behind it, bouncing in with light overshoot."
    },
    "built_at": "2026-10-24T15:54:21"
+  },
+  {
+   "topic": "How Does the Flu Spread From Person to Person?",
+   "video_id": "MzNC0Kng0p0",
+   "short_id": "f5240o13chc",
+   "style": "paper-ink+tint",
+   "short_style": "mono-red",
+   "publish_at": "2026-10-24T20:00:00Z",
+   "kit": "maxflat",
+   "lang": {
+    "name": "Field Notebook Cartography",
+    "art_style": "Max Flat — the channel look: flat colour backgrounds, thick dark outlines, flat fills, the signature character MAX — everything drawn in code with the channel puppet kit, no painted images",
+    "shape_language": "Hand-cut and observational: people drawn as simple gesture-sketch figures with loose limbs, droplets as small ink teardrop clusters, virus as a fine spiked sphere with stippled interior, rooms and towns as inked map plans with contour lines; spread shown as orange wash blooming from one figure outward.",
+    "line_quality": "Variable-width dip-pen ink lines, slightly wobbly, with cross-hatching for shadow and thin dotted trail lines for transmission paths.",
+    "texture": "Visible paper fibre and foxing stains, faint ink bleed, coffee-ring smudges, subtle fold creases and tiny stipple dots.",
+    "motion_personality": "Slow and handmade: lines draw on as if being inked, orange washes soak outward like watercolour spreading, stamps thump down with a small settle, pages and map tabs wipe across like turning sheets.",
+    "camera": "Slow cinematic push-ins and drone-style drifts over an inked tabletop map, parallax between paper layers, occasional pull-back to reveal a whole town with the infection wash spreading, and notebook-page cutaways with pinned labels.",
+    "typography_feel": "Small widely letter-spaced serif caps for lead-in lines, a heavy high-contrast serif for key words that slides in, and handwritten-style annotations with thin pen leader lines drawing to the drawing parts."
+   },
+   "short_lang": {
+    "name": "Paper Cutout Outbreak",
+    "art_style": "Max Flat — the channel look: flat colour backgrounds, thick dark outlines, flat fills, the signature character MAX — everything drawn in code with the channel puppet kit, no painted images",
+    "shape_language": "Hand-cut, angular-yet-chunky scissor shapes: people are mismatched collage figures with oversized heads and mitten hands, droplets are red cut-paper teardrops, virus particles are jagged spiky starbursts, and rooms are simple cardboard-box stage sets with peel-off flaps.",
+    "line_quality": "Thick, uneven black marker outlines with deliberate print misregistration, plus torn white paper edges around cut-outs and the occasional hand-scribbled arrow.",
+    "texture": "Halftone dot shading, shifting film grain each frame, slight paper creases and sticker drop-shadows, with static noise flashes between scenes.",
+    "motion_personality": "Jittery stop-motion at 8-12fps: cut-outs pop in with snappy scale-bounces, sneeze droplets burst out in stepped jumps, the starburst pulses and rotates in discrete steps, and elements slide and peek in from the frame edges.",
+    "camera": "Flat, front-on tabletop view with abrupt punch-in cuts on key moments (sneeze, handshake, shared doorknob), occasional split-screen panels, and TV-static glitch cuts rather than smooth moves.",
+    "typography_feel": "Heavy condensed all-caps headline words as cut-out sticker lettering, slightly rotated and misaligned, each snapping in on a beat. Typewriter-mono captions underneath, with one key word on a red or yellow label strip."
+   },
+   "built_at": "2026-10-24T18:05:35"
   }
  ],
  "used_styles": [
@@ -69,11 +99,14 @@
   "playful-cartoon+tint",
   "bold-pop+tint",
   "neon-hud+tint",
-  "clinical-clean+tint"
+  "clinical-clean+tint",
+  "paper-ink+tint",
+  "mono-red"
  ],
  "used_kits": [
   "line",
   "flat",
+  "maxflat",
   "maxflat"
  ],
  "used_langs": [
@@ -96,6 +129,26 @@
    "motion_personality": "Bouncy and friendly: characters squash and stretch, droplets pop out with overshoot and drift in lazy arcs, shapes morph between scenes, idle breathing and blinking loops keep everything alive.",
    "camera": "Mostly flat front-on 2D vertical framing with gentle parallax between foreground and background layers, quick punch-in zooms on key moments like a sneeze or a handshake, and simple split panels comparing cough, touch and shared air.",
    "typography_feel": "Large rounded Poppins semibold sentence-case captions in navy, a few words per beat, key word highlighted in a coral blob behind it, bouncing in with light overshoot."
+  },
+  {
+   "name": "Field Notebook Cartography",
+   "art_style": "Max Flat — the channel look: flat colour backgrounds, thick dark outlines, flat fills, the signature character MAX — everything drawn in code with the channel puppet kit, no painted images",
+   "shape_language": "Hand-cut and observational: people drawn as simple gesture-sketch figures with loose limbs, droplets as small ink teardrop clusters, virus as a fine spiked sphere with stippled interior, rooms and towns as inked map plans with contour lines; spread shown as orange wash blooming from one figure outward.",
+   "line_quality": "Variable-width dip-pen ink lines, slightly wobbly, with cross-hatching for shadow and thin dotted trail lines for transmission paths.",
+   "texture": "Visible paper fibre and foxing stains, faint ink bleed, coffee-ring smudges, subtle fold creases and tiny stipple dots.",
+   "motion_personality": "Slow and handmade: lines draw on as if being inked, orange washes soak outward like watercolour spreading, stamps thump down with a small settle, pages and map tabs wipe across like turning sheets.",
+   "camera": "Slow cinematic push-ins and drone-style drifts over an inked tabletop map, parallax between paper layers, occasional pull-back to reveal a whole town with the infection wash spreading, and notebook-page cutaways with pinned labels.",
+   "typography_feel": "Small widely letter-spaced serif caps for lead-in lines, a heavy high-contrast serif for key words that slides in, and handwritten-style annotations with thin pen leader lines drawing to the drawing parts."
+  },
+  {
+   "name": "Paper Cutout Outbreak",
+   "art_style": "Max Flat — the channel look: flat colour backgrounds, thick dark outlines, flat fills, the signature character MAX — everything drawn in code with the channel puppet kit, no painted images",
+   "shape_language": "Hand-cut, angular-yet-chunky scissor shapes: people are mismatched collage figures with oversized heads and mitten hands, droplets are red cut-paper teardrops, virus particles are jagged spiky starbursts, and rooms are simple cardboard-box stage sets with peel-off flaps.",
+   "line_quality": "Thick, uneven black marker outlines with deliberate print misregistration, plus torn white paper edges around cut-outs and the occasional hand-scribbled arrow.",
+   "texture": "Halftone dot shading, shifting film grain each frame, slight paper creases and sticker drop-shadows, with static noise flashes between scenes.",
+   "motion_personality": "Jittery stop-motion at 8-12fps: cut-outs pop in with snappy scale-bounces, sneeze droplets burst out in stepped jumps, the starburst pulses and rotates in discrete steps, and elements slide and peek in from the frame edges.",
+   "camera": "Flat, front-on tabletop view with abrupt punch-in cuts on key moments (sneeze, handshake, shared doorknob), occasional split-screen panels, and TV-static glitch cuts rather than smooth moves.",
+   "typography_feel": "Heavy condensed all-caps headline words as cut-out sticker lettering, slightly rotated and misaligned, each snapping in on a beat. Typewriter-mono captions underneath, with one key word on a red or yellow label strip."
   }
  ]
 }

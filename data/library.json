@@ -3,6 +3,146 @@
   "max_floor": {
    "desc": "kneeling and curled on the floor holding his side, eyes squeezed shut in pain",
    "ar": 1.0244
+  },
+  "max_standing_wide_eyed_and_frozen": {
+   "desc": "standing wide-eyed and frozen, arms slightly raised, hair blown back, looking toward the incoming cloud",
+   "ar": 0.5
+  },
+  "max_squinting_and_leaning_back_with": {
+   "desc": "squinting and leaning back with one hand shielding his face, mouth open in alarm",
+   "ar": 0.5467
+  },
+  "max_standing_sideways_nose_scrunched_eyes": {
+   "desc": "standing sideways, nose scrunched, eyes crossed looking at his own nose, hands at his sides",
+   "ar": 0.3478
+  },
+  "max_hand_on_chin_one_eyebrow": {
+   "desc": "hand on chin, one eyebrow raised, head tilted, looking up thoughtfully at a floating question mark",
+   "ar": 0.47
+  },
+  "max_leaning_forward_with_wide_curious": {
+   "desc": "leaning forward with wide curious eyes and a lightbulb-ready grin, one finger raised, other hand cupped to his ear",
+   "ar": 0.5011
+  },
+  "max_looking_at_a_wall_clock": {
+   "desc": "looking at a wall clock with narrowed eyes, hand rubbing his chin",
+   "ar": 0.6689
+  },
+  "max_tiptoeing_nervously_and_glancing_over": {
+   "desc": "tiptoeing nervously and glancing over his shoulder, finger to lips, eyes wide",
+   "ar": 0.3944
+  },
+  "max_waking_up_with_a_huge": {
+   "desc": "waking up with a huge yawn, stretching arms overhead, messy hair, in pajamas, sunrise behind",
+   "ar": 0.6844
+  },
+  "max_strolling_forward_half_asleep_holding": {
+   "desc": "strolling forward half asleep holding a steaming coffee cup, droopy eyelids, briefcase in the other hand",
+   "ar": 0.4633
+  },
+  "max_sitting_at_his_desk_glancing": {
+   "desc": "sitting at his desk glancing sideways with a nervous half-smile, eyebrows raised, while a colleague Sam's blurry sneezing silhouette is hinted at the edge of the frame",
+   "ar": 1.0375
+  },
+  "max_leaning_slightly_away_with_a": {
+   "desc": "leaning slightly away with a polite uncertain smile, one eyebrow raised, hand half-waving",
+   "ar": 0.4011
+  },
+  "max_nodding_and_smiling_cheerfully_a": {
+   "desc": "nodding and smiling cheerfully, a thought bubble above him showing a sandwich and a 10:00 clock",
+   "ar": 0.5544
+  },
+  "max_sitting_happily_at_his_desk": {
+   "desc": "sitting happily at his desk, sipping coffee, unaware, small and centered",
+   "ar": 0.6983
+  },
+  "max_looking_up_in_surprise_as": {
+   "desc": "looking up in surprise as a cloud approaches, mouth slightly open",
+   "ar": 0.4
+  },
+  "max_frozen_mid_stride_with_eyes": {
+   "desc": "frozen mid-stride with eyes wide, hair slightly lifted, in slow motion",
+   "ar": 0.5978
+  },
+  "max_feeling_a_light_breeze_hair": {
+   "desc": "feeling a light breeze, hair and tie gently blowing, eyes closed, puzzled little frown, hand held out to feel the air",
+   "ar": 0.5011
+  },
+  "max_standing_with_arms_stretched_out": {
+   "desc": "standing with arms stretched out measuring distance, calm confident look",
+   "ar": 0.7578
+  },
+  "max_leaning_in_suspiciously_squinting_through": {
+   "desc": "leaning in suspiciously, squinting through a small magnifying glass held up to one eye",
+   "ar": 0.4956
+  },
+  "max_peering_closely_at_the_speck": {
+   "desc": "peering closely at the speck with hands on knees, curious face",
+   "ar": 0.5756
+  },
+  "max_sitting_at_his_desk_reaching": {
+   "desc": "sitting at his desk reaching for his coffee, unaware, eyes on his laptop",
+   "ar": 0.8833
+  },
+  "max_leaning_forward_with_wide_eyes": {
+   "desc": "leaning forward with wide eyes and raised eyebrows, finger raised in a 'wait a second' gesture",
+   "ar": 0.5522
+  },
+  "max_squinting_at_the_speck_on": {
+   "desc": "squinting at the speck on a table with wide eyes, leaning in",
+   "ar": 0.7211
+  },
+  "max_breathing_in_and_out_calmly": {
+   "desc": "breathing in and out calmly with eyes closed, small mist wisps circling his head, a slight worried frown",
+   "ar": 0.5722
+  },
+  "max_standing_listening_politely_nodding_mist": {
+   "desc": "standing listening politely, nodding, mist wafting toward him",
+   "ar": 0.6333
+  },
+  "max_standing_in_a_busy_open": {
+   "desc": "standing in a busy open-plan office, wide-eyed and puzzled, one hand scratching his head, a coffee mug in the other hand",
+   "ar": 1.068
+  },
+  "max_sitting_relaxed_at_his_desk": {
+   "desc": "sitting relaxed at his desk, smiling confidently, giving a thumbs up with a laptop in front of him and a clock on the wall showing 9:00",
+   "ar": 0.7111
+  },
+  "max_sitting_at_his_desk_leaning": {
+   "desc": "sitting at his desk, leaning back with wide eyes and raised hands, bracing as droplets approach him",
+   "ar": 0.7333
+  },
+  "max_sitting_at_his_desk_in": {
+   "desc": "sitting at his desk in side profile, relaxed and unaware, eyes on his laptop, nose in view",
+   "ar": 0.67
+  },
+  "max_sitting_at_his_desk_typing": {
+   "desc": "sitting at his desk typing happily, calm relaxed smile, shrugging with open palms as if nothing is wrong",
+   "ar": 0.6956
+  },
+  "max_standing_in_the_office_exhaling": {
+   "desc": "standing in the office exhaling a visible cloud of small purple dots from his mouth, unaware and smiling, a calendar page on the wall showing a day circled",
+   "ar": 0.6678
+  },
+  "max_holding_up_a_smartphone_toward": {
+   "desc": "holding up a smartphone toward the viewer with a friendly wink, a paper-plane send icon floating from the phone",
+   "ar": 0.5411
+  },
+  "max_pointing_upward_with_one_finger": {
+   "desc": "pointing upward with one finger and a cheerful smile, as if indicating a link above his head",
+   "ar": 0.4533
+  },
+  "max_thumb_max_flinching_backward_with": {
+   "desc": "Max flinching backward with both arms raised to shield his face, eyes wide and mouth open in shock as a glittering cloud rushes toward him, big expressive face, upper body turned to the viewer",
+   "ar": 1.1653
+  },
+  "max_thumb_max_frozen_in_dread": {
+   "desc": "Max frozen in dread, hands clutching his cheeks, pale face and wide fearful eyes, staring at the ticking clock, big expressive face, upper body turned to the viewer",
+   "ar": 0.4011
+  },
+  "max_thumb_max_looking_down_at": {
+   "desc": "Max looking down at his own chest in betrayed disbelief, one eyebrow raised and jaw dropped, hand pressed to his nose, big expressive face, upper body turned to the viewer",
+   "ar": 0.4044
   }
  },
  "props": {
@@ -13,6 +153,74 @@
   "crystals": {
    "desc": "three tiny sharp golden crystals stuck together into one small clump",
    "ar": 0.9043
+  },
+  "prop_a_large_round_cartoon": {
+   "desc": "a large round cartoon wall clock showing a hand sweeping to 30 hours, with a small red alarm bell on top",
+   "ar": 0.7743
+  },
+  "prop_a_simple_cartoon_takeaway": {
+   "desc": "a simple cartoon takeaway coffee cup with steam",
+   "ar": 0.5143
+  },
+  "prop_a_cartoon_coworker_sam": {
+   "desc": "a cartoon coworker Sam seen from the chest up at the next desk, red nose, thick scarf wrapped tight, tissue in hand",
+   "ar": 0.73
+  },
+  "prop_a_cartoon_sandwich_with": {
+   "desc": "a cartoon sandwich with lettuce and tomato",
+   "ar": 1.2852
+  },
+  "prop_a_flat_cartoon_measuring": {
+   "desc": "a flat cartoon measuring tape stretched across the floor marked '6 feet' with a CDC-style badge",
+   "ar": 3.5816
+  },
+  "prop_a_simple_cartoon_magnifying": {
+   "desc": "a simple cartoon magnifying glass",
+   "ar": 0.8361
+  },
+  "prop_a_tiny_dried_crumpled": {
+   "desc": "a tiny dried crumpled speck with a small green spiky virus peeking inside, labelled 'droplet nucleus'",
+   "ar": 1.322
+  },
+  "prop_a_speck_of_dust": {
+   "desc": "a speck of dust drawn big next to a vastly smaller dot for the particle, with an arrow labelled 'far smaller'",
+   "ar": 1.5481
+  },
+  "prop_a_simple_cartoon_face": {
+   "desc": "a simple cartoon face mask with ear loops, with a down-arrow showing a shrinking cloud beside it",
+   "ar": 2.569
+  },
+  "prop_a_simple_cartoon_metal": {
+   "desc": "a simple cartoon metal door handle on a door, with tiny glittering green virus specks on it",
+   "ar": 1.0927
+  },
+  "prop_a_shiny_steel_door": {
+   "desc": "a shiny steel door handle, flat cartoon, with three tiny purple spiky virus dots sitting on it",
+   "ar": 2.0116
+  },
+  "prop_a_cartoon_fingertip_with": {
+   "desc": "a cartoon fingertip with a tiny purple virus on it and a small countdown timer showing a few minutes",
+   "ar": 0.6486
+  },
+  "prop_a_flat_bar_chart": {
+   "desc": "a flat bar-chart style sign with a short bar labeled 'hand' and a tall bar labeled 'breathing', CDC logo-like badge without text detail",
+   "ar": 0.6043
+  },
+  "prop_cute_cartoon_flu_virus": {
+   "desc": "cute cartoon flu virus character, round purple body with spikes, a little hood and a grin",
+   "ar": 0.8918
+  },
+  "prop_a_cartoon_airway_cell": {
+   "desc": "a cartoon airway cell surface with a large golden lock-shaped receptor and a purple spiky virus protein shaped like a key about to insert into it",
+   "ar": 0.7243
+  },
+  "prop_a_cartoon_scissor_shaped": {
+   "desc": "a cartoon scissor-shaped enzyme in bright green cutting a small tab on the virus spike so a door in the cell membrane swings open",
+   "ar": 0.99
+  },
+  "prop_a_swollen_pink_cartoon": {
+   "desc": "a swollen pink cartoon cell bursting open with dozens of small spiky purple viruses pouring out, next to a small clock showing a few hours passing",
+   "ar": 1.0443
   }
  }
 }
