@@ -252,7 +252,7 @@ export const TLEpisode: React.FC<TLEpProps> = ({beats, marks, vertical}) => {
   const bodyOn = interpolate(f, [0, 20], [0, 1], cl);
   const hasMarks = marks.length > 1 && b.stageIdx >= 0;
   const L = vertical
-    ? {body: [540, 655, 0.65], stamp: [80, 240, 130], wid: [540, 1150, 0.8], words: [80, 1490, 72, 900]}
+    ? {body: [540, 790, 0.64], stamp: [80, 210, 120], wid: [540, 1345, 0.86], words: [80, b.stage ? 330 : 250, 76, 920]}
     : {body: [470, 500, 0.86], stamp: [990, 200, 150], wid: [1350, b.stage ? 500 : 430, 0.92], words: [990, b.stage ? 830 : 800, 70, 860]};
   return <AbsoluteFill style={{background: `radial-gradient(circle at ${vertical ? '50% 38%' : '26% 50%'}, #15254A 0%, ${TL.bg} 68%)`}}>
     <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`}>

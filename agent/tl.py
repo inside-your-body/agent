@@ -68,7 +68,7 @@ in chronological order, 8–16 sentences each, each with its own surprise. Plant
 Final scene (stage null): the big picture + one question for the comments. Short spoken sentences, one idea each, every sentence SHOWABLE
 with a number, an organ, an object or a change. Max 12 numbers in total. Explain — never lecture or tell the viewer what to do.
 
-Then write {N_SHORTS} SHORTS (each 105–130 words, ≈ 40–48 s), each a different surprising slice of the timeline, self-contained:
+Then write {N_SHORTS} SHORTS (each 95–115 words, ≈ 40–50 s — never longer), each a different surprising slice of the timeline, self-contained:
 line 1 = a curiosity question or shocking claim that works in the first second; one continuous mini timeline (2–3 stamps);
 second-to-last line sends viewers to the full video ("the full timeline is in the video linked above"); last line loops into the first.
 
@@ -110,14 +110,17 @@ def board_lines(lines, context, recent=()):
 
 
 def _board_ask(lines, context):
+    stage_key = ', "stage": str|null' if 'stage' in context else ''
     return llm.ask_json(f"""You storyboard an "Inside Your Body" video: a hologram body (one organ lights up) + one code-drawn widget + 2-4 big
 key words per sentence. Video: {context}
 {VISUALS}
 Rules: the widget must literally show what the sentence says (its number, object, organ, change); use the sentence's real numbers;
 "words" = 2-4 words lifted from the sentence that carry its meaning (short words, no filler), never the whole sentence;
-vary the widget types; labels are short (≤30 chars).
+vary the widget types: "icon" at most 1 in 4 sentences and the same icon at most twice, "question" only for real open questions
+(at most 1 in 8); prefer numbers, organs, cells, meters, waves and comparisons that SHOW the mechanism; labels are short (≤30 chars).
+"words" are punchy: 1-3 words each, max 3 items, e.g. ["LIVER", "TAKES CHARGE"].
 Sentences (index: text): {json.dumps({i: (t['text'] if isinstance(t, dict) else t) for i, t in enumerate(lines)}, ensure_ascii=False)}
-Return JSON: {{"beats": [{{"i": int, "organ": ORGAN, "visual": {{...}}, "words": [str]}}]}} — one per sentence, same order.""", max_tokens=16000)
+Return JSON: {{"beats": [{{"i": int, "organ": ORGAN, "visual": {{...}}, "words": [str]{stage_key}}}]}} — one per sentence, same order.""", max_tokens=16000)
 
 
 def _fix_visual(v, words, organ):
@@ -157,7 +160,7 @@ def storyboard(ep):
         sc['lines'] = new
     for k, s in enumerate(ep.get('shorts', [])):
         lines = s['lines']
-        bs = board_lines(lines, f"{ctx} — vertical Short #{k + 1} '{s['title']}'. Also give each sentence a 'stage' time stamp (≤10 chars) or null")
+        bs = board_lines(lines, f"{ctx} — vertical Short #{k + 1} '{s['title']}'. Also give each sentence a 'stage': the time stamp it is about (≤10 chars UPPERCASE, e.g. 'DAY 3'; keep it the same for consecutive sentences about that moment; null only for the hook line)")
         s['lines'] = []
         for t, b in zip(lines, bs):
             text = t['text'] if isinstance(t, dict) else t
@@ -216,8 +219,22 @@ def build(topic, ep_dir, dry_run=False):
     stages = [sc.get('stage') for sc in ep['scenes'] for _ in sc['lines']]
     save(ep_dir / 'props_long.json', props(long_lines(ep), stages, segs, False))
     for k, s in enumerate(ep.get('shorts', [])[:N_SHORTS]):
-        sg = _voice([l['text'] for l in s['lines']], [len(s['lines'])], ep_dir / f'vo_short{k}.wav', ep_dir / f'segs_short{k}.json')
-        print(f'voice short {k}: {sg[-1]["end"]:.0f}s')
+        for attempt in range(3):
+            sg = _voice([l['text'] for l in s['lines']], [len(s['lines'])], ep_dir / f'vo_short{k}.wav', ep_dir / f'segs_short{k}.json')
+            print(f'voice short {k}: {sg[-1]["end"]:.0f}s')
+            if sg[-1]['end'] <= 57 or attempt == 2: break
+            target = int(_wc([l['text'] for l in s['lines']]) * 52 / sg[-1]['end'])
+            out = llm.ask_json(f"""Shorten this YouTube Short script to at most {target} words (it must stay under 55 seconds). Keep line 1 (the hook),
+the mini timeline, the line that sends viewers to the full video and the loop. Return ONLY {{"lines": [str]}}.
+Lines: {json.dumps([l['text'] for l in s['lines']], ensure_ascii=False)}""", max_tokens=3000)
+            if out.get('lines'):
+                bs = board_lines(out['lines'], f"{ep['title']} — vertical Short. Also give each sentence a 'stage': the time stamp it is about (≤10 chars UPPERCASE, e.g. 'DAY 3'; keep it the same for consecutive sentences about that moment; null only for the hook line)")
+                s['lines'] = [{'text': t, 'organ': b.get('organ') if b.get('organ') in ORGANS else 'none',
+                               'words': [w for w in (b.get('words') or []) if isinstance(w, str)][:4] or t.split()[:3], 'stage': b.get('stage') or None,
+                               'visual': _fix_visual(b.get('visual'), [w for w in (b.get('words') or []) if isinstance(w, str)][:4] or t.split()[:3], b.get('organ'))}
+                              for t, b in zip(out['lines'], bs)]
+                save(ep_dir / 'episode.json', ep)
+                for f in (f'vo_short{k}.wav', f'segs_short{k}.json'): (ep_dir / f).unlink(missing_ok=True)
         save(ep_dir / f'props_short{k}.json', props(s['lines'], [l.get('stage') for l in s['lines']], sg, True))
     if not (ep_dir / 'thumbnail.jpg').exists():
         try: thumbs(ep, ep_dir)
