@@ -272,6 +272,22 @@ topic_clear=false if a viewer could not tell what the video is about."""}]
         print('thumb check failed', e); return {}
 
 
+def _to_16x9(src, dst):
+    """3:2 image -> 1280x720 without cropping anything: fitted to the height; the side bars take the colour of the image's own
+    edges (dark navy background) and the seam is feathered, so nothing of the headline is ever cut."""
+    from PIL import Image
+    im = Image.open(src).convert('RGB')
+    w = round(im.width * 720 / im.height); fg = im.resize((w, 720), Image.LANCZOS)
+    x0 = (1280 - w) // 2
+    a = np.asarray(fg).astype(np.float32)
+    border = np.concatenate([a[:8].reshape(-1, 3), a[-8:].reshape(-1, 3), a[:, :8].reshape(-1, 3), a[:, -8:].reshape(-1, 3)])
+    dark = border[border.sum(1) < np.percentile(border.sum(1), 50)]          # the background, not the objects touching the edge
+    bg = np.zeros((720, 1280, 3), np.float32); bg[:] = np.median(dark, axis=0)
+    F = 60; m = np.ones(w, np.float32); m[:F] = np.linspace(0, 1, F); m[-F:] = np.linspace(1, 0, F)
+    bg[:, x0:x0 + w] = bg[:, x0:x0 + w] * (1 - m[None, :, None]) + a * m[None, :, None]
+    Image.fromarray(bg.clip(0, 255).astype(np.uint8)).save(dst, quality=92)
+
+
 def thumbs(ep, ep_dir):
     """Owner (Oct 25): ONE thumbnail made by ChatGPT (image API) from a summary of the video: the text on it must tell what the video
     is about AND make people curious. Vision check for spelling; up to 3 tries; the old code-made design is only the fallback."""
@@ -290,10 +306,10 @@ What the video shows: {summ}
 The text on the thumbnail must tell the viewer clearly what the video is about AND make them curious enough to click — not vague,
 not too short to understand, not the full title either: one short headline of 3-6 words (it may have one highlighted key word).
 Choose the single most striking visual that shows the topic at a glance. {THUMB_STYLE}
-Keep ALL text and important parts inside the middle 16:9 area (the top and bottom 8% will be cropped). Spell every word correctly.{note}"""
+Keep it SIMPLE and uncluttered like a top science channel: one main subject (or a clear 2-3 step change with arrows), no people's faces,
+no more than one small number badge besides the headline. Keep a small margin around the headline. Spell every word correctly.{note}"""
         if not images.gen(prompt, raw, size='1536x1024', quality='high'): continue
-        im = Image.open(raw).convert('RGB'); w, h = im.size; ch = int(w * 9 / 16); top = (h - ch) // 2
-        jpg = out / f'gpt{k}.jpg'; im.crop((0, top, w, top + ch)).resize((1280, 720), Image.LANCZOS).save(jpg, quality=92)
+        jpg = out / f'gpt{k}.jpg'; _to_16x9(raw, jpg)
         r = _check_thumb(jpg, title)
         print('thumb check', k, r)
         if r.get('spelling_ok', True) and r.get('readable', True) and r.get('topic_clear', True):
