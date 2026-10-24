@@ -72,7 +72,7 @@ Then write {N_SHORTS} SHORTS (each 95–115 words, ≈ 40–50 s — never longe
 line 1 = a curiosity question or shocking claim that works in the first second; one continuous mini timeline (2–3 stamps);
 second-to-last line sends viewers to the full video ("the full timeline is in the video linked above"); last line loops into the first.
 
-Thumbnails: 3 variants. Each = "number" (the big number/time on the thumbnail, ≤8 chars, e.g. "30 DAYS", "24H", "-70%"),
+Thumbnail fallback (only used if the main thumbnail fails): 1 variant = "number" (the big number/time on the thumbnail, ≤8 chars, e.g. "30 DAYS", "24H", "-70%"),
 "words" (2–3 words that name the topic, e.g. "NO SUGAR"), "subject" (ONE striking, instantly recognisable object/scene that shows the topic,
 described for a photo-real image, e.g. "a pile of white sugar cubes with one cube crumbling, dramatic studio light").
 
@@ -243,32 +243,78 @@ Lines: {json.dumps([l['text'] for l in s['lines']], ensure_ascii=False)}""", max
 
 
 # ---------------- thumbnails ----------------
+THUMB_STYLE = """Style (the channel's approved look, owner's reference): dark navy-blue background with a soft blue glow; one big, clear,
+photo-real / glossy 3D medical illustration of the subject with dramatic studio lighting and a glowing rim (e.g. a tooth going from
+healthy -> decaying -> rotten with bright orange arrows between the stages); HUGE bold condensed sans-serif headline at the top in
+white with the key word in bright yellow, thick black outline/shadow, perfectly spelled; high contrast, very clean, easy to read on a phone."""
+
+
+def summary(ep):
+    lines = [l['text'] for l in long_lines(ep)]
+    return llm.ask(f"""Summarise this YouTube video for the person who designs its thumbnail, in 5-7 sentences: what the video is about,
+what the viewer will see happen (the timeline / stages), and the 2-3 most surprising moments. Plain English, no markdown.
+Title: {ep.get('upload', {}).get('title') or ep.get('title')}
+Narration: {' '.join(lines)[:14000]}""", max_tokens=1200).strip()
+
+
+def _check_thumb(img, title):
+    """Claude vision: is every word spelled correctly, readable, and does it tell the topic?"""
+    import base64
+    content = [{'type': 'image', 'source': {'type': 'base64', 'media_type': 'image/jpeg', 'data': base64.b64encode(img.read_bytes()).decode()}},
+               {'type': 'text', 'text': f"""YouTube thumbnail for the video "{title}". Check it strictly. Return JSON only:
+{{"text": "the exact words on it", "spelling_ok": bool, "readable": bool, "topic_clear": bool, "problem": str}}
+spelling_ok=false for any misspelled, garbled or made-up word or letters; readable=false if text is cut off, too small or covered;
+topic_clear=false if a viewer could not tell what the video is about."""}]
+    try:
+        r = llm._repair(llm.ask(content, max_tokens=800, retries=2)) or {}
+        return r
+    except Exception as e:
+        print('thumb check failed', e); return {}
+
+
 def thumbs(ep, ep_dir):
-    from . import images, thumbmax
+    """Owner (Oct 25): ONE thumbnail made by ChatGPT (image API) from a summary of the video: the text on it must tell what the video
+    is about AND make people curious. Vision check for spelling; up to 3 tries; the old code-made design is only the fallback."""
+    from . import images
+    from PIL import Image
     out = ep_dir / 'thumbs'; out.mkdir(exist_ok=True)
+    summ = summary(ep); (out / 'summary.txt').write_text(summ)
+    title = ep.get('upload', {}).get('title') or ep.get('title')
+    note = ''
+    for k in range(3):
+        raw = out / f'gpt{k}.png'
+        prompt = f"""Design ONE YouTube thumbnail (16:9 landscape) for this video.
+Video title: {title}
+What the video shows: {summ}
+
+The text on the thumbnail must tell the viewer clearly what the video is about AND make them curious enough to click — not vague,
+not too short to understand, not the full title either: one short headline of 3-6 words (it may have one highlighted key word).
+Choose the single most striking visual that shows the topic at a glance. {THUMB_STYLE}
+Keep ALL text and important parts inside the middle 16:9 area (the top and bottom 8% will be cropped). Spell every word correctly.{note}"""
+        if not images.gen(prompt, raw, size='1536x1024', quality='high'): continue
+        im = Image.open(raw).convert('RGB'); w, h = im.size; ch = int(w * 9 / 16); top = (h - ch) // 2
+        jpg = out / f'gpt{k}.jpg'; im.crop((0, top, w, top + ch)).resize((1280, 720), Image.LANCZOS).save(jpg, quality=92)
+        r = _check_thumb(jpg, title)
+        print('thumb check', k, r)
+        if r.get('spelling_ok', True) and r.get('readable', True) and r.get('topic_clear', True):
+            shutil.copy(jpg, ep_dir / 'thumbnail.jpg'); return
+        note = f"\nA previous attempt had this problem, avoid it: {r.get('problem') or 'misspelled text'}."
+    print('ChatGPT thumbnail failed the checks -> code-made fallback')
+    v = ((ep.get('thumbnail') or {}).get('variants') or [{}])[0]
     pub = ROOT / 'render/public/ep'; pub.mkdir(parents=True, exist_ok=True)
-    looks = []
-    for i, v in enumerate((ep.get('thumbnail') or {}).get('variants', [])[:3]):
-        img = out / f'subject{i}.png'
-        if not img.exists():
-            images.gen(f"{v['subject']}. Photo-real, crisp, dramatic cinematic lighting, high detail, centred single subject, no text, "
-                       f"isolated on a transparent background", img, size='1024x1024', transparent=True, quality='high')
-        if not img.exists(): continue
+    img = out / 'subject0.png'
+    if v.get('subject') and not img.exists():
+        images.gen(f"{v['subject']}. Photo-real, crisp, dramatic cinematic lighting, centred single subject, no text, isolated on a transparent background",
+                   img, size='1024x1024', transparent=True, quality='high')
+    props = {'number': v.get('number', ''), 'words': v.get('words', title), 'v': 0}
+    if img.exists():
         try:
             from . import cutout; cutout.trim(img, img)
         except Exception: pass
-        shutil.copy(img, pub / f'tl_subject{i}.png')
-        from PIL import Image
-        w, h = Image.open(img).size
-        pf = out / f't{i}.json'
-        save(pf, {'number': v.get('number', ''), 'words': v.get('words', ''), 'subject': f'ep/tl_subject{i}.png', 'ar': w / h, 'v': i})
-        sh(['npx', 'remotion', 'still', 'src/index.ts', 'ThumbTL', str(out / f't{i}.jpg'), f'--props={pf}', '--log=warn'], cwd=ROOT / 'render')
-        if (out / f't{i}.jpg').exists(): looks.append((f't{i}', f"{v.get('number')} / {v.get('words')}", out / f't{i}.jpg'))
-    verdict = thumbmax._judge(looks) if looks else {}
-    ok = [x for x in looks if verdict.get(x[0], (True, ''))[0]] or looks
-    ok.sort(key=lambda x: -thumbmax.SCORES.get(x[0], 0))
-    for n, (_, _, p) in enumerate(ok):
-        shutil.copy(p, ep_dir / f"thumbnail{'' if n == 0 else '_' + 'bc'[n - 1]}.jpg")
+        shutil.copy(img, pub / 'tl_subject0.png'); w, h = Image.open(img).size
+        props.update(subject='ep/tl_subject0.png', ar=w / h)
+    pf = out / 'fallback.json'; save(pf, props)
+    sh(['npx', 'remotion', 'still', 'src/index.ts', 'ThumbTL', str(ep_dir / 'thumbnail.jpg'), f'--props={pf}', '--log=warn'], cwd=ROOT / 'render')
 
 
 # ---------------- audio ----------------

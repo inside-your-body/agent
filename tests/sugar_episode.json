@@ -1,0 +1,3393 @@
+{
+ "title": "What Happens to Your Body When You Stop Eating Sugar",
+ "main_keyword": "stop eating sugar",
+ "scenes": [
+  {
+   "title": "The Sugar Crash",
+   "stage": null,
+   "organ": "pancreas",
+   "lines": [
+    {
+     "text": "It's 3 p.m., and a cookie is sliding into your mouth for the last time.",
+     "organ": "pancreas",
+     "words": [
+      "3 p.m.",
+      "cookie",
+      "last time"
+     ],
+     "visual": {
+      "type": "clock",
+      "from": "15:00",
+      "to": "15:01"
+     }
+    },
+    {
+     "text": "Your blood sugar spikes within minutes.",
+     "organ": "pancreas",
+     "words": [
+      "blood sugar",
+      "spikes",
+      "minutes"
+     ],
+     "visual": {
+      "type": "wave",
+      "label": "Blood sugar",
+      "calm": false
+     }
+    },
+    {
+     "text": "Then it crashes.",
+     "organ": "pancreas",
+     "words": [
+      "crashes"
+     ],
+     "visual": {
+      "type": "meter",
+      "label": "Blood sugar",
+      "from": 0.9,
+      "to": 0.2,
+      "good": false
+     }
+    },
+    {
+     "text": "You know the feeling.",
+     "organ": "brain",
+     "words": [
+      "know",
+      "feeling"
+     ],
+     "visual": {
+      "type": "question",
+      "text": "You know the feeling, right?"
+     }
+    },
+    {
+     "text": "Heavy eyelids.",
+     "organ": "brain",
+     "words": [
+      "heavy",
+      "eyelids"
+     ],
+     "visual": {
+      "type": "icon",
+      "name": "eye",
+      "cross": false,
+      "count": 2,
+      "label": "Heavy eyelids"
+     }
+    },
+    {
+     "text": "A fuzzy head.",
+     "organ": "brain",
+     "words": [
+      "fuzzy",
+      "head"
+     ],
+     "visual": {
+      "type": "checklist",
+      "items": [
+       "Fuzzy head",
+       "Can't focus",
+       "Slow thinking"
+      ],
+      "bad": true
+     }
+    },
+    {
+     "text": "A hand reaching for something sweet again.",
+     "organ": "brain",
+     "words": [
+      "reaching",
+      "something sweet"
+     ],
+     "visual": {
+      "type": "icon",
+      "name": "candy",
+      "cross": false,
+      "count": 3,
+      "label": "Craving sweets"
+     }
+    },
+    {
+     "text": "Now imagine that crash never comes again.",
+     "organ": "pancreas",
+     "words": [
+      "crash",
+      "never comes"
+     ],
+     "visual": {
+      "type": "wave",
+      "label": "Blood sugar",
+      "calm": true
+     }
+    },
+    {
+     "text": "What happens when sugar vanishes from your life, from day 1 to one full year?",
+     "organ": "none",
+     "words": [
+      "sugar vanishes",
+      "day 1",
+      "one year"
+     ],
+     "visual": {
+      "type": "clock",
+      "from": "Day 1",
+      "to": "Year 1"
+     }
+    },
+    {
+     "text": "By the end, you'll know which organ changes fastest.",
+     "organ": "none",
+     "words": [
+      "which organ",
+      "changes fastest"
+     ],
+     "visual": {
+      "type": "question",
+      "text": "Which organ changes fastest?"
+     }
+    },
+    {
+     "text": "It isn't your waistline.",
+     "organ": "fat",
+     "words": [
+      "isn't",
+      "waistline"
+     ],
+     "visual": {
+      "type": "versus",
+      "myth": "Your waistline changes first",
+      "fact": "Another organ beats it"
+     }
+    },
+    {
+     "text": "And it happens in just nine days.",
+     "organ": "pancreas",
+     "words": [
+      "just",
+      "nine days"
+     ],
+     "visual": {
+      "type": "stat",
+      "value": 9.0,
+      "prefix": "",
+      "unit": " days",
+      "label": "Time for the change",
+      "good": true
+     }
+    }
+   ],
+   "narration": [
+    "It's 3 p.m., and a cookie is sliding into your mouth for the last time.",
+    "Your blood sugar spikes within minutes.",
+    "Then it crashes.",
+    "You know the feeling.",
+    "Heavy eyelids.",
+    "A fuzzy head.",
+    "A hand reaching for something sweet again.",
+    "Now imagine that crash never comes again.",
+    "What happens when sugar vanishes from your life, from day 1 to one full year?",
+    "By the end, you'll know which organ changes fastest.",
+    "It isn't your waistline.",
+    "And it happens in just nine days."
+   ]
+  },
+  {
+   "title": "The Last Spike",
+   "stage": "DAY 1",
+   "organ": "pancreas",
+   "lines": [
+    {
+     "text": "It's the first morning with no added sugar.",
+     "organ": "pancreas",
+     "words": [
+      "first morning",
+      "no sugar"
+     ],
+     "visual": {
+      "type": "clock",
+      "from": "06:00",
+      "to": "07:00"
+     }
+    },
+    {
+     "text": "You pour your coffee black.",
+     "organ": "pancreas",
+     "words": [
+      "coffee",
+      "black"
+     ],
+     "visual": {
+      "type": "icon",
+      "name": "coffee",
+      "cross": false,
+      "count": 1,
+      "label": "Black coffee"
+     }
+    },
+    {
+     "text": "You skip the flavoured yoghurt.",
+     "organ": "pancreas",
+     "words": [
+      "skip",
+      "flavoured yoghurt"
+     ],
+     "visual": {
+      "type": "icon",
+      "name": "milk",
+      "cross": true,
+      "count": 1,
+      "label": "Flavoured yoghurt skipped"
+     }
+    },
+    {
+     "text": "Your last sugary snack is still in your blood.",
+     "organ": "pancreas",
+     "words": [
+      "last sugary snack",
+      "blood"
+     ],
+     "visual": {
+      "type": "cells",
+      "kind": "glucose",
+      "action": "flow",
+      "label": "Leftover sugar in blood"
+     }
+    },
+    {
+     "text": "Blood glucose typically peaks within 30 to 45 minutes of a sugary food.",
+     "organ": "pancreas",
+     "words": [
+      "glucose peaks",
+      "30 to 45 minutes"
+     ],
+     "visual": {
+      "type": "stat",
+      "value": 45.0,
+      "prefix": "30-",
+      "unit": " min",
+      "label": "Time to glucose peak",
+      "good": false
+     }
+    },
+    {
+     "text": "Then it falls back to normal in about 2 to 3 hours.",
+     "organ": "pancreas",
+     "words": [
+      "falls back",
+      "2 to 3 hours"
+     ],
+     "visual": {
+      "type": "wave",
+      "label": "Blood sugar falling",
+      "calm": true
+     }
+    },
+    {
+     "text": "Your pancreas pushes out insulin to handle every spike.",
+     "organ": "pancreas",
+     "words": [
+      "pancreas",
+      "insulin",
+      "every spike"
+     ],
+     "visual": {
+      "type": "cells",
+      "kind": "insulin",
+      "action": "flow",
+      "label": "Insulin released"
+     }
+    },
+    {
+     "text": "Now the spike never arrives.",
+     "organ": "pancreas",
+     "words": [
+      "spike",
+      "never arrives"
+     ],
+     "visual": {
+      "type": "meter",
+      "label": "Blood sugar spike",
+      "from": 0.9,
+      "to": 0.15,
+      "good": true
+     }
+    },
+    {
+     "text": "The curve flattens.",
+     "organ": "pancreas",
+     "words": [
+      "curve",
+      "flattens"
+     ],
+     "visual": {
+      "type": "wave",
+      "label": "Blood sugar curve",
+      "calm": true
+     }
+    },
+    {
+     "text": "That mid-afternoon slump you used to blame on work?",
+     "organ": "pancreas",
+     "words": [
+      "mid-afternoon slump",
+      "loosen"
+     ],
+     "visual": {
+      "type": "battery",
+      "from": 0.2,
+      "to": 0.7,
+      "label": "Afternoon energy"
+     }
+    },
+    {
+     "text": "It starts to loosen its grip.",
+     "organ": "pancreas",
+     "words": [
+      "loosen",
+      "grip"
+     ],
+     "visual": {
+      "type": "checklist",
+      "items": [
+       "Sleepy",
+       "Sugar cravings",
+       "Brain fog"
+      ],
+      "bad": true
+     }
+    },
+    {
+     "text": "Your liver quietly takes charge.",
+     "organ": "liver",
+     "words": [
+      "liver",
+      "takes charge"
+     ],
+     "visual": {
+      "type": "organ",
+      "name": "liver",
+      "state": "healthy",
+      "label": "Liver takes charge"
+     }
+    },
+    {
+     "text": "Within three to four hours of your last meal, the glucose in your blood runs low.",
+     "organ": "liver",
+     "words": [
+      "three to four hours",
+      "glucose runs low"
+     ],
+     "visual": {
+      "type": "clock",
+      "from": "08:00",
+      "to": "12:00"
+     }
+    },
+    {
+     "text": "The liver opens its pantry of stored glycogen.",
+     "organ": "liver",
+     "words": [
+      "liver",
+      "stored glycogen"
+     ],
+     "visual": {
+      "type": "cells",
+      "kind": "glucose",
+      "action": "flow",
+      "label": "Glycogen released"
+     }
+    },
+    {
+     "text": "It holds roughly 80 to 120 grams.",
+     "organ": "liver",
+     "words": [
+      "80 to 120",
+      "grams"
+     ],
+     "visual": {
+      "type": "stat",
+      "value": 120.0,
+      "prefix": "80-",
+      "unit": "g",
+      "label": "Glycogen in liver",
+      "good": true
+     }
+    },
+    {
+     "text": "Your muscles hold another 350 to 400.",
+     "organ": "liver",
+     "words": [
+      "muscles",
+      "350 to 400"
+     ],
+     "visual": {
+      "type": "compare",
+      "a": {
+       "label": "Liver",
+       "value": 120.0
+      },
+      "b": {
+       "label": "Muscles",
+       "value": 400.0
+      },
+      "unit": "g"
+     }
+    },
+    {
+     "text": "Here's the first surprise.",
+     "organ": "liver",
+     "words": [
+      "first surprise"
+     ],
+     "visual": {
+      "type": "question",
+      "text": "What is the first surprise?"
+     }
+    },
+    {
+     "text": "Your body makes its own glucose, even with zero sugar coming in.",
+     "organ": "liver",
+     "words": [
+      "makes own glucose",
+      "zero sugar"
+     ],
+     "visual": {
+      "type": "icon",
+      "name": "sugar",
+      "cross": true,
+      "count": 1,
+      "label": "Zero sugar in, glucose made"
+     }
+    },
+    {
+     "text": "In the first 10 hours of fasting, about 55 percent of your body's own glucose output already comes from this process.",
+     "organ": "liver",
+     "words": [
+      "55 percent",
+      "first 10 hours"
+     ],
+     "visual": {
+      "type": "stat",
+      "value": 55.0,
+      "prefix": "",
+      "unit": "%",
+      "label": "Glucose from own production",
+      "good": true
+     }
+    },
+    {
+     "text": "It's called gluconeogenesis.",
+     "organ": "liver",
+     "words": [
+      "gluconeogenesis"
+     ],
+     "visual": {
+      "type": "checklist",
+      "items": [
+       "Gluconeogenesis"
+      ],
+      "bad": false
+     }
+    },
+    {
+     "text": "Your body is not waiting for your next snack.",
+     "organ": "liver",
+     "words": [
+      "not waiting",
+      "next snack"
+     ],
+     "visual": {
+      "type": "versus",
+      "myth": "Body waits for your next snack",
+      "fact": "Body makes its own glucose"
+     }
+    },
+    {
+     "text": "And that's only the beginning.",
+     "organ": "liver",
+     "words": [
+      "only",
+      "beginning"
+     ],
+     "visual": {
+      "type": "question",
+      "text": "And that's only the beginning..."
+     }
+    }
+   ],
+   "narration": [
+    "It's the first morning with no added sugar.",
+    "You pour your coffee black.",
+    "You skip the flavoured yoghurt.",
+    "Your last sugary snack is still in your blood.",
+    "Blood glucose typically peaks within 30 to 45 minutes of a sugary food.",
+    "Then it falls back to normal in about 2 to 3 hours.",
+    "Your pancreas pushes out insulin to handle every spike.",
+    "Now the spike never arrives.",
+    "The curve flattens.",
+    "That mid-afternoon slump you used to blame on work?",
+    "It starts to loosen its grip.",
+    "Your liver quietly takes charge.",
+    "Within three to four hours of your last meal, the glucose in your blood runs low.",
+    "The liver opens its pantry of stored glycogen.",
+    "It holds roughly 80 to 120 grams.",
+    "Your muscles hold another 350 to 400.",
+    "Here's the first surprise.",
+    "Your body makes its own glucose, even with zero sugar coming in.",
+    "In the first 10 hours of fasting, about 55 percent of your body's own glucose output already comes from this process.",
+    "It's called gluconeogenesis.",
+    "Your body is not waiting for your next snack.",
+    "And that's only the beginning."
+   ]
+  },
+  {
+   "title": "The Brain Protests",
+   "stage": "DAY 3",
+   "organ": "brain",
+   "lines": [
+    {
+     "text": "Day 3 is when the brain notices.",
+     "organ": "brain",
+     "words": [
+      "Day 3",
+      "brain notices"
+     ],
+     "visual": {
+      "type": "icon",
+      "name": "calendar",
+      "cross": false,
+      "count": 1,
+      "label": "Day 3"
+     }
+    },
+    {
+     "text": "You're staring at the vending machine at work.",
+     "organ": "brain",
+     "words": [
+      "staring",
+      "vending machine"
+     ],
+     "visual": {
+      "type": "icon",
+      "name": "candy",
+      "cross": false,
+      "count": 4,
+      "label": "Vending machine temptation"
+     }
+    },
+    {
+     "text": "Your head aches.",
+     "organ": "brain",
+     "words": [
+      "head aches"
+     ],
+     "visual": {
+      "type": "organ",
+      "name": "brain",
+      "state": "inflamed",
+      "label": "Headache"
+     }
+    },
+    {
+     "text": "Your patience is gone.",
+     "organ": "brain",
+     "words": [
+      "patience",
+      "gone"
+     ],
+     "visual": {
+      "type": "meter",
+      "label": "Patience",
+      "from": 0.7,
+      "to": 0.05,
+      "good": false
+     }
+    },
+    {
+     "text": "Sugar lights up the brain's reward centre, a region called the nucleus accumbens.",
+     "organ": "brain",
+     "words": [
+      "reward centre",
+      "nucleus accumbens"
+     ],
+     "visual": {
+      "type": "cells",
+      "kind": "neurons",
+      "action": "attack",
+      "label": "Reward centre lights up"
+     }
+    },
+    {
+     "text": "It's the same area involved in responses to addictive drugs.",
+     "organ": "brain",
+     "words": [
+      "same area",
+      "addictive drugs"
+     ],
+     "visual": {
+      "type": "versus",
+      "myth": "Sugar reward is unique",
+      "fact": "Same area as addictive drugs"
+     }
+    },
+    {
+     "text": "Now the signal stops.",
+     "organ": "brain",
+     "words": [
+      "signal stops"
+     ],
+     "visual": {
+      "type": "wave",
+      "label": "Reward signal",
+      "calm": true
+     }
+    },
+    {
+     "text": "Many people report headaches, tiredness, brain fog and a mood that sinks.",
+     "organ": "brain",
+     "words": [
+      "headaches",
+      "brain fog",
+      "mood sinks"
+     ],
+     "visual": {
+      "type": "checklist",
+      "items": [
+       "Headaches",
+       "Tiredness",
+       "Brain fog",
+       "Sinking mood"
+      ],
+      "bad": true
+     }
+    },
+    {
+     "text": "Cravings can feel enormous.",
+     "organ": "brain",
+     "words": [
+      "cravings",
+      "enormous"
+     ],
+     "visual": {
+      "type": "meter",
+      "label": "Craving strength",
+      "from": 0.2,
+      "to": 1,
+      "good": false
+     }
+    },
+    {
+     "text": "One honest caveat: the research on this in humans is limited.",
+     "organ": "brain",
+     "words": [
+      "honest caveat",
+      "limited"
+     ],
+     "visual": {
+      "type": "icon",
+      "name": "warning",
+      "cross": false,
+      "count": 1,
+      "label": "Limited human research"
+     }
+    },
+    {
+     "text": "Much of the strongest evidence comes from rodents.",
+     "organ": "brain",
+     "words": [
+      "strongest evidence",
+      "rodents"
+     ],
+     "visual": {
+      "type": "icon",
+      "name": "bacteria",
+      "cross": false,
+      "count": 6,
+      "label": "Rodent studies"
+     }
+    },
+    {
+     "text": "And whether sugar is truly addictive is still debated.",
+     "organ": "brain",
+     "words": [
+      "truly addictive",
+      "debated"
+     ],
+     "visual": {
+      "type": "question",
+      "text": "Is sugar truly addictive? Still debated."
+     }
+    },
+    {
+     "text": "But here's the part that sounds scary and isn't.",
+     "organ": "brain",
+     "words": [
+      "sounds scary",
+      "isn't"
+     ],
+     "visual": {
+      "type": "versus",
+      "myth": "Cutting sugar is scary",
+      "fact": "It sounds scary and isn't"
+     }
+    },
+    {
+     "text": "Your body does not need dietary sugar to keep your blood sugar steady.",
+     "organ": "pancreas",
+     "words": [
+      "blood sugar",
+      "steady"
+     ],
+     "visual": {
+      "type": "wave",
+      "label": "Blood sugar",
+      "calm": true
+     }
+    },
+    {
+     "text": "In long fasting studies, by about 64 hours, roughly 96 percent of the body's own glucose comes from non-sugar sources.",
+     "organ": "liver",
+     "words": [
+      "64 hours",
+      "96 percent",
+      "non-sugar"
+     ],
+     "visual": {
+      "type": "stat",
+      "value": 96.0,
+      "prefix": "~",
+      "unit": "%",
+      "label": "Glucose from non-sugar, 64h",
+      "good": true
+     }
+    },
+    {
+     "text": "Mostly amino acids.",
+     "organ": "liver",
+     "words": [
+      "amino acids"
+     ],
+     "visual": {
+      "type": "cells",
+      "kind": "glucose",
+      "action": "flow",
+      "label": "Made from amino acids"
+     }
+    },
+    {
+     "text": "That's an extreme case, not a normal low-sugar diet.",
+     "organ": "none",
+     "words": [
+      "extreme case",
+      "not normal"
+     ],
+     "visual": {
+      "type": "icon",
+      "name": "warning",
+      "cross": false,
+      "count": 1,
+      "label": "Extreme case only"
+     }
+    },
+    {
+     "text": "Fruit, grains and milk still bring carbohydrates.",
+     "organ": "gut",
+     "words": [
+      "fruit",
+      "grains",
+      "milk",
+      "carbohydrates"
+     ],
+     "visual": {
+      "type": "icon",
+      "name": "bread",
+      "cross": false,
+      "count": 3,
+      "label": "Fruit, grains, milk"
+     }
+    },
+    {
+     "text": "Your brain isn't starving.",
+     "organ": "brain",
+     "words": [
+      "brain",
+      "isn't starving"
+     ],
+     "visual": {
+      "type": "battery",
+      "from": 0.5,
+      "to": 0.8,
+      "label": "Brain fuel"
+     }
+    },
+    {
+     "text": "It's just complaining.",
+     "organ": "brain",
+     "words": [
+      "just complaining"
+     ],
+     "visual": {
+      "type": "organ",
+      "name": "brain",
+      "state": "healing",
+      "label": "Just complaining"
+     }
+    }
+   ],
+   "narration": [
+    "Day 3 is when the brain notices.",
+    "You're staring at the vending machine at work.",
+    "Your head aches.",
+    "Your patience is gone.",
+    "Sugar lights up the brain's reward centre, a region called the nucleus accumbens.",
+    "It's the same area involved in responses to addictive drugs.",
+    "Now the signal stops.",
+    "Many people report headaches, tiredness, brain fog and a mood that sinks.",
+    "Cravings can feel enormous.",
+    "One honest caveat: the research on this in humans is limited.",
+    "Much of the strongest evidence comes from rodents.",
+    "And whether sugar is truly addictive is still debated.",
+    "But here's the part that sounds scary and isn't.",
+    "Your body does not need dietary sugar to keep your blood sugar steady.",
+    "In long fasting studies, by about 64 hours, roughly 96 percent of the body's own glucose comes from non-sugar sources.",
+    "Mostly amino acids.",
+    "That's an extreme case, not a normal low-sugar diet.",
+    "Fruit, grains and milk still bring carbohydrates.",
+    "Your brain isn't starving.",
+    "It's just complaining."
+   ]
+  },
+  {
+   "title": "The Liver Reacts",
+   "stage": "WEEK 1",
+   "organ": "liver",
+   "lines": [
+    {
+     "text": "Now the wildest part of the whole timeline.",
+     "organ": "liver",
+     "words": [
+      "Wildest part",
+      "timeline"
+     ],
+     "visual": {
+      "type": "question",
+      "text": "The wildest part of the timeline?"
+     }
+    },
+    {
+     "text": "Picture the sweetened drink you used to have with lunch.",
+     "organ": "none",
+     "words": [
+      "Sweetened drink",
+      "lunch"
+     ],
+     "visual": {
+      "type": "icon",
+      "name": "soda",
+      "cross": false,
+      "count": 1,
+      "label": "Sweetened lunch drink"
+     }
+    },
+    {
+     "text": "Every day, your liver had to deal with it.",
+     "organ": "liver",
+     "words": [
+      "Every day",
+      "liver",
+      "deal"
+     ],
+     "visual": {
+      "type": "icon",
+      "name": "calendar",
+      "cross": false,
+      "count": 7,
+      "label": "Every single day"
+     }
+    },
+    {
+     "text": "Your liver is a sugar factory.",
+     "organ": "liver",
+     "words": [
+      "Liver",
+      "sugar factory"
+     ],
+     "visual": {
+      "type": "organ",
+      "name": "liver",
+      "state": "healthy",
+      "label": "The sugar factory"
+     }
+    },
+    {
+     "text": "When it gets too much fructose, it turns the extra into fat.",
+     "organ": "liver",
+     "words": [
+      "Too much fructose",
+      "turns into fat"
+     ],
+     "visual": {
+      "type": "cells",
+      "kind": "fat cells",
+      "action": "grow",
+      "label": "Extra fructose becomes fat"
+     }
+    },
+    {
+     "text": "Scientists call it de novo lipogenesis.",
+     "organ": "liver",
+     "words": [
+      "De novo",
+      "lipogenesis"
+     ],
+     "visual": {
+      "type": "versus",
+      "myth": "Sugar is just burned for energy",
+      "fact": "De novo lipogenesis: sugar into fat"
+     }
+    },
+    {
+     "text": "In one study, researchers cut sugar for just nine days.",
+     "organ": "liver",
+     "words": [
+      "Nine days",
+      "cut sugar"
+     ],
+     "visual": {
+      "type": "clock",
+      "from": "00:00",
+      "to": "09:00"
+     }
+    },
+    {
+     "text": "Total sugar dropped from 28 percent of calories to 10.",
+     "organ": "liver",
+     "words": [
+      "28 percent",
+      "to 10"
+     ],
+     "visual": {
+      "type": "compare",
+      "a": {
+       "label": "Before",
+       "value": 28.0
+      },
+      "b": {
+       "label": "After",
+       "value": 10.0
+      },
+      "unit": "% of calories"
+     }
+    },
+    {
+     "text": "Starch replaced it, so calories stayed the same.",
+     "organ": "none",
+     "words": [
+      "Starch",
+      "calories same"
+     ],
+     "visual": {
+      "type": "icon",
+      "name": "bread",
+      "cross": false,
+      "count": 3,
+      "label": "Starch replaced sugar"
+     }
+    },
+    {
+     "text": "Liver fat fell from 7.2 percent to 3.8 percent.",
+     "organ": "liver",
+     "words": [
+      "Liver fat",
+      "7.2 to 3.8"
+     ],
+     "visual": {
+      "type": "compare",
+      "a": {
+       "label": "Before",
+       "value": 7.2
+      },
+      "b": {
+       "label": "After",
+       "value": 3.8
+      },
+      "unit": "% liver fat"
+     }
+    },
+    {
+     "text": "Almost cut in half.",
+     "organ": "liver",
+     "words": [
+      "Almost",
+      "cut in half"
+     ],
+     "visual": {
+      "type": "meter",
+      "label": "Liver fat",
+      "from": 1,
+      "to": 0.53,
+      "good": true
+     }
+    },
+    {
+     "text": "And nobody lost weight.",
+     "organ": "none",
+     "words": [
+      "Nobody",
+      "lost weight"
+     ],
+     "visual": {
+      "type": "icon",
+      "name": "scale",
+      "cross": true,
+      "count": 1,
+      "label": "No weight lost"
+     }
+    },
+    {
+     "text": "Quick warning on the fine print.",
+     "organ": "none",
+     "words": [
+      "Quick warning",
+      "fine print"
+     ],
+     "visual": {
+      "type": "icon",
+      "name": "warning",
+      "cross": false,
+      "count": 1,
+      "label": "Read the fine print"
+     }
+    },
+    {
+     "text": "This was a small study of 41 children with obesity, who started with very high sugar intake.",
+     "organ": "liver",
+     "words": [
+      "41 children",
+      "obesity",
+      "high sugar"
+     ],
+     "visual": {
+      "type": "stat",
+      "value": 41.0,
+      "prefix": "",
+      "unit": " kids",
+      "label": "Children with obesity",
+      "good": false
+     }
+    },
+    {
+     "text": "Adults won't see identical numbers.",
+     "organ": "none",
+     "words": [
+      "Adults",
+      "won't see identical"
+     ],
+     "visual": {
+      "type": "versus",
+      "myth": "Adults get identical numbers",
+      "fact": "Adults won't see the same results"
+     }
+    },
+    {
+     "text": "But a later trial found a similar liver-fat drop in adults after six weeks of fructose restriction.",
+     "organ": "liver",
+     "words": [
+      "Adults",
+      "six weeks",
+      "liver-fat drop"
+     ],
+     "visual": {
+      "type": "stat",
+      "value": 6.0,
+      "prefix": "",
+      "unit": " weeks",
+      "label": "Adult trial: liver fat fell",
+      "good": true
+     }
+    },
+    {
+     "text": "There's one more hidden number.",
+     "organ": "liver",
+     "words": [
+      "One more",
+      "hidden number"
+     ],
+     "visual": {
+      "type": "question",
+      "text": "What is the one more hidden number?"
+     }
+    },
+    {
+     "text": "A waste marker called d-lactate fell by 50 percent.",
+     "organ": "liver",
+     "words": [
+      "D-lactate",
+      "fell 50 percent"
+     ],
+     "visual": {
+      "type": "stat",
+      "value": 50.0,
+      "prefix": "-",
+      "unit": "%",
+      "label": "D-lactate waste marker",
+      "good": true
+     }
+    },
+    {
+     "text": "It's linked to a reactive molecule called methylglyoxal, which glycates proteins about 250 times faster than glucose.",
+     "organ": "liver",
+     "words": [
+      "Methylglyoxal",
+      "250 times faster"
+     ],
+     "visual": {
+      "type": "stat",
+      "value": 250.0,
+      "prefix": "",
+      "unit": "x",
+      "label": "Faster glycation than glucose",
+      "good": false
+     }
+    },
+    {
+     "text": "Deep inside, the factory is cleaning up.",
+     "organ": "liver",
+     "words": [
+      "Factory",
+      "cleaning up"
+     ],
+     "visual": {
+      "type": "organ",
+      "name": "liver",
+      "state": "healing",
+      "label": "Factory cleaning up"
+     }
+    }
+   ],
+   "narration": [
+    "Now the wildest part of the whole timeline.",
+    "Picture the sweetened drink you used to have with lunch.",
+    "Every day, your liver had to deal with it.",
+    "Your liver is a sugar factory.",
+    "When it gets too much fructose, it turns the extra into fat.",
+    "Scientists call it de novo lipogenesis.",
+    "In one study, researchers cut sugar for just nine days.",
+    "Total sugar dropped from 28 percent of calories to 10.",
+    "Starch replaced it, so calories stayed the same.",
+    "Liver fat fell from 7.2 percent to 3.8 percent.",
+    "Almost cut in half.",
+    "And nobody lost weight.",
+    "Quick warning on the fine print.",
+    "This was a small study of 41 children with obesity, who started with very high sugar intake.",
+    "Adults won't see identical numbers.",
+    "But a later trial found a similar liver-fat drop in adults after six weeks of fructose restriction.",
+    "There's one more hidden number.",
+    "A waste marker called d-lactate fell by 50 percent.",
+    "It's linked to a reactive molecule called methylglyoxal, which glycates proteins about 250 times faster than glucose.",
+    "Deep inside, the factory is cleaning up."
+   ]
+  },
+  {
+   "title": "The Cravings Fade",
+   "stage": "WEEK 3",
+   "organ": "brain",
+   "lines": [
+    {
+     "text": "By week 3, the storm often passes.",
+     "organ": "brain",
+     "words": [
+      "Week 3",
+      "storm",
+      "passes"
+     ],
+     "visual": {
+      "type": "wave",
+      "label": "Craving storm",
+      "calm": true
+     }
+    },
+    {
+     "text": "You walk past the bakery and keep walking.",
+     "organ": "brain",
+     "words": [
+      "walk past",
+      "bakery",
+      "keep walking"
+     ],
+     "visual": {
+      "type": "icon",
+      "name": "bread",
+      "cross": true,
+      "count": 1,
+      "label": "Bakery ignored"
+     }
+    },
+    {
+     "text": "You barely notice the smell.",
+     "organ": "brain",
+     "words": [
+      "barely notice",
+      "smell"
+     ],
+     "visual": {
+      "type": "meter",
+      "label": "Smell pull",
+      "from": 0.85,
+      "to": 0.15,
+      "good": true
+     }
+    },
+    {
+     "text": "Commonly reported timelines say symptoms peak in the first week and ease by the second.",
+     "organ": "brain",
+     "words": [
+      "peak",
+      "first week",
+      "ease",
+      "second"
+     ],
+     "visual": {
+      "type": "organ",
+      "name": "brain",
+      "state": "healthy",
+      "label": "peak first week ease second"
+     }
+    },
+    {
+     "text": "Sleep and mood tend to improve by the third.",
+     "organ": "brain",
+     "words": [
+      "Sleep",
+      "mood",
+      "improve",
+      "third"
+     ],
+     "visual": {
+      "type": "checklist",
+      "items": [
+       "Better sleep",
+       "Better mood",
+       "Steadier focus"
+      ],
+      "bad": false
+     }
+    },
+    {
+     "text": "These timelines are approximate, so treat them as typical, not guaranteed.",
+     "organ": "none",
+     "words": [
+      "approximate",
+      "typical",
+      "not guaranteed"
+     ],
+     "visual": {
+      "type": "versus",
+      "myth": "Everyone follows the same timeline",
+      "fact": "Timelines are approximate, not guaranteed"
+     }
+    },
+    {
+     "text": "Your brain's reward circuits are settling into a new rhythm.",
+     "organ": "brain",
+     "words": [
+      "reward circuits",
+      "new rhythm"
+     ],
+     "visual": {
+      "type": "cells",
+      "kind": "neurons",
+      "action": "flow",
+      "label": "Reward circuits settling"
+     }
+    },
+    {
+     "text": "The shouting turns into a whisper.",
+     "organ": "brain",
+     "words": [
+      "shouting",
+      "whisper"
+     ],
+     "visual": {
+      "type": "compare",
+      "a": {
+       "label": "Shouting",
+       "value": 90.0
+      },
+      "b": {
+       "label": "Whisper",
+       "value": 15.0
+      },
+      "unit": "dB"
+     }
+    },
+    {
+     "text": "Here's a question.",
+     "organ": "brain",
+     "words": [
+      "Here's",
+      "question"
+     ],
+     "visual": {
+      "type": "question",
+      "text": "Here's a question..."
+     }
+    },
+    {
+     "text": "What happened to your sense of sweetness?",
+     "organ": "none",
+     "words": [
+      "sense",
+      "sweetness"
+     ],
+     "visual": {
+      "type": "question",
+      "text": "What happened to your sense of sweetness?"
+     }
+    },
+    {
+     "text": "That answer comes next.",
+     "organ": "none",
+     "words": [
+      "answer",
+      "comes next"
+     ],
+     "visual": {
+      "type": "icon",
+      "name": "clock",
+      "cross": false,
+      "count": 1,
+      "label": "Answer coming up"
+     }
+    },
+    {
+     "text": "Your tongue is quietly rewriting its settings.",
+     "organ": "none",
+     "words": [
+      "tongue",
+      "rewriting",
+      "settings"
+     ],
+     "visual": {
+      "type": "meter",
+      "label": "Sweetness sensitivity",
+      "from": 0.3,
+      "to": 0.8,
+      "good": true
+     }
+    }
+   ],
+   "narration": [
+    "By week 3, the storm often passes.",
+    "You walk past the bakery and keep walking.",
+    "You barely notice the smell.",
+    "Commonly reported timelines say symptoms peak in the first week and ease by the second.",
+    "Sleep and mood tend to improve by the third.",
+    "These timelines are approximate, so treat them as typical, not guaranteed.",
+    "Your brain's reward circuits are settling into a new rhythm.",
+    "The shouting turns into a whisper.",
+    "Here's a question.",
+    "What happened to your sense of sweetness?",
+    "That answer comes next.",
+    "Your tongue is quietly rewriting its settings."
+   ]
+  },
+  {
+   "title": "The Taste Reset",
+   "stage": "MONTH 1",
+   "organ": "stomach",
+   "lines": [
+    {
+     "text": "Month 1 is about your tongue.",
+     "organ": "stomach",
+     "words": [
+      "Month 1",
+      "your tongue"
+     ],
+     "visual": {
+      "type": "icon",
+      "name": "calendar",
+      "cross": false,
+      "count": 1,
+      "label": "Month 1"
+     }
+    },
+    {
+     "text": "Think of your morning cereal.",
+     "organ": "stomach",
+     "words": [
+      "morning",
+      "cereal"
+     ],
+     "visual": {
+      "type": "icon",
+      "name": "food",
+      "cross": false,
+      "count": 1,
+      "label": "Morning cereal"
+     }
+    },
+    {
+     "text": "It used to taste fine.",
+     "organ": "stomach",
+     "words": [
+      "used to",
+      "taste fine"
+     ],
+     "visual": {
+      "type": "meter",
+      "label": "Sweetness you notice",
+      "from": 0.5,
+      "to": 0.5,
+      "good": true
+     }
+    },
+    {
+     "text": "Soon it may taste far too sweet.",
+     "organ": "stomach",
+     "words": [
+      "far too sweet"
+     ],
+     "visual": {
+      "type": "meter",
+      "label": "Sweetness you notice",
+      "from": 0.5,
+      "to": 0.95,
+      "good": false
+     }
+    },
+    {
+     "text": "Animal studies give a clue.",
+     "organ": "stomach",
+     "words": [
+      "Animal studies",
+      "clue"
+     ],
+     "visual": {
+      "type": "question",
+      "text": "What do animal studies reveal?"
+     }
+    },
+    {
+     "text": "Rats on a high-sugar diet lost about 50 percent of their taste nerve response to sucrose in four weeks.",
+     "organ": "stomach",
+     "words": [
+      "50 percent",
+      "taste nerve",
+      "four weeks"
+     ],
+     "visual": {
+      "type": "stat",
+      "value": 50.0,
+      "prefix": "-",
+      "unit": "%",
+      "label": "Taste nerve response to sucrose",
+      "good": false
+     }
+    },
+    {
+     "text": "After four weeks back on a normal diet, it returned.",
+     "organ": "stomach",
+     "words": [
+      "four weeks",
+      "returned"
+     ],
+     "visual": {
+      "type": "meter",
+      "label": "Taste nerve response",
+      "from": 0.5,
+      "to": 1,
+      "good": true
+     }
+    },
+    {
+     "text": "In people, the effect takes a little longer.",
+     "organ": "stomach",
+     "words": [
+      "people",
+      "takes longer"
+     ],
+     "visual": {
+      "type": "clock",
+      "from": "04:00",
+      "to": "08:00"
+     }
+    },
+    {
+     "text": "In one trial, the low-sugar group began rating low-sugar puddings as more intense in the second month.",
+     "organ": "stomach",
+     "words": [
+      "low-sugar group",
+      "more intense",
+      "second month"
+     ],
+     "visual": {
+      "type": "compare",
+      "a": {
+       "label": "Month 1",
+       "value": 1.0
+      },
+      "b": {
+       "label": "Month 2",
+       "value": 2.0
+      },
+      "unit": "x intensity"
+     }
+    },
+    {
+     "text": "So an apple starts to taste different.",
+     "organ": "stomach",
+     "words": [
+      "apple",
+      "taste different"
+     ],
+     "visual": {
+      "type": "icon",
+      "name": "apple",
+      "cross": false,
+      "count": 1,
+      "label": "Apple tastes different"
+     }
+    },
+    {
+     "text": "Not because the apple changed.",
+     "organ": "stomach",
+     "words": [
+      "apple",
+      "not changed"
+     ],
+     "visual": {
+      "type": "icon",
+      "name": "apple",
+      "cross": true,
+      "count": 1,
+      "label": "Apple didn't change"
+     }
+    },
+    {
+     "text": "Because your tongue did.",
+     "organ": "stomach",
+     "words": [
+      "your tongue",
+      "did"
+     ],
+     "visual": {
+      "type": "cells",
+      "kind": "neurons",
+      "action": "shrink",
+      "label": "Taste receptors adapting"
+     }
+    },
+    {
+     "text": "Also, here's a myth worth breaking.",
+     "organ": "none",
+     "words": [
+      "myth",
+      "breaking"
+     ],
+     "visual": {
+      "type": "question",
+      "text": "A myth worth breaking?"
+     }
+    },
+    {
+     "text": "You don't have to give up fruit.",
+     "organ": "stomach",
+     "words": [
+      "give up",
+      "fruit"
+     ],
+     "visual": {
+      "type": "versus",
+      "myth": "You must give up all fruit",
+      "fact": "Whole fruit is fine"
+     }
+    },
+    {
+     "text": "The WHO guidelines target free sugars, meaning added sugars plus juice and honey.",
+     "organ": "stomach",
+     "words": [
+      "WHO",
+      "free sugars",
+      "juice and honey"
+     ],
+     "visual": {
+      "type": "checklist",
+      "items": [
+       "Added sugars",
+       "Juice",
+       "Honey"
+      ],
+      "bad": true
+     }
+    },
+    {
+     "text": "They don't cover sugars inside whole fruit, vegetables or milk.",
+     "organ": "stomach",
+     "words": [
+      "whole fruit",
+      "vegetables",
+      "milk"
+     ],
+     "visual": {
+      "type": "checklist",
+      "items": [
+       "Whole fruit",
+       "Vegetables",
+       "Milk"
+      ],
+      "bad": false
+     }
+    },
+    {
+     "text": "And another myth.",
+     "organ": "none",
+     "words": [
+      "another myth"
+     ],
+     "visual": {
+      "type": "question",
+      "text": "Another myth?"
+     }
+    },
+    {
+     "text": "A sugar detox doesn't flush toxins.",
+     "organ": "liver",
+     "words": [
+      "detox",
+      "flush toxins"
+     ],
+     "visual": {
+      "type": "icon",
+      "name": "warning",
+      "cross": true,
+      "count": 1,
+      "label": "Toxin flush"
+     }
+    },
+    {
+     "text": "Your liver and kidneys already do that job every day.",
+     "organ": "kidneys",
+     "words": [
+      "liver",
+      "kidneys",
+      "every day"
+     ],
+     "visual": {
+      "type": "organ",
+      "name": "kidneys",
+      "state": "healthy",
+      "label": "Liver and kidneys at work"
+     }
+    },
+    {
+     "text": "What changes is how your body adapts to less.",
+     "organ": "stomach",
+     "words": [
+      "body adapts",
+      "less"
+     ],
+     "visual": {
+      "type": "meter",
+      "label": "Adaptation to less sugar",
+      "from": 0.2,
+      "to": 0.8,
+      "good": true
+     }
+    }
+   ],
+   "narration": [
+    "Month 1 is about your tongue.",
+    "Think of your morning cereal.",
+    "It used to taste fine.",
+    "Soon it may taste far too sweet.",
+    "Animal studies give a clue.",
+    "Rats on a high-sugar diet lost about 50 percent of their taste nerve response to sucrose in four weeks.",
+    "After four weeks back on a normal diet, it returned.",
+    "In people, the effect takes a little longer.",
+    "In one trial, the low-sugar group began rating low-sugar puddings as more intense in the second month.",
+    "So an apple starts to taste different.",
+    "Not because the apple changed.",
+    "Because your tongue did.",
+    "Also, here's a myth worth breaking.",
+    "You don't have to give up fruit.",
+    "The WHO guidelines target free sugars, meaning added sugars plus juice and honey.",
+    "They don't cover sugars inside whole fruit, vegetables or milk.",
+    "And another myth.",
+    "A sugar detox doesn't flush toxins.",
+    "Your liver and kidneys already do that job every day.",
+    "What changes is how your body adapts to less."
+   ]
+  },
+  {
+   "title": "The New Normal",
+   "stage": "MONTH 3",
+   "organ": "gut",
+   "lines": [
+    {
+     "text": "By month 3, the change is in your perception.",
+     "organ": "brain",
+     "words": [
+      "Month 3",
+      "perception"
+     ],
+     "visual": {
+      "type": "question",
+      "text": "What changes by month 3?"
+     }
+    },
+    {
+     "text": "A friend hands you a slice of cake.",
+     "organ": "none",
+     "words": [
+      "friend",
+      "slice",
+      "cake"
+     ],
+     "visual": {
+      "type": "icon",
+      "name": "cake",
+      "cross": false,
+      "count": 1,
+      "label": "A slice of cake"
+     }
+    },
+    {
+     "text": "You take one bite and wince.",
+     "organ": "gut",
+     "words": [
+      "one bite",
+      "wince"
+     ],
+     "visual": {
+      "type": "checklist",
+      "items": [
+       "One bite",
+       "Wince"
+      ],
+      "bad": true
+     }
+    },
+    {
+     "text": "It's sweeter than you remember.",
+     "organ": "brain",
+     "words": [
+      "sweeter",
+      "remember"
+     ],
+     "visual": {
+      "type": "meter",
+      "label": "Perceived sweetness",
+      "from": 0.4,
+      "to": 0.9,
+      "good": false
+     }
+    },
+    {
+     "text": "In that same human trial, by the third month the low-sugar group rated both low and high sweetness as about 40 percent sweeter than the control group did.",
+     "organ": "brain",
+     "words": [
+      "third month",
+      "40 percent",
+      "sweeter"
+     ],
+     "visual": {
+      "type": "stat",
+      "value": 40.0,
+      "prefix": "~",
+      "unit": "%",
+      "label": "Sweeter than control group",
+      "good": true
+     }
+    },
+    {
+     "text": "Same pudding.",
+     "organ": "none",
+     "words": [
+      "Same",
+      "pudding"
+     ],
+     "visual": {
+      "type": "icon",
+      "name": "food",
+      "cross": false,
+      "count": 2,
+      "label": "Same pudding"
+     }
+    },
+    {
+     "text": "Different tongue.",
+     "organ": "gut",
+     "words": [
+      "Different",
+      "tongue"
+     ],
+     "visual": {
+      "type": "cells",
+      "kind": "neurons",
+      "action": "flow",
+      "label": "Taste signals changed"
+     }
+    },
+    {
+     "text": "The odd part is that the intensity changed, but not how much they enjoyed it.",
+     "organ": "brain",
+     "words": [
+      "intensity changed",
+      "enjoyed"
+     ],
+     "visual": {
+      "type": "compare",
+      "a": {
+       "label": "Intensity",
+       "value": 140.0
+      },
+      "b": {
+       "label": "Enjoyment",
+       "value": 100.0
+      },
+      "unit": "%"
+     }
+    },
+    {
+     "text": "So your tongue turns the dial up.",
+     "organ": "brain",
+     "words": [
+      "tongue",
+      "dial up"
+     ],
+     "visual": {
+      "type": "meter",
+      "label": "Tongue sensitivity dial",
+      "from": 0.4,
+      "to": 0.85,
+      "good": true
+     }
+    },
+    {
+     "text": "Your reward system still likes what it likes.",
+     "organ": "brain",
+     "words": [
+      "reward system",
+      "still likes"
+     ],
+     "visual": {
+      "type": "versus",
+      "myth": "Cravings fade with sensitivity",
+      "fact": "Reward system still likes sweet"
+     }
+    },
+    {
+     "text": "Meanwhile, the WHO sets a benchmark.",
+     "organ": "none",
+     "words": [
+      "WHO",
+      "benchmark"
+     ],
+     "visual": {
+      "type": "icon",
+      "name": "doctor",
+      "cross": false,
+      "count": 1,
+      "label": "WHO benchmark"
+     }
+    },
+    {
+     "text": "Under 10 percent of daily energy from free sugars.",
+     "organ": "none",
+     "words": [
+      "Under 10 percent",
+      "free sugars"
+     ],
+     "visual": {
+      "type": "stat",
+      "value": 10.0,
+      "prefix": "<",
+      "unit": "%",
+      "label": "Daily energy from free sugar",
+      "good": true
+     }
+    },
+    {
+     "text": "Below 5 percent, roughly 25 grams or 6 teaspoons, gives extra benefits.",
+     "organ": "gut",
+     "words": [
+      "Below 5 percent",
+      "25 grams",
+      "6 teaspoons"
+     ],
+     "visual": {
+      "type": "stat",
+      "value": 25.0,
+      "prefix": "<",
+      "unit": "g",
+      "label": "Below 5% = 6 teaspoons",
+      "good": true
+     }
+    },
+    {
+     "text": "A single can of soda can hold up to 40 grams.",
+     "organ": "none",
+     "words": [
+      "single can",
+      "soda",
+      "40 grams"
+     ],
+     "visual": {
+      "type": "stat",
+      "value": 40.0,
+      "prefix": "up to ",
+      "unit": "g",
+      "label": "Sugar in one soda can",
+      "good": false
+     }
+    },
+    {
+     "text": "Even a tablespoon of ketchup has about 4.",
+     "organ": "none",
+     "words": [
+      "tablespoon",
+      "ketchup",
+      "about 4"
+     ],
+     "visual": {
+      "type": "compare",
+      "a": {
+       "label": "Soda can",
+       "value": 40.0
+      },
+      "b": {
+       "label": "Ketchup tbsp",
+       "value": 4.0
+      },
+      "unit": "g"
+     }
+    },
+    {
+     "text": "Which means the biggest changes may come from the sugar you never noticed.",
+     "organ": "gut",
+     "words": [
+      "biggest changes",
+      "never noticed"
+     ],
+     "visual": {
+      "type": "question",
+      "text": "Is hidden sugar the real culprit?"
+     }
+    }
+   ],
+   "narration": [
+    "By month 3, the change is in your perception.",
+    "A friend hands you a slice of cake.",
+    "You take one bite and wince.",
+    "It's sweeter than you remember.",
+    "In that same human trial, by the third month the low-sugar group rated both low and high sweetness as about 40 percent sweeter than the control group did.",
+    "Same pudding.",
+    "Different tongue.",
+    "The odd part is that the intensity changed, but not how much they enjoyed it.",
+    "So your tongue turns the dial up.",
+    "Your reward system still likes what it likes.",
+    "Meanwhile, the WHO sets a benchmark.",
+    "Under 10 percent of daily energy from free sugars.",
+    "Below 5 percent, roughly 25 grams or 6 teaspoons, gives extra benefits.",
+    "A single can of soda can hold up to 40 grams.",
+    "Even a tablespoon of ketchup has about 4.",
+    "Which means the biggest changes may come from the sugar you never noticed."
+   ]
+  },
+  {
+   "title": "One Year Later",
+   "stage": "YEAR 1",
+   "organ": "heart",
+   "lines": [
+    {
+     "text": "A full year without added sugar.",
+     "organ": "none",
+     "words": [
+      "full year",
+      "without sugar"
+     ],
+     "visual": {
+      "type": "clock",
+      "from": "00:00",
+      "to": "12:00"
+     }
+    },
+    {
+     "text": "Now we zoom out to the long game.",
+     "organ": "none",
+     "words": [
+      "zoom out",
+      "long game"
+     ],
+     "visual": {
+      "type": "question",
+      "text": "What does the long game look like?"
+     }
+    },
+    {
+     "text": "Your teeth come first.",
+     "organ": "none",
+     "words": [
+      "teeth",
+      "first"
+     ],
+     "visual": {
+      "type": "icon",
+      "name": "tooth",
+      "cross": false,
+      "count": 1,
+      "label": "Teeth first"
+     }
+    },
+    {
+     "text": "Every sip of a sweet drink bathes them in sugar.",
+     "organ": "none",
+     "words": [
+      "sweet drink",
+      "bathes",
+      "sugar"
+     ],
+     "visual": {
+      "type": "icon",
+      "name": "soda",
+      "cross": false,
+      "count": 4,
+      "label": "Sweet drinks bathe teeth"
+     }
+    },
+    {
+     "text": "The WHO found more tooth decay when free sugars rise above 10 percent of energy.",
+     "organ": "none",
+     "words": [
+      "more decay",
+      "above 10 percent"
+     ],
+     "visual": {
+      "type": "stat",
+      "value": 10.0,
+      "prefix": ">",
+      "unit": "%",
+      "label": "Free sugar share of energy",
+      "good": false
+     }
+    },
+    {
+     "text": "And lower decay when intake stays under 5 percent, though that evidence is lower quality.",
+     "organ": "none",
+     "words": [
+      "lower decay",
+      "under 5 percent"
+     ],
+     "visual": {
+      "type": "meter",
+      "label": "Tooth decay",
+      "from": 0.7,
+      "to": 0.3,
+      "good": true
+     }
+    },
+    {
+     "text": "Cavities build up over a lifetime, so fewer sugar hits means fewer chances for them.",
+     "organ": "none",
+     "words": [
+      "fewer sugar hits",
+      "fewer chances"
+     ],
+     "visual": {
+      "type": "checklist",
+      "items": [
+       "Fewer sugar hits",
+       "Fewer chances",
+       "Fewer cavities"
+      ],
+      "bad": false
+     }
+    },
+    {
+     "text": "Now your heart.",
+     "organ": "heart",
+     "words": [
+      "your heart"
+     ],
+     "visual": {
+      "type": "organ",
+      "name": "heart",
+      "state": "healthy",
+      "label": "Your heart"
+     }
+    },
+    {
+     "text": "In a CDC and Harvard study that followed people for about 14 years, those getting 10 to 25 percent of calories from added sugar had a 30 percent higher risk of dying from heart disease.",
+     "organ": "heart",
+     "words": [
+      "30 percent higher",
+      "heart disease"
+     ],
+     "visual": {
+      "type": "stat",
+      "value": 30.0,
+      "prefix": "+",
+      "unit": "%",
+      "label": "Heart disease death risk",
+      "good": false
+     }
+    },
+    {
+     "text": "At 25 percent or more, the risk nearly tripled.",
+     "organ": "heart",
+     "words": [
+      "25 percent",
+      "nearly tripled"
+     ],
+     "visual": {
+      "type": "compare",
+      "a": {
+       "label": "10-25% sugar",
+       "value": 1.3
+      },
+      "b": {
+       "label": "25%+ sugar",
+       "value": 3.0
+      },
+      "unit": "x risk"
+     }
+    },
+    {
+     "text": "Remember, it's an observational study.",
+     "organ": "heart",
+     "words": [
+      "observational",
+      "study"
+     ],
+     "visual": {
+      "type": "icon",
+      "name": "doctor",
+      "cross": false,
+      "count": 1,
+      "label": "Observational study"
+     }
+    },
+    {
+     "text": "It shows a link, not proof.",
+     "organ": "heart",
+     "words": [
+      "link",
+      "not proof"
+     ],
+     "visual": {
+      "type": "versus",
+      "myth": "Proof sugar causes it",
+      "fact": "A link, not proof"
+     }
+    },
+    {
+     "text": "But the link held even for people who weren't overweight.",
+     "organ": "heart",
+     "words": [
+      "weren't overweight",
+      "link held"
+     ],
+     "visual": {
+      "type": "icon",
+      "name": "scale",
+      "cross": true,
+      "count": 1,
+      "label": "Even if not overweight"
+     }
+    },
+    {
+     "text": "That's the quiet danger.",
+     "organ": "heart",
+     "words": [
+      "quiet danger"
+     ],
+     "visual": {
+      "type": "wave",
+      "label": "Hidden heart strain",
+      "calm": false
+     }
+    },
+    {
+     "text": "You can look fine on the outside.",
+     "organ": "heart",
+     "words": [
+      "look fine",
+      "outside"
+     ],
+     "visual": {
+      "type": "checklist",
+      "items": [
+       "Normal weight",
+       "Looks healthy",
+       "Hidden risk"
+      ],
+      "bad": true
+     }
+    },
+    {
+     "text": "One year in, your liver, tongue and teeth have all been rewired by what you left out.",
+     "organ": "liver",
+     "words": [
+      "liver, tongue, teeth",
+      "rewired"
+     ],
+     "visual": {
+      "type": "organ",
+      "name": "liver",
+      "state": "healing",
+      "label": "Rewired in one year"
+     }
+    }
+   ],
+   "narration": [
+    "A full year without added sugar.",
+    "Now we zoom out to the long game.",
+    "Your teeth come first.",
+    "Every sip of a sweet drink bathes them in sugar.",
+    "The WHO found more tooth decay when free sugars rise above 10 percent of energy.",
+    "And lower decay when intake stays under 5 percent, though that evidence is lower quality.",
+    "Cavities build up over a lifetime, so fewer sugar hits means fewer chances for them.",
+    "Now your heart.",
+    "In a CDC and Harvard study that followed people for about 14 years, those getting 10 to 25 percent of calories from added sugar had a 30 percent higher risk of dying from heart disease.",
+    "At 25 percent or more, the risk nearly tripled.",
+    "Remember, it's an observational study.",
+    "It shows a link, not proof.",
+    "But the link held even for people who weren't overweight.",
+    "That's the quiet danger.",
+    "You can look fine on the outside.",
+    "One year in, your liver, tongue and teeth have all been rewired by what you left out."
+   ]
+  },
+  {
+   "title": "The Big Picture",
+   "stage": null,
+   "organ": "none",
+   "lines": [
+    {
+     "text": "Look at the whole timeline again.",
+     "organ": "none",
+     "words": [
+      "Whole",
+      "timeline"
+     ],
+     "visual": {
+      "type": "question",
+      "text": "Whole timeline"
+     }
+    },
+    {
+     "text": "A flat blood sugar curve on day 1.",
+     "organ": "pancreas",
+     "words": [
+      "Flat",
+      "blood sugar",
+      "day 1"
+     ],
+     "visual": {
+      "type": "wave",
+      "label": "Blood sugar, day 1",
+      "calm": true
+     }
+    },
+    {
+     "text": "A noisy brain on day 3.",
+     "organ": "brain",
+     "words": [
+      "Noisy brain",
+      "day 3"
+     ],
+     "visual": {
+      "type": "wave",
+      "label": "Brain activity, day 3",
+      "calm": false
+     }
+    },
+    {
+     "text": "A liver cutting its fat in half within days.",
+     "organ": "liver",
+     "words": [
+      "Liver",
+      "fat in half",
+      "within days"
+     ],
+     "visual": {
+      "type": "meter",
+      "label": "Liver fat",
+      "from": 1,
+      "to": 0.5,
+      "good": true
+     }
+    },
+    {
+     "text": "A tongue that resets over months.",
+     "organ": "none",
+     "words": [
+      "Tongue",
+      "resets",
+      "months"
+     ],
+     "visual": {
+      "type": "icon",
+      "name": "calendar",
+      "cross": false,
+      "count": 3,
+      "label": "Taste resets over months"
+     }
+    },
+    {
+     "text": "Teeth and a heart that benefit over years.",
+     "organ": "heart",
+     "words": [
+      "Teeth",
+      "heart",
+      "benefit",
+      "years"
+     ],
+     "visual": {
+      "type": "checklist",
+      "items": [
+       "Stronger teeth",
+       "Healthier heart",
+       "Over years"
+      ],
+      "bad": false
+     }
+    },
+    {
+     "text": "Your body never needed the sugar.",
+     "organ": "none",
+     "words": [
+      "Never needed",
+      "sugar"
+     ],
+     "visual": {
+      "type": "icon",
+      "name": "sugar",
+      "cross": true,
+      "count": 1,
+      "label": "Never needed it"
+     }
+    },
+    {
+     "text": "It just adapted to having it.",
+     "organ": "none",
+     "words": [
+      "Adapted",
+      "having it"
+     ],
+     "visual": {
+      "type": "cells",
+      "kind": "glucose",
+      "action": "flow",
+      "label": "Body adapted to sugar"
+     }
+    },
+    {
+     "text": "And when it was gone, it adapted again.",
+     "organ": "none",
+     "words": [
+      "Gone",
+      "adapted again"
+     ],
+     "visual": {
+      "type": "compare",
+      "a": {
+       "label": "With sugar",
+       "value": 100.0
+      },
+      "b": {
+       "label": "Without sugar",
+       "value": 40.0
+      },
+      "unit": "% reliance"
+     }
+    },
+    {
+     "text": "So here's our question.",
+     "organ": "none",
+     "words": [
+      "Our",
+      "question"
+     ],
+     "visual": {
+      "type": "question",
+      "text": "So here's our question."
+     }
+    },
+    {
+     "text": "Which stamp surprised you most?",
+     "organ": "none",
+     "words": [
+      "Which stamp",
+      "surprised most"
+     ],
+     "visual": {
+      "type": "question",
+      "text": "Which stamp surprised you most?"
+     }
+    },
+    {
+     "text": "Tell us in the comments.",
+     "organ": "none",
+     "words": [
+      "Tell us",
+      "comments"
+     ],
+     "visual": {
+      "type": "icon",
+      "name": "phone",
+      "cross": false,
+      "count": 1,
+      "label": "Comment below"
+     }
+    }
+   ],
+   "narration": [
+    "Look at the whole timeline again.",
+    "A flat blood sugar curve on day 1.",
+    "A noisy brain on day 3.",
+    "A liver cutting its fat in half within days.",
+    "A tongue that resets over months.",
+    "Teeth and a heart that benefit over years.",
+    "Your body never needed the sugar.",
+    "It just adapted to having it.",
+    "And when it was gone, it adapted again.",
+    "So here's our question.",
+    "Which stamp surprised you most?",
+    "Tell us in the comments."
+   ]
+  }
+ ],
+ "shorts": [
+  {
+   "title": "The Organ That Changes in 9 Days",
+   "lines": [
+    {
+     "text": "Which organ changes fastest when you quit sugar?",
+     "organ": "none",
+     "words": [
+      "Which organ",
+      "changes fastest"
+     ],
+     "stage": null,
+     "visual": {
+      "type": "question",
+      "text": "Which organ changes fastest when you quit sugar?"
+     }
+    },
+    {
+     "text": "Not your waistline.",
+     "organ": "fat",
+     "words": [
+      "Not",
+      "your waistline"
+     ],
+     "stage": null,
+     "visual": {
+      "type": "icon",
+      "name": "scale",
+      "cross": true,
+      "count": 1,
+      "label": "Not your waistline"
+     }
+    },
+    {
+     "text": "It's your liver.",
+     "organ": "liver",
+     "words": [
+      "It's your liver"
+     ],
+     "stage": null,
+     "visual": {
+      "type": "organ",
+      "name": "liver",
+      "state": "fatty",
+      "label": "Your liver"
+     }
+    },
+    {
+     "text": "Your liver turns extra fructose into fat.",
+     "organ": "liver",
+     "words": [
+      "extra fructose",
+      "into fat"
+     ],
+     "stage": null,
+     "visual": {
+      "type": "cells",
+      "kind": "glucose",
+      "action": "flow",
+      "label": "Fructose turns into fat"
+     }
+    },
+    {
+     "text": "In one study, kids cut sugar for just nine days.",
+     "organ": "liver",
+     "words": [
+      "kids",
+      "cut sugar",
+      "nine days"
+     ],
+     "stage": "Day 9",
+     "visual": {
+      "type": "clock",
+      "from": "00:00",
+      "to": "09:00"
+     }
+    },
+    {
+     "text": "Sugar fell from 28 percent of calories to 10.",
+     "organ": "liver",
+     "words": [
+      "28 percent",
+      "to 10"
+     ],
+     "stage": "Day 9",
+     "visual": {
+      "type": "compare",
+      "a": {
+       "label": "Before",
+       "value": 28.0
+      },
+      "b": {
+       "label": "After",
+       "value": 10.0
+      },
+      "unit": "% of calories"
+     }
+    },
+    {
+     "text": "Starch replaced it, so calories stayed the same.",
+     "organ": "none",
+     "words": [
+      "Starch replaced it",
+      "calories same"
+     ],
+     "stage": null,
+     "visual": {
+      "type": "icon",
+      "name": "bread",
+      "cross": false,
+      "count": 1,
+      "label": "Starch replaced sugar"
+     }
+    },
+    {
+     "text": "Liver fat dropped from 7.2 percent to 3.8 percent.",
+     "organ": "liver",
+     "words": [
+      "Liver fat",
+      "7.2 to 3.8"
+     ],
+     "stage": "Day 9",
+     "visual": {
+      "type": "compare",
+      "a": {
+       "label": "Before",
+       "value": 7.2
+      },
+      "b": {
+       "label": "After",
+       "value": 3.8
+      },
+      "unit": "% liver fat"
+     }
+    },
+    {
+     "text": "Almost cut in half.",
+     "organ": "liver",
+     "words": [
+      "Almost",
+      "cut in half"
+     ],
+     "stage": null,
+     "visual": {
+      "type": "stat",
+      "value": 47.0,
+      "prefix": "-",
+      "unit": "%",
+      "label": "Liver fat reduction",
+      "good": true
+     }
+    },
+    {
+     "text": "And nobody lost weight.",
+     "organ": "fat",
+     "words": [
+      "nobody",
+      "lost weight"
+     ],
+     "stage": null,
+     "visual": {
+      "type": "meter",
+      "label": "Weight lost",
+      "from": 0.5,
+      "to": 0.5,
+      "good": false
+     }
+    },
+    {
+     "text": "Careful, though.",
+     "organ": "none",
+     "words": [
+      "Careful",
+      "though"
+     ],
+     "stage": null,
+     "visual": {
+      "type": "icon",
+      "name": "warning",
+      "cross": false,
+      "count": 1,
+      "label": "Careful"
+     }
+    },
+    {
+     "text": "That was a small study in children with obesity.",
+     "organ": "none",
+     "words": [
+      "small study",
+      "children",
+      "obesity"
+     ],
+     "stage": null,
+     "visual": {
+      "type": "checklist",
+      "items": [
+       "Small study",
+       "Children",
+       "With obesity"
+      ],
+      "bad": false
+     }
+    },
+    {
+     "text": "But a later trial saw a similar drop in adults after six weeks.",
+     "organ": "liver",
+     "words": [
+      "later trial",
+      "adults",
+      "six weeks"
+     ],
+     "stage": "Week 6",
+     "visual": {
+      "type": "icon",
+      "name": "calendar",
+      "cross": false,
+      "count": 6,
+      "label": "6 weeks, adults"
+     }
+    },
+    {
+     "text": "Then comes day 90.",
+     "organ": "none",
+     "words": [
+      "Then",
+      "day 90"
+     ],
+     "stage": "Day 90",
+     "visual": {
+      "type": "stat",
+      "value": 90.0,
+      "prefix": "Day ",
+      "unit": "",
+      "label": "Then comes",
+      "good": true
+     }
+    },
+    {
+     "text": "Your tongue starts rating sweetness about 40 percent stronger.",
+     "organ": "none",
+     "words": [
+      "tongue",
+      "40 percent stronger"
+     ],
+     "stage": "Day 90",
+     "visual": {
+      "type": "stat",
+      "value": 40.0,
+      "prefix": "+",
+      "unit": "%",
+      "label": "Sweetness rating",
+      "good": true
+     }
+    },
+    {
+     "text": "Same food.",
+     "organ": "none",
+     "words": [
+      "Same food"
+     ],
+     "stage": null,
+     "visual": {
+      "type": "icon",
+      "name": "cake",
+      "cross": false,
+      "count": 1,
+      "label": "Same food"
+     }
+    },
+    {
+     "text": "Different tongue.",
+     "organ": "none",
+     "words": [
+      "Different tongue"
+     ],
+     "stage": null,
+     "visual": {
+      "type": "versus",
+      "myth": "Sweet is sweet",
+      "fact": "Your tongue changed"
+     }
+    },
+    {
+     "text": "Your body is quietly rewiring itself the entire time.",
+     "organ": "brain",
+     "words": [
+      "quietly rewiring",
+      "entire time"
+     ],
+     "stage": null,
+     "visual": {
+      "type": "wave",
+      "label": "Body rewiring",
+      "calm": true
+     }
+    },
+    {
+     "text": "Send this to someone who thinks a sugar break does nothing.",
+     "organ": "none",
+     "words": [
+      "Send this",
+      "sugar break"
+     ],
+     "stage": null,
+     "visual": {
+      "type": "icon",
+      "name": "phone",
+      "cross": false,
+      "count": 1,
+      "label": "Send this"
+     }
+    },
+    {
+     "text": "The full timeline is in the video linked above.",
+     "organ": "none",
+     "words": [
+      "full timeline",
+      "video linked"
+     ],
+     "stage": null,
+     "visual": {
+      "type": "checklist",
+      "items": [
+       "Full timeline",
+       "In the video",
+       "Linked above"
+      ],
+      "bad": false
+     }
+    },
+    {
+     "text": "So which organ changes fastest when you quit sugar?",
+     "organ": "liver",
+     "words": [
+      "Which organ",
+      "changes fastest"
+     ],
+     "stage": null,
+     "visual": {
+      "type": "question",
+      "text": "Which organ changes fastest when you quit sugar?"
+     }
+    }
+   ]
+  },
+  {
+   "title": "Day 3 Without Sugar",
+   "lines": [
+    {
+     "text": "Why does day 3 without sugar feel so awful?",
+     "organ": "brain",
+     "words": [
+      "Day 3",
+      "awful"
+     ],
+     "stage": null,
+     "visual": {
+      "type": "question",
+      "text": "Why is day 3 without sugar so awful?"
+     }
+    },
+    {
+     "text": "Your brain is protesting.",
+     "organ": "brain",
+     "words": [
+      "Brain",
+      "protesting"
+     ],
+     "stage": null,
+     "visual": {
+      "type": "organ",
+      "name": "brain",
+      "state": "inflamed",
+      "label": "Brain protesting"
+     }
+    },
+    {
+     "text": "Sugar lights up its reward centre.",
+     "organ": "brain",
+     "words": [
+      "Sugar",
+      "reward centre"
+     ],
+     "stage": null,
+     "visual": {
+      "type": "icon",
+      "name": "candy",
+      "cross": false,
+      "count": 3,
+      "label": "Sugar reward hit"
+     }
+    },
+    {
+     "text": "Then the signal stops.",
+     "organ": "brain",
+     "words": [
+      "Signal",
+      "stops"
+     ],
+     "stage": null,
+     "visual": {
+      "type": "meter",
+      "label": "Reward signal",
+      "from": 0.9,
+      "to": 0.1,
+      "good": false
+     }
+    },
+    {
+     "text": "People commonly report headaches, fog and sinking mood.",
+     "organ": "brain",
+     "words": [
+      "Headaches",
+      "fog",
+      "sinking mood"
+     ],
+     "stage": null,
+     "visual": {
+      "type": "checklist",
+      "items": [
+       "Headaches",
+       "Brain fog",
+       "Sinking mood"
+      ],
+      "bad": true
+     }
+    },
+    {
+     "text": "The evidence in humans is limited, and much comes from rodents.",
+     "organ": "brain",
+     "words": [
+      "Evidence",
+      "limited",
+      "rodents"
+     ],
+     "stage": null,
+     "visual": {
+      "type": "cells",
+      "kind": "neurons",
+      "action": "flow",
+      "label": "Human evidence limited"
+     }
+    },
+    {
+     "text": "But here's the twist.",
+     "organ": "none",
+     "words": [
+      "Here's",
+      "twist"
+     ],
+     "stage": null,
+     "visual": {
+      "type": "question",
+      "text": "But here's the twist..."
+     }
+    },
+    {
+     "text": "Your blood sugar doesn't crash.",
+     "organ": "pancreas",
+     "words": [
+      "Blood sugar",
+      "doesn't crash"
+     ],
+     "stage": null,
+     "visual": {
+      "type": "wave",
+      "label": "Blood sugar",
+      "calm": true
+     }
+    },
+    {
+     "text": "Your liver makes glucose from amino acids.",
+     "organ": "liver",
+     "words": [
+      "Liver",
+      "glucose",
+      "amino acids"
+     ],
+     "stage": null,
+     "visual": {
+      "type": "cells",
+      "kind": "glucose",
+      "action": "flow",
+      "label": "Liver makes glucose"
+     }
+    },
+    {
+     "text": "By about 64 hours of fasting, around 96 percent of your body's own glucose is homemade.",
+     "organ": "liver",
+     "words": [
+      "64 hours",
+      "96 percent",
+      "homemade"
+     ],
+     "stage": null,
+     "visual": {
+      "type": "stat",
+      "value": 96.0,
+      "prefix": "~",
+      "unit": "%",
+      "label": "Glucose homemade at 64h",
+      "good": true
+     }
+    },
+    {
+     "text": "That's from long fasting studies, not a normal diet.",
+     "organ": "none",
+     "words": [
+      "Long fasting",
+      "not normal diet"
+     ],
+     "stage": null,
+     "visual": {
+      "type": "icon",
+      "name": "warning",
+      "cross": false,
+      "count": 1,
+      "label": "Long fasting studies"
+     }
+    },
+    {
+     "text": "Still, it shows your body doesn't need dietary sugar to stay steady.",
+     "organ": "liver",
+     "words": [
+      "Doesn't need",
+      "dietary sugar",
+      "steady"
+     ],
+     "stage": null,
+     "visual": {
+      "type": "versus",
+      "myth": "You need dietary sugar to stay steady",
+      "fact": "Your body makes its own glucose"
+     }
+    },
+    {
+     "text": "Then, by week 3, the storm often fades.",
+     "organ": "brain",
+     "words": [
+      "Week 3",
+      "storm fades"
+     ],
+     "stage": null,
+     "visual": {
+      "type": "meter",
+      "label": "Withdrawal storm",
+      "from": 0.9,
+      "to": 0.2,
+      "good": true
+     }
+    },
+    {
+     "text": "Cravings ease and sleep tends to improve.",
+     "organ": "brain",
+     "words": [
+      "Cravings ease",
+      "sleep improves"
+     ],
+     "stage": null,
+     "visual": {
+      "type": "checklist",
+      "items": [
+       "Cravings ease",
+       "Better sleep"
+      ],
+      "bad": false
+     }
+    },
+    {
+     "text": "Send this to someone who's dreading day 3.",
+     "organ": "none",
+     "words": [
+      "Send this",
+      "dreading day 3"
+     ],
+     "stage": null,
+     "visual": {
+      "type": "icon",
+      "name": "phone",
+      "cross": false,
+      "count": 1,
+      "label": "Send to a friend"
+     }
+    },
+    {
+     "text": "The full timeline is in the video linked above.",
+     "organ": "none",
+     "words": [
+      "Full timeline",
+      "linked above"
+     ],
+     "stage": null,
+     "visual": {
+      "type": "clock",
+      "from": "00:00",
+      "to": "72:00"
+     }
+    },
+    {
+     "text": "So why does day 3 without sugar feel so awful?",
+     "organ": "brain",
+     "words": [
+      "Day 3",
+      "so awful"
+     ],
+     "stage": null,
+     "visual": {
+      "type": "question",
+      "text": "So why is day 3 so awful?"
+     }
+    }
+   ]
+  },
+  {
+   "title": "Your Tongue Resets",
+   "lines": [
+    {
+     "text": "Can your tongue forget how sweet things taste?",
+     "organ": "none",
+     "words": [
+      "tongue",
+      "forget",
+      "sweet"
+     ],
+     "stage": null,
+     "visual": {
+      "type": "question",
+      "text": "Can your tongue forget sweetness?"
+     }
+    },
+    {
+     "text": "Yes, and it takes about two months.",
+     "organ": "none",
+     "words": [
+      "two months",
+      "Yes"
+     ],
+     "stage": "2 months",
+     "visual": {
+      "type": "clock",
+      "from": "00:00",
+      "to": "08:00"
+     }
+    },
+    {
+     "text": "In one human trial, people on lower sugar started rating puddings as more intense.",
+     "organ": "brain",
+     "words": [
+      "lower sugar",
+      "more intense"
+     ],
+     "stage": "Trial",
+     "visual": {
+      "type": "checklist",
+      "items": [
+       "Lower sugar diet",
+       "Puddings taste stronger",
+       "More intense sweetness"
+      ],
+      "bad": false
+     }
+    },
+    {
+     "text": "By month three, they rated both low and high sweetness about 40 percent sweeter than others did.",
+     "organ": "brain",
+     "words": [
+      "month three",
+      "40 percent",
+      "sweeter"
+     ],
+     "stage": "Month 3",
+     "visual": {
+      "type": "stat",
+      "value": 40.0,
+      "prefix": "+",
+      "unit": "%",
+      "label": "Sweeter ratings by month 3",
+      "good": true
+     }
+    },
+    {
+     "text": "In rats, a high-sugar diet cut taste nerve response by 50 percent in four weeks.",
+     "organ": "brain",
+     "words": [
+      "rats",
+      "50 percent",
+      "four weeks"
+     ],
+     "stage": "4 weeks",
+     "visual": {
+      "type": "meter",
+      "label": "Taste nerve response",
+      "from": 1,
+      "to": 0.5,
+      "good": false
+     }
+    },
+    {
+     "text": "Four weeks back on normal food, it returned.",
+     "organ": "brain",
+     "words": [
+      "normal food",
+      "returned"
+     ],
+     "stage": "4 weeks",
+     "visual": {
+      "type": "meter",
+      "label": "Taste nerve response",
+      "from": 0.5,
+      "to": 1,
+      "good": true
+     }
+    },
+    {
+     "text": "So an apple starts to taste like dessert.",
+     "organ": "none",
+     "words": [
+      "apple",
+      "tastes",
+      "dessert"
+     ],
+     "stage": null,
+     "visual": {
+      "type": "icon",
+      "name": "apple",
+      "cross": false,
+      "count": 1,
+      "label": "Apple tastes like dessert"
+     }
+    },
+    {
+     "text": "Same apple.",
+     "organ": "none",
+     "words": [
+      "Same apple"
+     ],
+     "stage": null,
+     "visual": {
+      "type": "compare",
+      "a": {
+       "label": "Apple before",
+       "value": 3.0
+      },
+      "b": {
+       "label": "Apple now",
+       "value": 8.0
+      },
+      "unit": "sweetness"
+     }
+    },
+    {
+     "text": "New tongue.",
+     "organ": "none",
+     "words": [
+      "New tongue"
+     ],
+     "stage": null,
+     "visual": {
+      "type": "cells",
+      "kind": "neurons",
+      "action": "flow",
+      "label": "Reset taste receptors"
+     }
+    },
+    {
+     "text": "And you didn't have to give up fruit.",
+     "organ": "none",
+     "words": [
+      "give up fruit",
+      "didn't"
+     ],
+     "stage": null,
+     "visual": {
+      "type": "icon",
+      "name": "apple",
+      "cross": false,
+      "count": 3,
+      "label": "Fruit stays"
+     }
+    },
+    {
+     "text": "The WHO targets added sugars, juice and honey, not whole fruit.",
+     "organ": "none",
+     "words": [
+      "WHO",
+      "added sugars",
+      "not whole fruit"
+     ],
+     "stage": null,
+     "visual": {
+      "type": "versus",
+      "myth": "WHO says: avoid all fruit",
+      "fact": "WHO targets added sugars, juice, honey"
+     }
+    },
+    {
+     "text": "Send this to someone who says fruit is too bland.",
+     "organ": "none",
+     "words": [
+      "Send this",
+      "fruit",
+      "bland"
+     ],
+     "stage": null,
+     "visual": {
+      "type": "icon",
+      "name": "phone",
+      "cross": false,
+      "count": 1,
+      "label": "Send this to a friend"
+     }
+    },
+    {
+     "text": "The full timeline is in the video linked above.",
+     "organ": "none",
+     "words": [
+      "full timeline",
+      "linked above"
+     ],
+     "stage": null,
+     "visual": {
+      "type": "icon",
+      "name": "calendar",
+      "cross": false,
+      "count": 1,
+      "label": "Full timeline linked above"
+     }
+    },
+    {
+     "text": "So can your tongue forget how sweet things taste?",
+     "organ": "none",
+     "words": [
+      "tongue",
+      "forget",
+      "sweet"
+     ],
+     "stage": null,
+     "visual": {
+      "type": "question",
+      "text": "Can your tongue forget sweetness?"
+     }
+    }
+   ]
+  }
+ ],
+ "upload": {
+  "main_keyword": "stop eating sugar",
+  "title": "What Happens When You Stop Eating Sugar: Day 1 to Year 1",
+  "description": "What happens when you stop eating sugar? Follow the timeline from day 1 to one year and watch your liver, brain and tongue change.\n\nIn this video you'll see: the day 3 brain protest, the 9-day liver surprise, and how your taste buds reset. We cover the stop eating sugar timeline with facts from WHO, JAMA and peer-reviewed studies. This is education, not medical advice.\n\nChapters\n{CHAPTERS}\n\nSources\nWHO: https://who.int/news/item/04-03-2015-who-calls-on-countries-to-reduce-sugars-intake-among-adults-and-children\nGastroenterology: https://www.gastrojournal.org/article/s0016-5085(17)35685-8/fulltext\nJCEM 2019: https://academic.oup.com/jcem/article/104/7/3003/5376630\nAm J Physiol Endocrinol Metab: https://journals.physiology.org/doi/full/10.1152/ajpendo.00232.2016\nAJCN taste study: https://pubmed.ncbi.nlm.nih.gov/26607941/\nJAMA Internal Medicine: https://jamanetwork.com/journals/jamainternalmedicine/fullarticle/1819573\n\nMusic: Kevin MacLeod (incompetech.com), licensed under CC BY.\n\n#stopeatingsugar #nosugar #insideyourbody",
+  "tags": [
+   "stop eating sugar",
+   "what happens when you stop eating sugar",
+   "no sugar diet",
+   "quit sugar",
+   "sugar detox",
+   "sugar withdrawal",
+   "sugar cravings",
+   "no sugar for 30 days",
+   "cutting out sugar",
+   "sugar and liver",
+   "sugar and brain",
+   "what happens if you quit sugar",
+   "added sugar",
+   "sugar free diet",
+   "effects of quitting sugar",
+   "how to stop sugar cravings",
+   "sugar timeline"
+  ],
+  "hashtags": [
+   "#stopeatingsugar",
+   "#nosugar",
+   "#insideyourbody"
+  ],
+  "pinned_comment": "Which stamp surprised you most: day 3, week 1 or month 3? Tell us below."
+ },
+ "thumbnail": {
+  "variants": [
+   {
+    "number": "30 DAYS",
+    "words": "NO SUGAR",
+    "subject": "a pile of white sugar cubes with one cube crumbling, dramatic studio light"
+   },
+   {
+    "number": "9 DAYS",
+    "words": "LIVER CHANGE",
+    "subject": "a glowing human liver on a dark background, half fatty yellow and half healthy red, dramatic light"
+   },
+   {
+    "number": "DAY 3",
+    "words": "SUGAR WITHDRAWAL",
+    "subject": "a single cookie with a bite taken, on a dark table, harsh dramatic spotlight"
+   }
+  ]
+ },
+ "sources": [
+  {
+   "title": "WHO: Guideline on sugars intake for adults and children",
+   "url": "https://who.int/news/item/04-03-2015-who-calls-on-countries-to-reduce-sugars-intake-among-adults-and-children"
+  },
+  {
+   "title": "Gastroenterology: Isocaloric fructose restriction and liver fat in children",
+   "url": "https://www.gastrojournal.org/article/s0016-5085(17)35685-8/fulltext"
+  },
+  {
+   "title": "J Clin Endocrinol Metab 2019: methylglyoxal and sugar restriction",
+   "url": "https://academic.oup.com/jcem/article/104/7/3003/5376630"
+  },
+  {
+   "title": "Am J Physiol Endocrinol Metab: gluconeogenesis during fasting",
+   "url": "https://journals.physiology.org/doi/full/10.1152/ajpendo.00232.2016"
+  },
+  {
+   "title": "AJCN (Wise et al.): sugar intake and sweetness perception",
+   "url": "https://pubmed.ncbi.nlm.nih.gov/26607941/"
+  },
+  {
+   "title": "JAMA Internal Medicine: added sugar and cardiovascular mortality",
+   "url": "https://jamanetwork.com/journals/jamainternalmedicine/fullarticle/1819573"
+  },
+  {
+   "title": "University of Michigan: sugar diet dulls taste response in animals",
+   "url": "https://lsa.umich.edu/mcdb/news-events/all-news/search-news/dulled-sweetness-taste-dus.html"
+  },
+  {
+   "title": "ClinicalTrials.gov NCT06751862: fructose restriction and liver fat",
+   "url": "https://clinicaltrials.gov/study/NCT06751862"
+  }
+ ],
+ "format": "tl",
+ "boarded": true
+}
