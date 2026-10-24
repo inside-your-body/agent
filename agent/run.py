@@ -157,6 +157,9 @@ def run_episode(a, topic, ep_dir):
 
     from . import youtube
     yt = youtube.client()
+    for old in [x for x in os.environ.get('REPLACE_IDS', '').replace(',', ' ').split() if x]:   # owner-approved replacement of a broken upload
+        try: yt.videos().delete(id=old).execute(); print('deleted old upload', old)
+        except Exception as e: print('could not delete', old, e)
     at = youtube.publish_time(CFG['schedule']['publish_long_utc'])
     vid = youtube.upload(yt, long_final, pkg['title'], pkg['description'], pkg['tags'], thumb, publish_at=at, synthetic=True)
     youtube.add_to_playlist(yt, vid)
