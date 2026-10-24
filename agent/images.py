@@ -40,7 +40,7 @@ def _remove_white(path):
 
 def _post(url, transparent, data=None, json_body=None, files=None):
     """POST to the images API trying models in order. Returns (response_json, used_white_bg)."""
-    models = [_OK['model']] if _OK['model'] else MODELS
+    models = ([_OK['model']] + [m for m in MODELS if m != _OK['model']]) if _OK['model'] else MODELS
     last = None
     for m in models:
         for want_t in ([True, False] if (transparent and _OK['transparent']) else [False]):
@@ -52,12 +52,14 @@ def _post(url, transparent, data=None, json_body=None, files=None):
             fl = [(k, (n, open(f, 'rb'), t)) for k, (n, f, t) in files] if files else None
             r = requests.post(url, headers=hdr, data=body if files else None, json=None if files else body, files=fl, timeout=300)
             if r.ok:
-                _OK['model'] = m
+                if not _OK['model']: _OK['model'] = m
                 if transparent and not want_t: _OK['transparent'] = False
                 return r.json(), transparent and not want_t
             txt = r.text[:400]; last = txt
             if 'does not exist' in txt or 'model_not_found' in txt or 'not supported' in txt and 'model' in txt:
                 break                                    # next model
+            if 'safety' in txt:
+                break                                    # the safety filter is model-specific and flaky: try the next model
             if 'background' in txt or 'transparent' in txt or 'output_format' in txt:
                 continue                                 # same model, white background + removal
             raise RuntimeError(txt)
