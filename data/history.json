@@ -89,6 +89,18 @@
     "typography_feel": "Heavy condensed all-caps headline words as cut-out sticker lettering, slightly rotated and misaligned, each snapping in on a beat. Typewriter-mono captions underneath, with one key word on a red or yellow label strip."
    },
    "built_at": "2026-10-24T18:05:35"
+  },
+  {
+   "topic": "What Happens to Your Body When You Stop Eating Sugar",
+   "video_id": "UsJwNI2bYOk",
+   "short_ids": [
+    "SWpLhkD7QLA",
+    "riK4zoBoFf8"
+   ],
+   "publish_at": "2026-10-26T20:00:00Z",
+   "format": "tl",
+   "music": "deliberate_thought",
+   "built_at": "2026-10-26T18:05:36"
   }
  ],
  "used_styles": [
@@ -101,13 +113,16 @@
   "neon-hud+tint",
   "clinical-clean+tint",
   "paper-ink+tint",
-  "mono-red"
+  "mono-red",
+  null,
+  null
  ],
  "used_kits": [
   "line",
   "flat",
   "maxflat",
-  "maxflat"
+  "maxflat",
+  null
  ],
  "used_langs": [
   {
@@ -150,5 +165,8 @@
    "camera": "Flat, front-on tabletop view with abrupt punch-in cuts on key moments (sneeze, handshake, shared doorknob), occasional split-screen panels, and TV-static glitch cuts rather than smooth moves.",
    "typography_feel": "Heavy condensed all-caps headline words as cut-out sticker lettering, slightly rotated and misaligned, each snapping in on a beat. Typewriter-mono captions underneath, with one key word on a red or yellow label strip."
   }
+ ],
+ "used_music": [
+  "deliberate_thought"
  ]
 }
