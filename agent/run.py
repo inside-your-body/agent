@@ -95,7 +95,8 @@ def run_tl(a, topic, ep_dir):
     spk = []
     for k, f, st in shorts:
         s = ep['shorts'][k]
-        title = (s.get('title') or ep['upload']['title'])[:90]
+        import re as _re
+        title = _re.sub(r'\s*#shorts\b', '', (s.get('title') or ep['upload']['title']), flags=_re.I).strip()[:90]
         spk.append({'k': k, 'file': str(f), 'title': title + ' #Shorts',
                     'description': s['lines'][0]['text'] + '\n\nThe full timeline: {FULL_URL}\n\n' + tags + '\n\n' + audio.credit(st)})
     pkg['shorts'] = spk; save(ep_dir / 'package.json', pkg)
