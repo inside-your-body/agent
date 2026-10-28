@@ -101,6 +101,18 @@
    "format": "tl",
    "music": "deliberate_thought",
    "built_at": "2026-10-26T18:05:36"
+  },
+  {
+   "topic": "What Happens to Your Body When You Don't Sleep?",
+   "video_id": "8SbnEzSc9PI",
+   "short_ids": [
+    "fW2u_ieDiJU",
+    "Jf5RxR1TpDo"
+   ],
+   "publish_at": "2026-10-28T20:00:00Z",
+   "format": "tl",
+   "music": "clean_soul",
+   "built_at": "2026-10-28T17:21:03"
   }
  ],
  "used_styles": [
@@ -115,6 +127,8 @@
   "paper-ink+tint",
   "mono-red",
   null,
+  null,
+  null,
   null
  ],
  "used_kits": [
@@ -122,6 +136,7 @@
   "flat",
   "maxflat",
   "maxflat",
+  null,
   null
  ],
  "used_langs": [
@@ -167,6 +182,7 @@
   }
  ],
  "used_music": [
-  "deliberate_thought"
+  "deliberate_thought",
+  "clean_soul"
  ]
 }
