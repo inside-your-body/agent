@@ -113,6 +113,18 @@
    "format": "tl",
    "music": "clean_soul",
    "built_at": "2026-10-28T17:21:03"
+  },
+  {
+   "topic": "What Happens Inside Your Body During a Heart Attack",
+   "video_id": "ehcyhKZKdwo",
+   "short_ids": [
+    "JRkaAAEB_zA",
+    "UqGuEzqPPuk"
+   ],
+   "publish_at": "2026-10-30T20:00:00Z",
+   "format": "tl",
+   "music": "fluidscape",
+   "built_at": "2026-10-30T17:17:01"
   }
  ],
  "used_styles": [
@@ -129,6 +141,8 @@
   null,
   null,
   null,
+  null,
+  null,
   null
  ],
  "used_kits": [
@@ -136,6 +150,7 @@
   "flat",
   "maxflat",
   "maxflat",
+  null,
   null,
   null
  ],
@@ -183,6 +198,7 @@
  ],
  "used_music": [
   "deliberate_thought",
-  "clean_soul"
+  "clean_soul",
+  "fluidscape"
  ]
 }
