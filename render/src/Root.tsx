@@ -15,6 +15,7 @@ import {MaxDemo, MaxSheetDemo} from './MaxDemo';
 import {SugarTimeline, sugarMeta} from './Timeline';
 import {TLEpisode, tlMeta} from './TLEpisode';
 import {ThumbTL} from './ThumbTL';
+import {ShortCover} from './ShortCover';
 import {StyleDemo, Thumb, DEMO_ORDER, DEMO_LEN} from './StyleDemo';
 
 const demo: Props = {kind: 'long', fps: 30, frames: 150, channel: 'Inside Your Body', title: 'demo', words: [],
@@ -46,6 +47,7 @@ export const Root: React.FC = () => (
     <Composition id="TLLong" component={TLEpisode as any} width={1920} height={1080} fps={30} durationInFrames={300} calculateMetadata={tlMeta as any} defaultProps={{beats: [], marks: [], frames: 300}} />
     <Composition id="TLShort" component={TLEpisode as any} width={1080} height={1920} fps={30} durationInFrames={300} calculateMetadata={tlMeta as any} defaultProps={{beats: [], marks: [], frames: 300, vertical: true}} />
     <Composition id="ThumbTL" component={ThumbTL as any} width={1920} height={1080} fps={30} durationInFrames={1} defaultProps={{number: "30 DAYS", words: "NO SUGAR", v: 0}} />
+    <Composition id="ShortCover" component={ShortCover as any} width={1080} height={1920} fps={30} durationInFrames={1} defaultProps={{title: "Your Liver Changes in 9 Days", organ: "liver", stamp: "DAY 9"}} />
     <Composition id="ThumbPro" component={ThumbPro} width={1920} height={1080} fps={30} durationInFrames={1} />
     <Composition id="GenThumb" component={GenThumb as any} width={1920} height={1080} fps={30} durationInFrames={1} defaultProps={{id: 't_main', kit: 'flat'}} />
     <Composition id="ThumbT" component={ThumbT as any} width={1920} height={1080} fps={30} durationInFrames={1} defaultProps={{lines: ['KIDNEY STONE', 'WORST PAIN', 'EVER?'], title: 'kidney stone'}} />
