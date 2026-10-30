@@ -239,7 +239,28 @@ const normOrg = (o: string): Organ => {
   const x = m[o] || o; return (ORG_OK.has(x) ? x : 'none') as Organ;
 };
 
-export const TLEpisode: React.FC<TLEpProps> = ({beats, marks, vertical}) => {
+// Shorts cover fix (owner, Oct 30): Shorts covers showed no text -> a fixed headline band at the top of every frame.
+const Headline: React.FC<{text: string; f: number}> = ({text, f}) => {
+  const ws = text.replace(/#\w+/g, '').trim().toUpperCase().split(/\s+/).filter(Boolean);
+  const size = ws.join(' ').length > 26 ? 84 : 100;
+  const wid = (a: string[]) => a.join(' ').length * size * 0.47;
+  let lines: string[][] = [ws];
+  if (wid(ws) > 940) {          // two balanced lines (three if still too wide)
+    let best = 1, bw = 1e9;
+    for (let k = 1; k < ws.length; k++) { const m = Math.max(wid(ws.slice(0, k)), wid(ws.slice(k))); if (m < bw) { bw = m; best = k; } }
+    lines = [ws.slice(0, best), ws.slice(best)];
+    if (bw > 940 && ws.length > 2) { const t = Math.ceil(ws.length / 3); lines = [ws.slice(0, t), ws.slice(t, 2 * t), ws.slice(2 * t)]; }
+  }
+  const p = interpolate(f, [0, 8], [0.92, 1], cl);
+  return <g transform={`translate(540 0) scale(${p}) translate(-540 0)`}>
+    <rect x={30} y={70} width={1020} height={lines.length * size * 1.08 + 70} rx={28} fill="#0B1220" opacity={0.92} stroke={TL.line} strokeWidth={5} />
+    {lines.slice(0, 3).map((ln, i) => <text key={i} x={540} y={70 + 35 + size * 0.92 + i * size * 1.08} textAnchor="middle" fontFamily="F_anton" fontSize={size}>
+      {ln.map((x, j) => <tspan key={j} fill={i === lines.length - 1 && j === ln.length - 1 ? GOLD : '#FFFFFF'}>{x + (j < ln.length - 1 ? ' ' : '')}</tspan>)}
+    </text>)}
+  </g>;
+};
+
+export const TLEpisode: React.FC<TLEpProps> = ({beats, marks, vertical, title}) => {
   const f = useCurrentFrame();
   let i = beats.findIndex((b) => f >= b.start && f < b.end); if (i < 0) i = f < (beats[0]?.start || 0) ? 0 : beats.length - 1;
   const b = beats[i]; if (!b) return <AbsoluteFill style={{background: TL.bg}} />;
@@ -252,7 +273,8 @@ export const TLEpisode: React.FC<TLEpProps> = ({beats, marks, vertical}) => {
   const bodyOn = interpolate(f, [0, 20], [0, 1], cl);
   const hasMarks = marks.length > 1 && b.stageIdx >= 0;
   const L = vertical
-    ? {body: [540, 790, 0.64], stamp: [80, 210, 120], wid: [540, 1345, 0.86], words: [80, b.stage ? 330 : 250, 76, 920]}
+    ? (title ? {body: [540, 880, 0.56], stamp: [80, 440, 104], wid: [540, 1370, 0.78], words: [80, b.stage ? 525 : 470, 66, 920]}
+             : {body: [540, 790, 0.64], stamp: [80, 210, 120], wid: [540, 1345, 0.86], words: [80, b.stage ? 330 : 250, 76, 920]})
     : {body: [470, 500, 0.86], stamp: [990, 200, 150], wid: [1350, b.stage ? 500 : 430, 0.92], words: [990, b.stage ? 830 : 800, 70, 860]};
   return <AbsoluteFill style={{background: `radial-gradient(circle at ${vertical ? '50% 38%' : '26% 50%'}, #15254A 0%, ${TL.bg} 68%)`}}>
     <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`}>
@@ -267,6 +289,7 @@ export const TLEpisode: React.FC<TLEpProps> = ({beats, marks, vertical}) => {
       <g opacity={out}><Words key={'w' + i} words={(b.words || []).slice(0, 4).map((w) => w.toUpperCase())} at={b.start + 10} f={f}
         x={L.words[0]} y={L.words[1]} size={L.words[2]} maxW={L.words[3]} /></g>
       {!vertical && hasMarks && <TimeBar marks={marks} active={b.stageIdx} f={f} at={stAt} />}
+      {vertical && title && <Headline text={title} f={f} />}
       {!vertical && <text x={60} y={66} fontFamily="F_inter" fontWeight={800} fontSize={22} letterSpacing={6} fill={TL.mute}>INSIDE YOUR BODY</text>}
     </svg>
   </AbsoluteFill>;

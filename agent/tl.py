@@ -284,7 +284,14 @@ Lines: {json.dumps([l['text'] for l in s['lines']], ensure_ascii=False)}""", max
                               for t, b in zip(out['lines'], bs)]
                 save(ep_dir / 'episode.json', ep)
                 for f in (f'vo_short{k}.wav', f'segs_short{k}.json'): (ep_dir / f).unlink(missing_ok=True)
-        save(ep_dir / f'props_short{k}.json', props(s['lines'], [l.get('stage') for l in s['lines']], sg, True))
+        pr = props(s['lines'], [l.get('stage') for l in s['lines']], sg, True)
+        import re as _re
+        pr['title'] = _re.sub(r'\s*#\w+', '', s.get('title') or ep.get('title') or '').strip()   # headline band = the Short's cover text
+        save(ep_dir / f'props_short{k}.json', pr)
+        try:   # cover image (headline + first stamp) — set as the Short's thumbnail where YouTube allows it
+            sh(['npx', 'remotion', 'still', 'src/index.ts', 'TLShort', str(ep_dir / f'short{k}_cover.jpg'), f'--props={ep_dir / f"props_short{k}.json"}',
+                f'--frame={min(pr["frames"] - 1, 45)}', '--jpeg-quality=88', '--log=warn'], cwd=ROOT / 'render')
+        except Exception as e: print('short cover failed', e)
     if not (ep_dir / 'thumbnail.jpg').exists():
         try: thumbs(ep, ep_dir)
         except Exception as e: print('thumbnail failed:', e)

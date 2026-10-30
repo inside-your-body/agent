@@ -116,8 +116,9 @@ def run_tl(a, topic, ep_dir):
     for j, s in enumerate(spk):
         hhmm, days = SHORT_SLOTS[j % len(SHORT_SLOTS)]
         try:
+            cover = ep_dir / f"short{s['k']}_cover.jpg"
             svid = youtube.upload(yt, s['file'], s['title'], s['description'].replace('{FULL_URL}', 'https://youtu.be/' + vid), pkg['tags'][:10],
-                                  publish_at=_at(hhmm, days), synthetic=True)
+                                  cover if cover.exists() else None, publish_at=_at(hhmm, days), synthetic=True)
             sids.append(svid)
             try: youtube.pin_comment_text(yt, svid, 'The full timeline is here: https://youtu.be/' + vid)
             except Exception as e: print('short comment not posted:', e)

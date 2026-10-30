@@ -155,6 +155,7 @@ jobs:
           path: |
             work/*/final_*.mp4
             work/*/thumbnail*.jpg
+            work/*/short*_cover.jpg
             work/*/package.json
             work/*/episode.json
             work/*/qa/*.jpg
