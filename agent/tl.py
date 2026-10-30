@@ -44,6 +44,50 @@ def long_words(ep): return _wc([ln['text'] for ln in long_lines(ep)])
 
 
 # ---------------- script ----------------
+# Channel audit (Oct 30, owner approved): our hooks scored WEAK (33-43/100) — they opened with scene-setting description and the
+# question came only after 15 s. New rule + every hook is scored by hookscore.py (yt-script skill) and the best of 3 is used.
+HOOK_V2 = """HOOK V2 (overrides anything softer above):
+- Line 1 (max 15 words) = a concrete number + what it costs / does to the viewer ("you") + an unanswered question or claim.
+  NEVER open with scene-setting description ("A spoon of sugar hovers over your coffee...").
+- By second 10 promise the timeline payoff with its stamps ("here's what happens at hour 48, hour 72 and day 11").
+TITLE: always contains a number or a time span (e.g. "After 72 Hours", "Day 1 to Year 1"), ≤ 60 characters, main keyword first."""
+
+
+def _hook_text(lines, n_words=40):
+    out, k = [], 0
+    for ln in lines:
+        out.append(ln); k += len(ln.split())
+        if k >= n_words: break
+    return ' '.join(out)
+
+
+def improve_hook(ep, notes=''):
+    """Write 3 alternative openings for the hook scene, score each first ~15 s with hookscore.py, keep the best."""
+    from . import hookscore
+    sc = ep['scenes'][0]
+    cur = [l['text'] if isinstance(l, dict) else l for l in sc['lines']]
+    best = (hookscore.score(_hook_text(cur))[1], cur, 'current')
+    feedback = ''
+    for attempt in range(2):
+        out = llm.ask_json(f"""Rewrite the HOOK scene (the first ~30 seconds) of this YouTube video 3 different ways.
+Video: {ep.get('upload', {}).get('title') or ep.get('title')}
+Timeline stamps of the video: {[s.get('stage') for s in ep['scenes'] if s.get('stage')]}
+Current hook lines: {json.dumps(cur, ensure_ascii=False)}
+{HOOK_V2}
+Each version: 5-8 short spoken sentences, same facts (no new claims), ends by handing over to the first stamp. Use different
+hook formulas (shocking number, impossible claim, direct "you" stakes, myth you believe).{feedback}
+Return JSON: {{"versions": [{{"formula": str, "lines": [str]}}]}}""", max_tokens=4000)
+        for v in out.get('versions', []):
+            ls = [x for x in v.get('lines', []) if isinstance(x, str) and x.strip()]
+            if len(ls) < 3: continue
+            parts, verdict, name, _ = hookscore.score(_hook_text(ls))
+            print(f'hook option {verdict}: {_hook_text(ls)[:90]}')
+            if verdict > best[0]: best = (verdict, ls, v.get('formula'))
+        if best[0] >= 55: break
+        feedback = f"\nPrevious best scored only {best[0]}/100: be more concrete (numbers), address 'you', name the stakes, open a curiosity gap."
+    print('hook chosen:', best[0], best[2])
+    sc['lines'] = best[1]; ep['hook_score'] = best[0]
+    return ep
 def write(topic, notes):
     ref = topic.get('ref') or {}
     return llm.ask_json(f"""You are the head writer of the YouTube channel "Inside Your Body" (English, adults, US/UK/Canada audience).
@@ -61,6 +105,7 @@ Research notes (use only facts from here; round numbers; be accurate, no medical
 
 Write the long video: {llm.WORDS_MIN}–{llm.WORDS_MAX} words of narration in total (≈ 8:30–9:15). Count carefully.
 {llm.HOOK_RULES}
+{HOOK_V2}
 {llm.STORY_CRAFT}
 {llm.SEO_RULES}
 STRUCTURE: scene 1 = hook (stage null). Then 5–8 timeline scenes, each = one time stamp ("stage", ≤10 chars, UPPERCASE, e.g. "DAY 3"),
@@ -202,6 +247,10 @@ def build(topic, ep_dir, dry_run=False):
             w = _wc([l for s in ep['scenes'] for l in s['lines']])
             if w >= llm.WORDS_MIN - 60: break
             print('script too short:', w, '-> expanding'); ep = expand(ep, notes, llm.WORDS_MIN + 40); save(ep_dir / 'episode.json', ep)
+    if not ep.get('hook_done'):
+        try: ep = improve_hook(ep, notes)
+        except Exception as e: print('hook step skipped:', e)
+        ep['hook_done'] = True; ep.pop('boarded', None); save(ep_dir / 'episode.json', ep)
     if not ep.get('boarded'):
         ep = storyboard(ep); save(ep_dir / 'episode.json', ep)
     # voice: long (length guard) + Shorts
