@@ -25,7 +25,7 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: python -m agent.thumbtest tests/sugar_episode.json
+        run: python -m agent.styletest
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -36,6 +36,7 @@ jobs:
             work/pov/*.wav
             work/pov/*.json
             work/thumbtest/**
+            work/styletest/**
             work/pov/*.png
             work/cost.json
           retention-days: 7
