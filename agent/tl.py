@@ -113,7 +113,7 @@ in chronological order, 8–16 sentences each, each with its own surprise. Plant
 Final scene (stage null): the big picture + one question for the comments. Short spoken sentences, one idea each, every sentence SHOWABLE
 with a number, an organ, an object or a change. Max 12 numbers in total. Explain — never lecture or tell the viewer what to do.
 
-Then write {N_SHORTS} SHORTS (each 95–115 words, ≈ 40–50 s — never longer), each a different surprising slice of the timeline, self-contained:
+Then write {N_SHORTS} SHORTS (each 75–95 words, ≈ 30–38 s — never longer; shorter Shorts are watched to the end and pushed more), each a different surprising slice of the timeline, self-contained:
 line 1 = a curiosity question or shocking claim that works in the first second; one continuous mini timeline (2–3 stamps);
 second-to-last line sends viewers to the full video ("the full timeline is in the video linked above"); last line loops into the first.
 
@@ -271,9 +271,9 @@ def build(topic, ep_dir, dry_run=False):
         for attempt in range(3):
             sg = _voice([l['text'] for l in s['lines']], [len(s['lines'])], ep_dir / f'vo_short{k}.wav', ep_dir / f'segs_short{k}.json')
             print(f'voice short {k}: {sg[-1]["end"]:.0f}s')
-            if sg[-1]['end'] <= 57 or attempt == 2: break
-            target = int(_wc([l['text'] for l in s['lines']]) * 52 / sg[-1]['end'])
-            out = llm.ask_json(f"""Shorten this YouTube Short script to at most {target} words (it must stay under 55 seconds). Keep line 1 (the hook),
+            if sg[-1]['end'] <= 44 or attempt == 2: break
+            target = int(_wc([l['text'] for l in s['lines']]) * 38 / sg[-1]['end'])
+            out = llm.ask_json(f"""Shorten this YouTube Short script to at most {target} words (it must stay under 40 seconds). Keep line 1 (the hook),
 the mini timeline, the line that sends viewers to the full video and the loop. Return ONLY {{"lines": [str]}}.
 Lines: {json.dumps([l['text'] for l in s['lines']], ensure_ascii=False)}""", max_tokens=3000)
             if out.get('lines'):
@@ -294,6 +294,8 @@ Lines: {json.dumps([l['text'] for l in s['lines']], ensure_ascii=False)}""", max
             cv = {'title': pr['title'], 'organ': orgs.most_common(1)[0][0] if orgs else 'none',
                   'stamp': next((l.get('stage') for l in s['lines'] if l.get('stage')), None)}
             save(ep_dir / f'cover_short{k}.json', cv)
+            pr['coverOrgan'], pr['coverStamp'] = cv['organ'], cv['stamp']        # the Short opens on its cover (first 1.3 s)
+            save(ep_dir / f'props_short{k}.json', pr)
             sh(['npx', 'remotion', 'still', 'src/index.ts', 'ShortCover', str(ep_dir / f'short{k}_cover.jpg'), f'--props={ep_dir / f"cover_short{k}.json"}',
                 '--jpeg-quality=88', '--log=warn'], cwd=ROOT / 'render')
         except Exception as e: print('short cover failed', e)
