@@ -78,6 +78,17 @@ artist draws the same person every time. One line, no intro.""", max_tokens=120)
     return [out.get(i, {}) for i in range(len(texts))], cast
 
 
+import threading, time
+_RATE = {'lock': threading.Lock(), 'next': 0.0}
+GAP = 3.6          # OpenAI image limit is 20 pictures / minute -> one start every 3.6 s (~16-17 / min) keeps us under it
+
+
+def _slot():
+    with _RATE['lock']:
+        now = time.time(); t = max(now, _RATE['next']); _RATE['next'] = t + GAP
+    if t > now: time.sleep(t - now)
+
+
 def draw(plan_beats, texts, pal, folder, vertical=False):
     folder.mkdir(parents=True, exist_ok=True)
     size = '1024x1536' if vertical else '1536x1024'
@@ -87,18 +98,27 @@ def draw(plan_beats, texts, pal, folder, vertical=False):
         b = plan_beats[i]
         st = (FLAT.format(**pal) if b.get('style') == 'flat' else INK.format(**pal))
         png = folder / f'p{i:03d}.png'
-        r = images.gen(f"{b.get('picture') or texts[i]}. {st}.", png, size=size, quality='low', retries=2)
+        r = None
+        for attempt in range(4):           # throttled; a rate-limit miss waits for the next minute window and tries again
+            _slot()
+            r = images.gen(f"{b.get('picture') or texts[i]}. {st}.", png, size=size, quality='low', retries=1)
+            if r and png.exists(): break
+            time.sleep(20)
         if not (r and png.exists()): return None
         from PIL import Image          # jpg keeps the work artifact small (it travels to every render shard)
         Image.open(png).convert('RGB').save(f, quality=88); png.unlink()
         return f
-    with ThreadPoolExecutor(8) as ex: return list(ex.map(one, range(len(texts))))
+    with ThreadPoolExecutor(6) as ex: return list(ex.map(one, range(len(texts))))
 
 
 def build_props(groups, line_segs, plan_beats, files, stages, pal_name, folder_rel, FPS=30, vertical=False, title=None):
     pal = {k: v for k, v in PALETTES[pal_name].items() if k != 'ink'}
     order = list(range(6)); random.Random(pal_name + str(len(groups))).shuffle(order)
     beats, last_tpl = [], -1
+    files = list(files)
+    for g in range(len(files)):         # a picture that could not be made reuses the closest one (never a blank screen)
+        if not files[g]:
+            files[g] = next((files[j] for j in list(range(g - 1, -1, -1)) + list(range(g + 1, len(files))) if files[j]), None)
     for g, (idx, pb, f) in enumerate(zip(groups, plan_beats, files)):
         start = 0 if g == 0 else int(round(line_segs[idx[0]]['start'] * 30))
         tpl = order[g % 6]

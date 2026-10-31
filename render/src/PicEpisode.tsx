@@ -167,8 +167,10 @@ export const PicEpisode: React.FC<PicProps> = ({beats, vertical, palette, title}
     <div style={{position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.45) 100%)'}} />
     <div style={{position: 'absolute', left: 0, right: 0, bottom: 0, height: H * 0.4, background: 'linear-gradient(transparent, rgba(0,0,0,0.55))'}} />
     {b.stage && <Stage key={'s' + b.stage} text={b.stage} at={stAt} f={f} W={W} H={H} pal={pal} top={vertical ? 330 : 70} />}
-    <Stat key={'n' + i} b={b} f={f} pal={pal} vertical={vertical} />
-    <Words key={'w' + i} b={b} f={f} W={W} H={H} pal={pal} vertical={vertical} />
+    {!(vertical && title && f < 40) && <>     {/* Shorts: nothing competes with the title slam in the first 1.3 s (= the cover) */}
+      <Stat key={'n' + i} b={b} f={f} pal={pal} vertical={vertical} />
+      <Words key={'w' + i} b={b} f={f} W={W} H={H} pal={pal} vertical={vertical} />
+    </>}
     {vertical && title && <Headline text={title} f={f} pal={pal} />}
     {!vertical && <div style={{position: 'absolute', right: 40, bottom: 30, fontFamily: 'F_inter', fontWeight: 800, fontSize: 20, letterSpacing: 6,
       color: 'rgba(255,255,255,0.55)'}}>INSIDE YOUR BODY</div>}
