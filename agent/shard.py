@@ -37,11 +37,14 @@ def run_tl(i, n, ep_dir, parts):
         k = i - n_long
         if k not in shorts: return
         out, comp, pf, rng = parts / f'short{k}.mp4', 'TLShort', ep_dir / f'props_short{k}.json', None
+        if load(pf).get('pic'): comp = 'PicShort'
     else:
         total = load(ep_dir / 'props_long.json')['frames']; step = -(-total // n_long)
         a, b = i * step, min(total, (i + 1) * step) - 1
         if a > b: return
         out, comp, pf, rng = parts / f'long_{i:02d}.mp4', 'TLLong', ep_dir / 'props_long.json', f'{a}-{b}'
+        if load(pf).get('pic'): comp = 'PicEpisode'
+    from . import pics; pics.stage_public(ep_dir)
     cmd = ['npx', 'remotion', 'render', 'src/index.ts', comp, str(out), f'--props={pf}', f'--concurrency={conc}', '--muted', '--log=warn']
     if rng: cmd.append(f'--frames={rng}')
     sh(cmd, cwd=ROOT / 'render')

@@ -49,6 +49,7 @@ export const Root: React.FC = () => (
     <Composition id="TLShort" component={TLEpisode as any} width={1080} height={1920} fps={30} durationInFrames={300} calculateMetadata={tlMeta as any} defaultProps={{beats: [], marks: [], frames: 300, vertical: true}} />
     <Composition id="ThumbTL" component={ThumbTL as any} width={1920} height={1080} fps={30} durationInFrames={1} defaultProps={{number: "30 DAYS", words: "NO SUGAR", v: 0}} />
     <Composition id="ShortCover" component={ShortCover as any} width={1080} height={1920} fps={30} durationInFrames={1} defaultProps={{title: "Your Liver Changes in 9 Days", organ: "liver", stamp: "DAY 9"}} />
+    <Composition id="PicShort" component={PicEpisode as any} width={1080} height={1920} fps={30} durationInFrames={300} calculateMetadata={picMeta as any} defaultProps={{beats: [], frames: 300, vertical: true}} />
     <Composition id="PicEpisode" component={PicEpisode as any} width={1920} height={1080} fps={30} durationInFrames={300} calculateMetadata={picMeta as any} defaultProps={{beats: [], frames: 300}} />
     <Composition id="ThumbPro" component={ThumbPro} width={1920} height={1080} fps={30} durationInFrames={1} />
     <Composition id="GenThumb" component={GenThumb as any} width={1920} height={1080} fps={30} durationInFrames={1} defaultProps={{id: 't_main', kit: 'flat'}} />

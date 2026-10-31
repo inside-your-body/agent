@@ -191,6 +191,14 @@ def _fix_visual(v, words, organ):
     return {'type': 'question', 'text': ' '.join(words)[:60]}
 
 
+def _as_dicts(ep):
+    for sc in ep['scenes']:
+        sc['lines'] = [l if isinstance(l, dict) else {'text': l} for l in sc['lines']]
+    for s in ep.get('shorts', []):
+        s['lines'] = [l if isinstance(l, dict) else {'text': l} for l in s['lines']]
+    return ep
+
+
 def storyboard(ep):
     ctx = ep['title']
     for sc in ep['scenes']:
@@ -252,7 +260,7 @@ def build(topic, ep_dir, dry_run=False):
         except Exception as e: print('hook step skipped:', e)
         ep['hook_done'] = True; ep.pop('boarded', None); save(ep_dir / 'episode.json', ep)
     if not ep.get('boarded'):
-        ep = storyboard(ep); save(ep_dir / 'episode.json', ep)
+        ep = _as_dicts(ep); ep['boarded'] = True; save(ep_dir / 'episode.json', ep)
     # voice: long (length guard) + Shorts
     need = CFG['long_video']['min_seconds'] + 3
     for attempt in range(3):
@@ -260,13 +268,28 @@ def build(topic, ep_dir, dry_run=False):
         segs = _voice([l['text'] for l in lines], [len(s['lines']) for s in ep['scenes']], ep_dir / 'vo_long.wav', ep_dir / 'segs_long.json')
         print(f"voice long: {segs[-1]['end']:.0f}s (need {need}s), {long_words(ep)} words")
         if segs[-1]['end'] >= need or attempt == 2: break
-        ep = expand(ep, notes, int(need * long_words(ep) / segs[-1]['end'] * 1.06)); ep = storyboard(ep); save(ep_dir / 'episode.json', ep)
+        ep = expand(ep, notes, int(need * long_words(ep) / segs[-1]['end'] * 1.06)); ep = _as_dicts(ep); save(ep_dir / 'episode.json', ep)
         for f in ('vo_long.wav', 'segs_long.json'): (ep_dir / f).unlink(missing_ok=True)
     # 'narration' view so package.py chapters work
     for sc in ep['scenes']: sc['narration'] = [l['text'] for l in sc['lines']]
     save(ep_dir / 'episode.json', ep)
     stages = [sc.get('stage') for sc in ep['scenes'] for _ in sc['lines']]
-    save(ep_dir / 'props_long.json', props(long_lines(ep), stages, segs, False))
+    # PICTURE format (owner, Oct 31): a new picture every 3-5 s, palette per topic, rotating typography
+    from . import pics
+    hist = load(ROOT / 'data/history.json')
+    if not ep.get('palette'):
+        ep['palette'] = pics.choose_palette(ep.get('upload', {}).get('title') or ep.get('title'), hist.get('used_palettes', [])); save(ep_dir / 'episode.json', ep)
+    pal = pics.PALETTES[ep['palette']]
+    texts = [l['text'] for l in long_lines(ep)]
+    groups = pics.group(texts)
+    gtexts = [' '.join(texts[i] for i in g) for g in groups]
+    if not (ep_dir / 'pics_long.json').exists():
+        pb, cast = pics.plan(gtexts, ep.get('upload', {}).get('title') or ep.get('title'))
+        save(ep_dir / 'pics_long.json', {'beats': pb, 'cast': cast})
+    pb = load(ep_dir / 'pics_long.json')['beats']
+    files = pics.draw(pb, gtexts, pal, ep_dir / 'pics' / 'long')
+    print(f'pictures long: {sum(1 for f in files if f)}/{len(files)}, palette {ep["palette"]}')
+    save(ep_dir / 'props_long.json', pics.build_props(groups, segs, pb, files, stages, ep['palette'], f'pics/{ep_dir.name}/long'))
     for k, s in enumerate(ep.get('shorts', [])[:N_SHORTS]):
         for attempt in range(3):
             sg = _voice([l['text'] for l in s['lines']], [len(s['lines'])], ep_dir / f'vo_short{k}.wav', ep_dir / f'segs_short{k}.json')
@@ -277,28 +300,29 @@ def build(topic, ep_dir, dry_run=False):
 the mini timeline, the line that sends viewers to the full video and the loop. Return ONLY {{"lines": [str]}}.
 Lines: {json.dumps([l['text'] for l in s['lines']], ensure_ascii=False)}""", max_tokens=3000)
             if out.get('lines'):
-                bs = board_lines(out['lines'], f"{ep['title']} — vertical Short. Also give each sentence a 'stage': the time stamp it is about (≤10 chars UPPERCASE, e.g. 'DAY 3'; keep it the same for consecutive sentences about that moment; null only for the hook line)")
-                s['lines'] = [{'text': t, 'organ': b.get('organ') if b.get('organ') in ORGANS else 'none',
-                               'words': [w for w in (b.get('words') or []) if isinstance(w, str)][:4] or t.split()[:3], 'stage': b.get('stage') or None,
-                               'visual': _fix_visual(b.get('visual'), [w for w in (b.get('words') or []) if isinstance(w, str)][:4] or t.split()[:3], b.get('organ'))}
-                              for t, b in zip(out['lines'], bs)]
+                s['lines'] = [{'text': t} for t in out['lines'] if isinstance(t, str)]
                 save(ep_dir / 'episode.json', ep)
                 for f in (f'vo_short{k}.wav', f'segs_short{k}.json'): (ep_dir / f).unlink(missing_ok=True)
-        pr = props(s['lines'], [l.get('stage') for l in s['lines']], sg, True)
         import re as _re
-        pr['title'] = _re.sub(r'\s*#\w+', '', s.get('title') or ep.get('title') or '').strip()   # headline band = the Short's cover text
-        save(ep_dir / f'props_short{k}.json', pr)
-        try:   # cover image (headline + first stamp) — set as the Short's thumbnail where YouTube allows it
-            from collections import Counter
-            orgs = Counter(l.get('organ') for l in s['lines'] if l.get('organ') not in (None, 'none'))
-            cv = {'title': pr['title'], 'organ': orgs.most_common(1)[0][0] if orgs else 'none',
-                  'stamp': next((l.get('stage') for l in s['lines'] if l.get('stage')), None)}
-            save(ep_dir / f'cover_short{k}.json', cv)
-            pr['coverOrgan'], pr['coverStamp'] = cv['organ'], cv['stamp']        # the Short opens on its cover (first 1.3 s)
-            save(ep_dir / f'props_short{k}.json', pr)
-            sh(['npx', 'remotion', 'still', 'src/index.ts', 'ShortCover', str(ep_dir / f'short{k}_cover.jpg'), f'--props={ep_dir / f"cover_short{k}.json"}',
-                '--jpeg-quality=88', '--log=warn'], cwd=ROOT / 'render')
-        except Exception as e: print('short cover failed', e)
+        title = _re.sub(r'\s*#\w+', '', s.get('title') or ep.get('title') or '').strip()   # headline band = the Short's cover text
+        st_texts = [l['text'] for l in s['lines']]
+        sgroups = pics.group(st_texts, min_words=7, max_words=16)
+        sg_texts = [' '.join(st_texts[i] for i in g) for g in sgroups]
+        if not (ep_dir / f'pics_short{k}.json').exists():
+            spb, _ = pics.plan(sg_texts, title, vertical=True)
+            save(ep_dir / f'pics_short{k}.json', {'beats': spb})
+        spb = load(ep_dir / f'pics_short{k}.json')['beats']
+        sfiles = pics.draw(spb, sg_texts, pal, ep_dir / 'pics' / f'short{k}', vertical=True)
+        sstages = [l.get('stage') for l in s['lines']]
+        save(ep_dir / f'props_short{k}.json', pics.build_props(sgroups, sg, spb, sfiles, sstages, ep['palette'], f'pics/{ep_dir.name}/short{k}',
+                                                              vertical=True, title=title))
+    try:   # Short covers: picture + headline, rendered from the Short itself
+        pics.stage_public(ep_dir)
+        for k in range(N_SHORTS):
+            if (ep_dir / f'props_short{k}.json').exists():
+                sh(['npx', 'remotion', 'still', 'src/index.ts', 'PicShort', str(ep_dir / f'short{k}_cover.jpg'), f'--props={ep_dir / f"props_short{k}.json"}',
+                    '--frame=12', '--jpeg-quality=88', '--log=warn'], cwd=ROOT / 'render')
+    except Exception as e: print('short cover failed', e)
     if not (ep_dir / 'thumbnail.jpg').exists():
         try: thumbs(ep, ep_dir)
         except Exception as e: print('thumbnail failed:', e)
@@ -425,6 +449,12 @@ def mix(silent, wav, pr, out, track):
             if b['stage'] and b['stage'] != prev_stage:
                 audio.place(fx, snd('whoosh1' if k % 2 else 'whoosh2'), max(0, t - 0.15), 0.35)
                 audio.place(fx, snd('impact2' if k % 3 else 'impact3'), t + 0.1, 0.3); last_t = t
+            elif b.get('sfx'):          # picture format: a soft swish on every picture change + the beat's own sound (rested)
+                audio.place(fx, snd('whoosh2' if k % 2 else 'whoosh3'), max(0, t - 0.12), 0.16)
+                from .pics import SFX_FILE
+                n = SFX_FILE.get(b['sfx'], 'pop1')
+                if n != last_n and t - last_t >= (2.5 if pr.get('vertical') else 4.0):
+                    audio.place(fx, snd(n), t + 0.35, 0.24); last_t, last_n = t, n
             elif t - last_t >= (2.5 if pr.get('vertical') else 4.5):
                 opts = [n for n in SFX_FOR.get(b['visual'].get('type'), ['pop1']) if n != last_n] or ['pop1']
                 n = opts[k % len(opts)]
@@ -443,7 +473,10 @@ def mix(silent, wav, pr, out, track):
 
 def render_local(ep_dir, kind):
     """Fallback when shard jobs did not render a part (single-runner mode)."""
-    comp = 'TLLong' if kind == 'long' else 'TLShort'
+    pic = load(ep_dir / f'props_{kind}.json', {}).get('pic')
+    comp = ('PicEpisode' if kind == 'long' else 'PicShort') if pic else ('TLLong' if kind == 'long' else 'TLShort')
+    if pic:
+        from . import pics; pics.stage_public(ep_dir)
     out = ep_dir / f'silent_{kind}.mp4'
     if not out.exists():
         sh(['npx', 'remotion', 'render', 'src/index.ts', comp, str(out), f'--props={ep_dir / f"props_{kind}.json"}', '--muted', '--log=warn'], cwd=ROOT / 'render')

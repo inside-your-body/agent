@@ -26,6 +26,7 @@ def mark_done(topic_id, entry):
     h.setdefault('used_kits', []).append(entry.get('kit'))
     h.setdefault('used_langs', []).extend([x for x in (entry.get('lang'), entry.get('short_lang')) if x])
     if entry.get('music'): h.setdefault('used_music', []).append(entry['music'])
+    if entry.get('palette'): h.setdefault('used_palettes', []).append(entry['palette'])
     save(ROOT / 'data/history.json', h)
 
 def main():
@@ -125,7 +126,7 @@ def run_tl(a, topic, ep_dir):
         except Exception as e: print('short upload failed', j, e)
     try: youtube.pin_comment_text(yt, vid, pkg['pinned_comment'])
     except Exception as e: print('comment not posted (will work once public):', e)
-    mark_done(topic['id'], {'topic': topic['title'], 'video_id': vid, 'short_ids': sids, 'publish_at': at, 'format': 'tl', 'music': track,
+    mark_done(topic['id'], {'topic': topic['title'], 'video_id': vid, 'short_ids': sids, 'publish_at': at, 'format': 'tl', 'music': track, 'palette': ep.get('palette'),
                             'built_at': dt.datetime.utcnow().isoformat(timespec='seconds')})
     save(ep_dir / 'result.json', {'video': vid, 'shorts': sids, 'publish_at': at, 'pinned_comment': pkg['pinned_comment']})
     print('DONE', vid, sids, at)
