@@ -77,7 +77,7 @@ def _at(hhmm, days=0):
     t = (dt.datetime.utcnow() + dt.timedelta(days=days)).replace(hour=h, minute=m, second=0, microsecond=0)
     return t.isoformat() + 'Z'
 
-SHORT_SLOTS = [('20:30', 0), ('20:00', 1)]   # owner (Oct 25): 2 Shorts — one with the episode, one the next day (23:00 Istanbul)
+SHORT_SLOTS = [('20:30', 0)]   # owner (Nov 2): every other day = 1 long video + 1 Short (Short 30 min after the long one)
 
 def run_tl(a, topic, ep_dir):
     from . import tl, package, audio, shard
