@@ -125,6 +125,19 @@
    "format": "tl",
    "music": "fluidscape",
    "built_at": "2026-10-30T17:17:01"
+  },
+  {
+   "topic": "What Happens in Your Brain During a Stroke?",
+   "video_id": "ba64qh4iA7M",
+   "short_ids": [
+    "fzWqhvS6DpQ",
+    "vaSLyHVX1dA"
+   ],
+   "publish_at": "2026-11-01T20:00:00Z",
+   "format": "tl",
+   "music": "floating_cities",
+   "palette": "crimson",
+   "built_at": "2026-11-01T17:27:19"
   }
  ],
  "used_styles": [
@@ -143,6 +156,8 @@
   null,
   null,
   null,
+  null,
+  null,
   null
  ],
  "used_kits": [
@@ -150,6 +165,7 @@
   "flat",
   "maxflat",
   "maxflat",
+  null,
   null,
   null,
   null
@@ -199,6 +215,10 @@
  "used_music": [
   "deliberate_thought",
   "clean_soul",
-  "fluidscape"
+  "fluidscape",
+  "floating_cities"
+ ],
+ "used_palettes": [
+  "crimson"
  ]
 }
