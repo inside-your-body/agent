@@ -150,6 +150,18 @@
    "music": "inspired",
    "palette": "sunset",
    "built_at": "2026-11-03T18:46:36"
+  },
+  {
+   "topic": "What Happens If You Stop Drinking Water",
+   "video_id": "9rk7CFxDCZA",
+   "short_ids": [
+    "kGDzLQOKxbY"
+   ],
+   "publish_at": "2026-11-05T20:00:00Z",
+   "format": "tl",
+   "music": "deliberate_thought",
+   "palette": "amber",
+   "built_at": "2026-11-05T19:12:58"
   }
  ],
  "used_styles": [
@@ -172,6 +184,8 @@
   null,
   null,
   null,
+  null,
+  null,
   null
  ],
  "used_kits": [
@@ -179,6 +193,7 @@
   "flat",
   "maxflat",
   "maxflat",
+  null,
   null,
   null,
   null,
@@ -232,10 +247,12 @@
   "clean_soul",
   "fluidscape",
   "floating_cities",
-  "inspired"
+  "inspired",
+  "deliberate_thought"
  ],
  "used_palettes": [
   "crimson",
-  "sunset"
+  "sunset",
+  "amber"
  ]
 }
