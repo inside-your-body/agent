@@ -40,7 +40,7 @@ jobs:
       - uses: actions/setup-node@v4
         with: {node-version: '20', cache: 'npm', cache-dependency-path: render/package-lock.json}
       - name: System deps
-        timeout-minutes: 8
+        timeout-minutes: 20
         run: bash scripts/deps.sh
       - name: Python deps
         run: pip install -r requirements.txt
