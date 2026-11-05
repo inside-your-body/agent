@@ -41,7 +41,7 @@ jobs:
         with: {node-version: '20', cache: 'npm', cache-dependency-path: render/package-lock.json}
       - name: System deps
         timeout-minutes: 8
-        run: for i in 1 2 3; do timeout 150 sudo apt-get update -qq && timeout 300 sudo apt-get install -y -qq ffmpeg fonts-noto-color-emoji && break; sleep 10; done
+        run: bash scripts/deps.sh
       - name: Python deps
         run: pip install -r requirements.txt
       - name: Render deps
@@ -107,7 +107,7 @@ jobs:
         with: {node-version: '20', cache: 'npm', cache-dependency-path: render/package-lock.json}
       - name: Deps
         run: |
-          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg fonts-noto-color-emoji
+          bash scripts/deps.sh
           pip install -r requirements.txt
           cd render && npm ci && npx remotion browser ensure
       - uses: actions/download-artifact@v4
@@ -127,7 +127,7 @@ jobs:
       - uses: actions/setup-python@v5
         with: {python-version: '3.11', cache: 'pip'}
       - name: Deps
-        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg fonts-noto-color-emoji && pip install -r requirements.txt
+        run: bash scripts/deps.sh && pip install -r requirements.txt
       - uses: actions/download-artifact@v4
         with: {name: work, path: work}
       - uses: actions/download-artifact@v4
