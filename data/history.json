@@ -162,6 +162,18 @@
    "music": "deliberate_thought",
    "palette": "amber",
    "built_at": "2026-11-05T19:12:58"
+  },
+  {
+   "topic": "What Eating Once a Day Does to Your Body, Hour by Hour",
+   "video_id": "aHKEYFTTqrU",
+   "short_ids": [
+    "kfrLc5QMg3c"
+   ],
+   "publish_at": "2026-11-08T20:00:00Z",
+   "format": "tl",
+   "music": "clean_soul",
+   "palette": "forest",
+   "built_at": "2026-11-08T17:19:48"
   }
  ],
  "used_styles": [
@@ -186,6 +198,8 @@
   null,
   null,
   null,
+  null,
+  null,
   null
  ],
  "used_kits": [
@@ -193,6 +207,7 @@
   "flat",
   "maxflat",
   "maxflat",
+  null,
   null,
   null,
   null,
@@ -248,11 +263,13 @@
   "fluidscape",
   "floating_cities",
   "inspired",
-  "deliberate_thought"
+  "deliberate_thought",
+  "clean_soul"
  ],
  "used_palettes": [
   "crimson",
   "sunset",
-  "amber"
+  "amber",
+  "forest"
  ]
 }
