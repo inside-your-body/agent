@@ -11,10 +11,10 @@ jobs:
           V=PEdcOLzbXYhL8IKOswXB
           mkdir out
           curl -s -H "xi-api-key: $KEY" https://api.elevenlabs.io/v1/user/subscription | python3 -c "import json,sys;d=json.load(sys.stdin);print('tier',d.get('tier'),'used',d.get('character_count'),'limit',d.get('character_limit'), d.get('detail',''))" || true
-          for M in eleven_v3 eleven_multilingual_v2; do
+          for M in eleven_v4 eleven_v4_turbo; do
             code=$(curl -s -o out/$M.mp3 -w "%{http_code}" -X POST "https://api.elevenlabs.io/v1/text-to-speech/$V?output_format=mp3_44100_128" \
               -H "xi-api-key: $KEY" -H "Content-Type: application/json" \
-              -d "{\"text\": \"سلام! این یک آزمایش کوتاه است. اگر فقط یک وعده در روز غذا بخوری، بدنت ساعت به ساعت چه تغییری می‌کند؟\", \"model_id\": \"$M\"}")
+              -d "{\"text\": \"اگر فقط یک وعده در روز غذا بخوری، بدنت ساعت به ساعت چه تغییری می‌کند؟ در چهار ساعت اول، قند خونت بالا می‌رود و انسولین وارد عمل می‌شود. اما حدود هجده ساعت بعد، اتفاقی می‌افتد که بیشتر مردم هیچ‌وقت درباره‌اش نشنیده‌اند.\", \"model_id\": \"$M\"}")
             echo "$M -> HTTP $code, $(stat -c%s out/$M.mp3) bytes"; [ "$code" = 200 ] || head -c 400 out/$M.mp3
           done
       - uses: actions/upload-artifact@v4
