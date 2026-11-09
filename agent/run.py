@@ -39,6 +39,15 @@ def main():
     cur = load(WORK / 'current.json', {})
     if a.stage == 'finish' and cur:
         return finish_from(cur, a)
+    if CFG['channel'].get('language') == 'fa':      # Persian channel «درون بدن» (Nov 2026): pre-voiced monthly batch, see agent/fa.py
+        from . import fa
+        e = next((x for x in fa.batch()['episodes'] if str(x['id']) == str(a.topic)), None) if a.topic else fa.next_episode()
+        if not e: print('no voiced Persian episode waiting -> nothing to build'); return
+        ep_dir = WORK / f"fa{e['id']}"
+        save(WORK / 'current.json', {'dir': ep_dir.name, 'format': 'tl', 'fa': e['id'], 'topic': {'id': e['id'], 'title': e['title']}})
+        fa.build(e, ep_dir)
+        if a.stage == 'build': print('build stage done:', ep_dir); return
+        return fa.finish(load(WORK / 'current.json'), a.dry_run)
 
     # run daily via cron, but only make an episode every ~2 days
     h = load(ROOT / 'data/history.json')
@@ -66,6 +75,9 @@ def main():
     run_episode(a, topic, ep_dir)
 
 def finish_from(cur, a):
+    if cur.get('fa'):
+        from . import fa
+        return fa.finish(cur, a.dry_run)
     if cur.get('format') == 'tl':
         return run_tl(a, cur['topic'], WORK / cur['dir'])
     run_episode(a, cur['topic'], WORK / cur['dir'])

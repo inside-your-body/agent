@@ -1,0 +1,52 @@
+name: Persian batch (topics, scripts, voices)
+
+# Owner (Nov 2026): once a month, while the ElevenLabs plan is active: 30 viral topics -> Persian scripts -> Aran voices.
+# Resumable: every finished script / voice is committed right away, so a re-run continues where the last one stopped.
+on:
+  workflow_dispatch:
+    inputs:
+      step:
+        description: 'all | topics | scripts | voices | status'
+        default: 'all'
+      n:
+        description: 'number of topics for a new batch'
+        default: '30'
+      limit:
+        description: 'optional: only this many scripts/voices in this run (e.g. 1 for a sample)'
+        required: false
+
+permissions:
+  contents: write
+concurrency: fa-batch
+
+jobs:
+  batch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11', cache: 'pip'}
+      - name: Deps
+        timeout-minutes: 20
+        run: bash scripts/deps.sh && pip install -r requirements.txt
+      - name: Run
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          YT_TOKEN_JSON: ${{ secrets.YT_TOKEN_JSON }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ARGS="${{ inputs.step }} --n ${{ inputs.n }}"
+          if [ -n "${{ inputs.limit }}" ]; then ARGS="$ARGS --limit ${{ inputs.limit }}"; fi
+          python -m agent.fa $ARGS
+          python -m agent.fa status
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: fa-batch-${{ github.run_number }}
+          path: |
+            data/fa/
+            work/cost.json
+          retention-days: 14

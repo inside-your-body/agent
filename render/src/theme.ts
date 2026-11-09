@@ -22,6 +22,11 @@ if (typeof document !== 'undefined') {
   Promise.all(FONTS.map((f) => new FontFace('F_' + f, `url(${staticFile('fonts/' + f + '.woff2')})`, {weight: '100 900'})
     .load().then((x) => (document as any).fonts.add(x)).catch(() => null)))
     .then(() => continueRender(h));
+  // Persian channel (Nov 2026): owner's fonts — Lalezar (headlines), Titr (strong), Yekan (body), Doran (tall), Almas (playful)
+  const h2 = delayRender('fa-fonts');
+  Promise.all(['lalezar', 'titr', 'yekan', 'doran', 'almas'].map((f) => new FontFace('F_' + f, `url(${staticFile('fonts/fa/' + f + '.ttf')})`)
+    .load().then((x) => (document as any).fonts.add(x)).catch(() => null)))
+    .then(() => continueRender(h2));
 }
 export const ff = (name: string) => `F_${name}, Inter, Arial, sans-serif`;
 

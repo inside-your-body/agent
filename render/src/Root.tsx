@@ -17,6 +17,7 @@ import {TLEpisode, tlMeta} from './TLEpisode';
 import {ThumbTL} from './ThumbTL';
 import {ShortCover} from './ShortCover';
 import {PicEpisode, picMeta} from './PicEpisode';
+import {ThumbFA} from './ThumbFA';
 import {StyleDemo, Thumb, DEMO_ORDER, DEMO_LEN} from './StyleDemo';
 
 const demo: Props = {kind: 'long', fps: 30, frames: 150, channel: 'Inside Your Body', title: 'demo', words: [],
@@ -51,6 +52,7 @@ export const Root: React.FC = () => (
     <Composition id="ShortCover" component={ShortCover as any} width={1080} height={1920} fps={30} durationInFrames={1} defaultProps={{title: "Your Liver Changes in 9 Days", organ: "liver", stamp: "DAY 9"}} />
     <Composition id="PicShort" component={PicEpisode as any} width={1080} height={1920} fps={30} durationInFrames={300} calculateMetadata={picMeta as any} defaultProps={{beats: [], frames: 300, vertical: true}} />
     <Composition id="PicEpisode" component={PicEpisode as any} width={1920} height={1080} fps={30} durationInFrames={300} calculateMetadata={picMeta as any} defaultProps={{beats: [], frames: 300}} />
+    <Composition id="ThumbFA" component={ThumbFA as any} width={1920} height={1080} fps={30} durationInFrames={1} defaultProps={{line1: 'وقتی ۷۲ ساعت', line2: 'آب نخوری', badge: '۷۲ ساعت'}} />
     <Composition id="ThumbPro" component={ThumbPro} width={1920} height={1080} fps={30} durationInFrames={1} />
     <Composition id="GenThumb" component={GenThumb as any} width={1920} height={1080} fps={30} durationInFrames={1} defaultProps={{id: 't_main', kit: 'flat'}} />
     <Composition id="ThumbT" component={ThumbT as any} width={1920} height={1080} fps={30} durationInFrames={1} defaultProps={{lines: ['KIDNEY STONE', 'WORST PAIN', 'EVER?'], title: 'kidney stone'}} />

@@ -26,6 +26,12 @@ SFX_FILE = {'whoosh': 'whoosh3', 'pop': 'pop2', 'ding': 'sparkle', 'tick': 'tick
             'impact': 'impact2', 'sparkle': 'sparkle', 'reveal': 'reveal', 'bong': 'bong', 'click': 'click', 'drip': 'drip', 'goo': 'goo'}
 
 
+FA_NOTE = ("""The video is in PERSIAN (Farsi). Write "picture" in ENGLISH (it goes to the image model). "words" must be 2-4 key words copied
+EXACTLY from the Persian beat (Persian script, no translation, no diacritics). In "stat", "value" uses digits (e.g. "72") and "unit" is a short
+PERSIAN word (e.g. "ساعت", "درصد", "روز").
+""")
+
+
 def choose_palette(title, recent=()):
     keys = [k for k in PALETTES if k not in list(recent)[-2:]]
     try:
@@ -49,8 +55,8 @@ def group(lines, min_words=9, max_words=20):
     return out
 
 
-def _plan_chunk(texts, offset, title, cast, vertical):
-    return llm.ask_json(f"""You are the motion-graphics director of a premium YouTube science explainer: "{title}"{' (vertical Short)' if vertical else ''}.
+def _plan_chunk(texts, offset, title, cast, vertical, fa=False):
+    return llm.ask_json(f"""{FA_NOTE if fa else ''}You are the motion-graphics director of a premium YouTube science explainer: "{title}"{' (vertical Short)' if vertical else ''}.
 Every beat gets ONE full-screen picture plus animated typography. Picture styles:
 - "ink": everyday life, people, objects, places (black-and-white ink sketch, one accent colour on the key element). Recurring character: {cast}.
 - "flat": anything INSIDE the body (organs, blood, cells, molecules, hormones) as simple flat 2D.
@@ -65,13 +71,13 @@ Return JSON {{"beats": [{{"i": int, "style": str, "picture": str, "words": [str]
                         max_tokens=9000)
 
 
-def plan(texts, title, vertical=False):
-    cast = llm.ask(f"""Describe in one line the recurring everyday character for the YouTube video "{title}" (age, look, clothes), so a sketch
+def plan(texts, title, vertical=False, fa=False):
+    cast = llm.ask(f"""Describe in English, in one line, the recurring everyday character for the YouTube video "{title}"{' (Persian-speaking audience: an Iranian-looking person)' if fa else ''} (age, look, clothes), so a sketch
 artist draws the same person every time. One line, no intro.""", max_tokens=120).strip().split('\n')[0][:200]
     out = {}
     for k in range(0, len(texts), 24):
         try:
-            r = _plan_chunk(texts[k:k + 24], k, title, cast, vertical)
+            r = _plan_chunk(texts[k:k + 24], k, title, cast, vertical, fa)
             for b in r.get('beats', []):
                 if isinstance(b, dict) and isinstance(b.get('i'), int): out[b['i']] = b
         except Exception as e: print('picture plan chunk failed', k, e)
@@ -111,7 +117,7 @@ def draw(plan_beats, texts, pal, folder, vertical=False):
     with ThreadPoolExecutor(6) as ex: return list(ex.map(one, range(len(texts))))
 
 
-def build_props(groups, line_segs, plan_beats, files, stages, pal_name, folder_rel, FPS=30, vertical=False, title=None):
+def build_props(groups, line_segs, plan_beats, files, stages, pal_name, folder_rel, FPS=30, vertical=False, title=None, rtl=False, texts=None):
     pal = {k: v for k, v in PALETTES[pal_name].items() if k != 'ink'}
     order = list(range(6)); random.Random(pal_name + str(len(groups))).shuffle(order)
     beats, last_tpl = [], -1
@@ -124,7 +130,7 @@ def build_props(groups, line_segs, plan_beats, files, stages, pal_name, folder_r
         tpl = order[g % 6]
         if tpl == last_tpl: tpl = order[(g + 1) % 6]
         last_tpl = tpl
-        words = [w for w in (pb.get('words') or []) if isinstance(w, str)][:4] or ' '.join([]).split()[:3]
+        words = [w for w in (pb.get('words') or []) if isinstance(w, str)][:4] or ((texts[g].split()[:3]) if texts else [])
         stat = pb.get('stat') if isinstance(pb.get('stat'), dict) and str(pb['stat'].get('value', '')).strip() else None
         beats.append({'start': start, 'img': f'{folder_rel}/{f.name}' if f else None, 'style': pb.get('style', 'ink'),
                       'words': words, 'accent': pb.get('accent') if isinstance(pb.get('accent'), int) else -1, 'stat': stat,
@@ -132,6 +138,7 @@ def build_props(groups, line_segs, plan_beats, files, stages, pal_name, folder_r
     total = int(round((line_segs[-1]['end'] + 1.5) * 30))
     for k, b in enumerate(beats): b['end'] = beats[k + 1]['start'] if k + 1 < len(beats) else total
     pr = {'beats': beats, 'frames': total, 'vertical': vertical, 'palette': pal, 'pic': True}
+    if rtl: pr.update(rtl=True, brand='درون بدن')
     if title: pr['title'] = title
     return pr
 

@@ -21,13 +21,14 @@ def publish_time(hhmm):
     t = now.replace(hour=h, minute=m, second=0, microsecond=0)
     return None if t < now + dt.timedelta(minutes=15) else t.isoformat() + 'Z'
 
-def upload(yt, video, title, description, tags, thumb=None, publish_at=None, synthetic=False):
+def upload(yt, video, title, description, tags, thumb=None, publish_at=None, synthetic=False, lang=None):
+    lang = lang or CFG['channel'].get('language', 'en')
     from googleapiclient.http import MediaFileUpload
     status = {'selfDeclaredMadeForKids': False, 'containsSyntheticMedia': synthetic}
     if publish_at: status.update(privacyStatus='private', publishAt=publish_at)
     else: status.update(privacyStatus='public')
     body = {'snippet': {'title': title[:100], 'description': description[:4900], 'tags': tags[:30],
-                        'categoryId': CFG['channel']['category_id'], 'defaultLanguage': 'en', 'defaultAudioLanguage': 'en'},
+                        'categoryId': CFG['channel']['category_id'], 'defaultLanguage': lang, 'defaultAudioLanguage': lang},
             'status': status}
     req = yt.videos().insert(part='snippet,status', body=body,
                              media_body=MediaFileUpload(str(video), chunksize=-1, resumable=True, mimetype='video/mp4'))

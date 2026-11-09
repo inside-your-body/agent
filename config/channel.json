@@ -1,22 +1,22 @@
 {
   "channel": {
-    "name": "Inside Your Body",
-    "handle": "@InsideYourBodyAnimated",
-    "language": "en",
+    "name": "درون بدن",
+    "handle": "@DaroonBadanTV",
+    "language": "fa",
     "category_id": "27",
-    "playlist_name": "Inside Your Body — Health Explained"
+    "playlist_name": "درون بدن — چه اتفاقی در بدن می‌افتد"
   },
   "schedule": {
     "every_days": 2,
     "build_cron_utc": "7 11 * * *",
-    "publish_long_utc": "20:00",
-    "publish_short_utc": "20:30",
-    "audience": "Owner: publish 23:00-24:00 Istanbul. 20:00 UTC = 23:00 Istanbul / 4 PM US Eastern / 9 PM UK; Short 30 min later.",
+    "publish_long_utc": "17:00",
+    "publish_short_utc": "17:30",
+    "audience": "Persian (Nov 2026): 17:00 UTC = 20:30 Tehran / 20:00 Istanbul; Short 30 min later. Uploaded in advance and scheduled every other day.",
     "mode": "auto_public",
     "min_hours_between_episodes": 40
   },
   "voice": {
-    "engine": "openai",
+    "engine": "elevenlabs",
     "model_url": "https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0/kokoro-v1.0.onnx",
     "voices_url": "https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0/voices-v1.0.bin",
     "blend": {

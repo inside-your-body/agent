@@ -1,8 +1,9 @@
 name: Make episode
 
 on:
-  schedule:
-    - cron: '7 11 * * *'       # daily 11:07 UTC (GitHub often starts scheduled runs hours late, so start early); run.py makes an episode only every ~2 days (min 40 h gap); it publishes at 20:00 UTC (23:00 Istanbul)
+  schedule:                  # Persian channel (Nov 2026): every run builds + uploads ONE pre-voiced episode, scheduled for its own
+    - cron: '7 4 * * *'        # publish day (every other day, 17:00 UTC); max 2 per day (YouTube quota) -> a 30-episode batch is
+    - cron: '7 13 * * *'       # uploaded in ~15 days; runs with nothing to build stop after a minute
   workflow_dispatch:
     inputs:
       dry_run:
@@ -59,6 +60,7 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           YT_TOKEN_JSON: ${{ secrets.YT_TOKEN_JSON }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           if [ -n "${{ inputs.resume_run }}" ] && [ -f work/current.json ]; then echo "go=1" >> $GITHUB_OUTPUT; echo "reusing build of run ${{ inputs.resume_run }}"; exit 0; fi
           ARGS="--stage build"
@@ -88,6 +90,8 @@ jobs:
             work/*/gen/*.tsx
             work/*/gen/qa*/st/*.jpg
             work/*/thumbnail*.jpg
+            work/*/short*_cover.jpg
+            work/*/props_*.json
             work/cost.json
           retention-days: 14
 
