@@ -23,7 +23,7 @@ on:
 permissions:
   contents: write
   actions: read
-concurrency: episode
+concurrency: episode-fa
 
 env:
   SHARDS: 8          # 7 parallel parts of the long video + 1 Short
