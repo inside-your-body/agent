@@ -95,7 +95,7 @@
   },
   {
    "id": 8,
-   "title": "وقتی نوشیدنی شیرین می‌خوری در بدنت چه می‌گذرد؟",
+   "title": "وقتی نوشابه می‌خوری ۶۰ دقیقه بعد در بدنت چه می‌شود؟",
    "en": "What happens in your body when you take a sip of a sugary drink",
    "angle": "از دهان تا کبد؛ ۶۰ دقیقه بعد از یک نوشابه",
    "stamps": "۱۰ دقیقه ← ۲۰ دقیقه ← ۴۰ دقیقه ← ۶۰ دقیقه",
@@ -103,7 +103,8 @@
     "title": "What Happens When You Take a Sip? 🧃 | Human Body Explained!",
     "views": 27379035
    },
-   "status": "todo"
+   "status": "scripted",
+   "words": 1402
   },
   {
    "id": 9,
