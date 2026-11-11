@@ -17,7 +17,7 @@
   },
   {
    "id": 2,
-   "title": "چرا موقع خواب می‌پری و بدنت تکان می‌خورد؟",
+   "title": "چرا موقع خواب می‌پری؟ پرش خواب چیست",
    "en": "Why you twitch before falling asleep",
    "angle": "توضیح پرش‌های خواب (هیپنیک جرک) و ربطش به مغز و عضلات",
    "stamps": "لحظه به خواب رفتن ← ثانیه‌های اول ← پرش ← بیداری ناگهانی",
@@ -25,7 +25,8 @@
     "title": "Why You Twitch Before Falling Asleep 😟 (weird)",
     "views": 49476551
    },
-   "status": "todo"
+   "status": "scripted",
+   "words": 1212
   },
   {
    "id": 3,
