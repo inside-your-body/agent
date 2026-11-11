@@ -16,7 +16,7 @@ EPS = FA_DIR / 'eps'
 RELEASE = 'fa-voices'
 MAX_PER_DAY = 2                      # 2 x (long + Short + 2 thumbnails) ~ 6,600 of the 10,000 daily YouTube quota units
 PUBLISH_LONG, PUBLISH_SHORT = '17:00', '17:30'   # UTC = 20:30 / 21:00 Tehran, 20:00 / 20:30 Istanbul
-WORDS_MIN, WORDS_MAX = 1450, 1600
+WORDS_MIN, WORDS_MAX = 1100, 1200       # measured Nov 11: Aran v4 at 1.2x reads ~2.1 Persian words/s -> 8:30-9:30
 SECONDS_MIN = CFG['long_video']['min_seconds']    # 8:05 -> mid-rolls
 FA_DIGITS = str.maketrans('0123456789', '۰۱۲۳۴۵۶۷۸۹')
 
