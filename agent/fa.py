@@ -303,24 +303,25 @@ def build(e, ep_dir):
     pal = pics.PALETTES[ep['palette']]
     texts = long_texts(ep); segs = load(ep_dir / 'segs_long.json')
     stages = [sc.get('stage') for sc in ep['scenes'] for _ in sc['lines']]
-    groups = pics.group(texts, min_words=11, max_words=20)        # Persian at 1.2x ≈ 2.6 words/s -> a new picture every ~4-5 s
-    gtexts = [' '.join(texts[i] for i in g) for g in groups]
+    tg = pics.time_groups(texts, segs)                            # a new picture every ~4-5 s of narration
+    groups, gtexts, gstarts = [b['idx'] for b in tg], [b['text'] for b in tg], [b['start'] for b in tg]
     if not (ep_dir / 'pics_long.json').exists():
         pb, cast = pics.plan(gtexts, e.get('en') or title, fa=True); save(ep_dir / 'pics_long.json', {'beats': pb, 'cast': cast})
     pb = load(ep_dir / 'pics_long.json')['beats']
     files = pics.draw(pb, gtexts, pal, ep_dir / 'pics' / 'long')
     print(f'pictures long: {sum(1 for f in files if f)}/{len(files)}, palette {ep["palette"]}')
-    save(ep_dir / 'props_long.json', pics.build_props(groups, segs, pb, files, stages, ep['palette'], f'pics/{ep_dir.name}/long', rtl=True, texts=gtexts))
+    save(ep_dir / 'props_long.json', pics.build_props(groups, segs, pb, files, stages, ep['palette'], f'pics/{ep_dir.name}/long', rtl=True, texts=gtexts, starts=gstarts))
     for k, s in enumerate(ep.get('shorts', [])[:1]):
         sg = load(ep_dir / f'segs_short{k}.json'); st = s['lines']
-        sgroups = pics.group(st, min_words=7, max_words=14); sgt = [' '.join(st[i] for i in g) for g in sgroups]
+        stg = pics.time_groups(st, sg, beat=3.5, min_d=2.6)
+        sgroups, sgt, sstarts = [b['idx'] for b in stg], [b['text'] for b in stg], [b['start'] for b in stg]
         if not (ep_dir / f'pics_short{k}.json').exists():
             spb, _ = pics.plan(sgt, e.get('en') or title, vertical=True, fa=True); save(ep_dir / f'pics_short{k}.json', {'beats': spb})
         spb = load(ep_dir / f'pics_short{k}.json')['beats']
         sfiles = pics.draw(spb, sgt, pal, ep_dir / 'pics' / f'short{k}', vertical=True)
         stitle = re.sub(r'#\S+', '', s.get('title') or title).strip()
         save(ep_dir / f'props_short{k}.json', pics.build_props(sgroups, sg, spb, sfiles, [None] * len(st), ep['palette'], f'pics/{ep_dir.name}/short{k}',
-                                                              vertical=True, title=stitle, rtl=True, texts=sgt))
+                                                              vertical=True, title=stitle, rtl=True, texts=sgt, starts=sstarts))
     pics.stage_public(ep_dir)
     try:
         for k in range(len(ep.get('shorts', [])[:1])):

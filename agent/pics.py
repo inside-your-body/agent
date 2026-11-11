@@ -55,6 +55,31 @@ def group(lines, min_words=9, max_words=20):
     return out
 
 
+def time_groups(lines, segs, beat=4.5, min_d=3.4):
+    """Owner (Nov 2026): a new picture every 4-5 s of NARRATION TIME. Short sentences are merged until >= min_d seconds; a long
+    sentence is cut into several pictures (its words split evenly, timed proportionally). Returns [{'idx', 'start', 'text'}]."""
+    out, cur = [], []
+    def flush():
+        if cur:
+            out.append({'idx': list(cur), 'start': segs[cur[0]]['start'], 'text': ' '.join(lines[i] for i in cur)}); cur.clear()
+    for i, ln in enumerate(lines):
+        d = segs[i]['end'] - segs[i]['start']
+        if d > beat + 1.6:
+            flush()
+            k = max(2, round(d / beat)); w = ln.split()
+            for j in range(k):
+                part = ' '.join(w[len(w) * j // k: len(w) * (j + 1) // k])
+                if part: out.append({'idx': [i], 'start': segs[i]['start'] + d * j / k, 'text': part})
+            continue
+        cur.append(i)
+        if segs[i]['end'] - segs[cur[0]]['start'] >= min_d: flush()
+    if cur:
+        if out and segs[cur[-1]]['end'] - segs[cur[0]]['start'] < 2.0 and len(out[-1]['idx']) and out[-1]['idx'][-1] == cur[0] - 1:
+            out[-1]['idx'] += cur; out[-1]['text'] += ' ' + ' '.join(lines[i] for i in cur); cur.clear()
+        flush()
+    return out
+
+
 def _plan_chunk(texts, offset, title, cast, vertical, fa=False):
     return llm.ask_json(f"""{FA_NOTE if fa else ''}You are the motion-graphics director of a premium YouTube science explainer: "{title}"{' (vertical Short)' if vertical else ''}.
 Every beat gets ONE full-screen picture plus animated typography. Picture styles:
@@ -117,7 +142,7 @@ def draw(plan_beats, texts, pal, folder, vertical=False):
     with ThreadPoolExecutor(6) as ex: return list(ex.map(one, range(len(texts))))
 
 
-def build_props(groups, line_segs, plan_beats, files, stages, pal_name, folder_rel, FPS=30, vertical=False, title=None, rtl=False, texts=None):
+def build_props(groups, line_segs, plan_beats, files, stages, pal_name, folder_rel, FPS=30, vertical=False, title=None, rtl=False, texts=None, starts=None):
     pal = {k: v for k, v in PALETTES[pal_name].items() if k != 'ink'}
     order = list(range(6)); random.Random(pal_name + str(len(groups))).shuffle(order)
     beats, last_tpl = [], -1
@@ -126,7 +151,7 @@ def build_props(groups, line_segs, plan_beats, files, stages, pal_name, folder_r
         if not files[g]:
             files[g] = next((files[j] for j in list(range(g - 1, -1, -1)) + list(range(g + 1, len(files))) if files[j]), None)
     for g, (idx, pb, f) in enumerate(zip(groups, plan_beats, files)):
-        start = 0 if g == 0 else int(round(line_segs[idx[0]]['start'] * 30))
+        start = 0 if g == 0 else int(round((starts[g] if starts else line_segs[idx[0]]['start']) * 30))
         tpl = order[g % 6]
         if tpl == last_tpl: tpl = order[(g + 1) % 6]
         last_tpl = tpl
