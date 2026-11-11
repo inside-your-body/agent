@@ -56,7 +56,7 @@
   },
   {
    "id": 5,
-   "title": "اگر هر روز تخم‌مرغ بخوری در بدنت چه اتفاقی می‌افتد؟",
+   "title": "اگر هر روز تخم‌مرغ بخوری چه می‌شود؟ ۴ ایستگاه",
    "en": "What happens inside your body when you eat eggs every day",
    "angle": "مسیر تخم‌مرغ از معده تا خون؛ پروتئین، کلسترول و سیری",
    "stamps": "۳۰ دقیقه ← ۴ ساعت ← ۲ هفته ← ۱ ماه",
@@ -64,7 +64,8 @@
     "title": "What Happens When You Eat Eggs? | Parasites Inside! | 3D Educational Animation",
     "views": 13265211
    },
-   "status": "todo"
+   "status": "scripted",
+   "words": 1289
   },
   {
    "id": 6,
