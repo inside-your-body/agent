@@ -2,7 +2,7 @@
  "episodes": [
   {
    "id": 1,
-   "title": "اگر ۳ روز نخوابی چه اتفاقی در بدنت می‌افتد؟",
+   "title": "اگر ۳ روز نخوابی چه اتفاقی می‌افتد؟ ساعت‌به‌ساعت",
    "en": "What happens if you never sleep (3 days)",
    "angle": "از خستگی ساده تا توهم؛ مغز بدون خواب ساعت‌به‌ساعت چه می‌کند",
    "stamps": "۲۴ ساعت ← ۴۸ ساعت ← ۷۲ ساعت ← بعد از اولین خواب جبرانی",
@@ -10,7 +10,8 @@
     "title": "What Happens If You Never Sleep 😳",
     "views": 40417280
    },
-   "status": "todo"
+   "status": "scripted",
+   "words": 1430
   },
   {
    "id": 2,
