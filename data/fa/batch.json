@@ -82,7 +82,7 @@
   },
   {
    "id": 7,
-   "title": "اگر یک ماه قند نخوری بدنت چه تغییری می‌کند؟",
+   "title": "ترک قند چه تغییری در بدن می‌دهد؟ ۳۰ دقیقه تا ۱ ماه",
    "en": "What happens inside your body when you eat sugar / quit sugar",
    "angle": "از جهش انسولین تا ولع قند و تغییرات انرژی در روزها و هفته‌ها",
    "stamps": "۳۰ دقیقه ← ۲۴ ساعت ← ۳ روز ← ۲ هفته ← ۱ ماه",
@@ -90,7 +90,8 @@
     "title": "This Happens Every Time You Eat Sugar #insulin #glucose",
     "views": 32889647
    },
-   "status": "todo"
+   "status": "scripted",
+   "words": 1212
   },
   {
    "id": 8,
