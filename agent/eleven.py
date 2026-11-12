@@ -106,3 +106,46 @@ def to_mp3(wav, mp3):
 
 def from_mp3(mp3, wav):
     subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', str(mp3), '-ac', '1', '-ar', str(SR), str(wav)], check=True)
+
+
+def tighten(wav, segs, keep=0.16, min_sil=0.26, thresh_db=-36, min_total=0):
+    """Owner (Nov 12): pauses between sentences felt long -> every silence longer than min_sil is shortened to `keep` seconds;
+    sentence timings are moved with the audio. Returns the new segs (wav is rewritten in place)."""
+    y, sr = sf.read(wav, dtype='float32')
+    if y.ndim > 1: y = y.mean(1)
+    hop = int(0.01 * sr); n = len(y) // hop
+    rms = np.sqrt(np.mean(y[:n * hop].reshape(n, hop) ** 2, axis=1) + 1e-12)
+    silent = rms < (10 ** (thresh_db / 20)) * max(1e-6, np.abs(y).max())
+    cuts, i = [], 0
+    while i < n:
+        if silent[i]:
+            j = i
+            while j < n and silent[j]: j += 1
+            dur = (j - i) * 0.01
+            if dur > min_sil:
+                a = i * 0.01 + keep / 2; b = j * 0.01 - keep / 2
+                if b > a: cuts.append((a, b))
+            i = j
+        else: i += 1
+    if not cuts: return segs
+    room = len(y) / sr - min_total                        # never push a long video under 8 minutes (mid-rolls)
+    total = sum(b - a for a, b in cuts)
+    if min_total and total > room:
+        f = max(0.0, room) / total
+        cuts = [(a, a + (b - a) * f) for a, b in cuts if (b - a) * f > 0.01]
+        if not cuts: return segs
+    keep_parts, last = [], 0
+    for a, b in cuts:
+        keep_parts.append(y[int(last * sr):int(a * sr)]); last = b
+    keep_parts.append(y[int(last * sr):])
+    sf.write(wav, np.concatenate(keep_parts), sr)
+    def mp(t):
+        sh = 0.0
+        for a, b in cuts:
+            if t >= b: sh += b - a
+            elif t > a: return round(a - sh, 3)
+            else: break
+        return round(t - sh, 3)
+    out = [{**s, 'start': mp(s['start']), 'end': mp(s['end'])} for s in segs]
+    print(f'tightened pauses: {len(cuts)} cut, -{sum(b - a for a, b in cuts):.1f}s')
+    return out

@@ -24,7 +24,7 @@ if (typeof document !== 'undefined') {
     .then(() => continueRender(h));
   // Persian channel (Nov 2026): owner's fonts — Lalezar (headlines), Titr (strong), Yekan (body), Doran (tall), Almas (playful)
   const h2 = delayRender('fa-fonts');
-  Promise.all(['lalezar', 'titr', 'yekan', 'doran', 'almas'].map((f) => new FontFace('F_' + f, `url(${staticFile('fonts/fa/' + f + '.ttf')})`)
+  Promise.all(['lalezar', 'titr', 'yekan', 'doran', 'almas', 'sfblack', 'sfbold', 'diodrum'].map((f) => new FontFace('F_' + f, `url(${staticFile('fonts/fa/' + f + '.ttf')})`)
     .load().then((x) => (document as any).fonts.add(x)).catch(() => null)))
     .then(() => continueRender(h2));
 }

@@ -306,7 +306,9 @@ def build(e, ep_dir):
         if not (ep_dir / f'vo_{kind}.wav').exists():
             _gh('release', 'download', RELEASE, '-p', f"{e['id']}_{kind}.mp3", '-O', str(mp3), '--clobber')
             eleven.from_mp3(mp3, ep_dir / f'vo_{kind}.wav')
-        shutil.copy(d / f'segs_{kind}.json', ep_dir / f'segs_{kind}.json')
+            # shorter pauses between sentences (owner, Nov 12) -> timings move with the audio
+            save(ep_dir / f'segs_{kind}.json', eleven.tighten(ep_dir / f'vo_{kind}.wav', load(d / f'segs_{kind}.json'),
+                                                               min_total=SECONDS_MIN - 1 if kind == 'long' else 0))
     save(ep_dir / 'episode.json', ep)
     title = (ep.get('upload') or {}).get('title') or e['title']
     hist = load(ROOT / 'data/history.json', {})
@@ -411,6 +413,22 @@ watermark). High contrast, readable on a phone, uncluttered, professional.{note}
     return False
 
 
+def reseo(eid):
+    """New SEO pack (description, tags) for an episode that is already on YouTube; keeps its music credit and Short link."""
+    from . import youtube
+    u = sched()['uploaded'].get(str(eid))
+    if not u: return
+    ep = load(EPS / str(eid) / 'episode.json'); d = WORK / f'reseo{eid}'; d.mkdir(parents=True, exist_ok=True)
+    shutil.copy(EPS / str(eid) / 'segs_long.json', d / 'segs_long.json')
+    yt = youtube.client()
+    v = yt.videos().list(part='snippet', id=u['video_id']).execute()['items'][0]
+    credit = next((ln for ln in v['snippet'].get('description', '').split('\n') if ln.startswith('Music:')), '')
+    pkg = package(ep, d, None, None, credit=credit)
+    sn = v['snippet']; sn.update(description=pkg['description'], tags=pkg['tags'])
+    yt.videos().update(part='snippet', body={'id': u['video_id'], 'snippet': sn}).execute()
+    print('seo updated on', u['video_id'])
+
+
 def rethumb(eid):
     """Make the new-template thumbnail for an episode that is already uploaded and set it on YouTube."""
     from . import youtube
@@ -453,9 +471,32 @@ def _ts(s):
     s = int(s); return f'{s // 60:02d}:{s % 60:02d}'
 
 
-def package(ep, ep_dir, track, short_track):
-    from . import audio
+def seo(ep):
+    """Owner (Nov 12): our SEO looked weak -> a full Persian SEO pack per video (what Persian viewers actually type)."""
     up = ep.get('upload') or {}
+    try:
+        r = llm.ask_json(f"""تو متخصص سئوی یوتیوب فارسی هستی. برای این ویدیو بسته‌ی سئو بنویس.
+عنوان: {up.get('title') or ep.get('title')}
+خلاصه‌ی متن: {' '.join(long_texts(ep))[:5000]}
+- main_keyword: پرجست‌وجوترین عبارتی که ایرانی‌ها برای این موضوع در یوتیوب و گوگل تایپ می‌کنند.
+- description: ۱۸۰ تا ۲۵۰ کلمه‌ی فارسی روان: جمله‌ی اول همان کلمه‌ی اصلی را دارد و کنجکاوی می‌سازد؛ بعد «در این ویدیو می‌بینی:» با ۴ تا ۶
+  خط کوتاه (هر خط با •)؛ کلمه‌ی اصلی و ۲ تا ۳ عبارت مرتبط هرکدام ۲ تا ۳ بار به طور طبیعی بیایند؛ آخرش دعوت به عضویت و یک سؤال برای کامنت.
+  جای فصل‌ها را با {{{{CHAPTERS}}}} بگذار (فقط همین کلمه، بدون عنوان).
+- tags: ۲۰ تا ۲۵ تگ: عبارت‌های جست‌وجوی واقعی فارسی (کوتاه و بلند)، چند نسخه‌ی فینگلیش، و ۳ تا ۴ انگلیسی.
+- hashtags: ۳ هشتگ فارسی (بدون فاصله، با _ به جای فاصله)، اولی کلمه‌ی اصلی.
+JSON: {{"main_keyword": str, "description": str, "tags": [str], "hashtags": [str]}}""", max_tokens=4000)
+        if r.get('description') and len(r['description']) > 300: return r
+    except Exception as ex: print('seo pack failed', ex)
+    return {}
+
+
+def package(ep, ep_dir, track, short_track, credit=None):
+    from . import audio
+    up = dict(ep.get('upload') or {})
+    sp_ = seo(ep)
+    if sp_:
+        up.update(description=sp_['description'], tags=sp_.get('tags') or up.get('tags', []), hashtags=sp_.get('hashtags') or up.get('hashtags', []))
+        if sp_.get('main_keyword'): up['main_keyword'] = sp_['main_keyword']
     segs = load(ep_dir / 'segs_long.json')
     chapters, si = [], 0
     for sc in ep['scenes']:
@@ -470,14 +511,14 @@ def package(ep, ep_dir, track, short_track):
     else: desc += '\n\nفصل‌ها:\n' + chap
     if ep.get('sources'): desc += '\n\nمنابع:\n' + '\n'.join(f"- {s.get('title')}: {s.get('url')}" for s in ep['sources'][:8])
     tags_h = ' '.join('#' + h.lstrip('#').replace(' ', '_') for h in up.get('hashtags', [])[:3])
-    desc += '\n\n⚠️ این ویدیو فقط آموزشی است و جایگزین مشاوره با پزشک نیست.\n\n' + tags_h + '\n\n' + audio.credit(track)
+    desc += '\n\n⚠️ این ویدیو فقط آموزشی است و جایگزین مشاوره با پزشک نیست.\n\n' + tags_h + '\n\n' + (credit if credit is not None else audio.credit(track))
     tags, total = [], 0
-    for t in [up.get('main_keyword') or ''] + up.get('tags', []):
+    for t in [up.get('main_keyword') or ''] + up.get('tags', []) + ['درون بدن', 'بدن انسان', 'سلامتی']:
         t = t.strip()
         if t and t not in tags and total + len(t) + 2 <= 480: tags.append(t); total += len(t) + 2
     s = (ep.get('shorts') or [{}])[0]
     stitle = re.sub(r'#\S+', '', s.get('title') or up.get('title') or '').strip()[:85] + ' #Shorts'
-    sdesc = (s.get('lines') or [''])[0] + '\n\nویدیوی کامل: {FULL_URL}\n\n' + tags_h + '\n\n' + audio.credit(short_track)
+    sdesc = (s.get('lines') or [''])[0] + '\n\nویدیوی کامل: {FULL_URL}\n\n' + tags_h + '\n\n' + (audio.credit(short_track) if short_track else '')
     return {'title': (up.get('title') or ep['title'])[:100], 'description': desc[:4900], 'tags': tags, 'short_title': stitle,
             'short_description': sdesc, 'pinned_comment': up.get('pinned_comment', '')}
 
@@ -544,7 +585,7 @@ def status():
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('cmd', choices=['topics', 'scripts', 'voices', 'status', 'all', 'rethumb'])
+    ap.add_argument('cmd', choices=['topics', 'scripts', 'voices', 'status', 'all', 'rethumb', 'reseo'])
     ap.add_argument('--id', default=None)
     ap.add_argument('--n', type=int, default=30)
     ap.add_argument('--limit', type=int, default=None)
@@ -554,9 +595,9 @@ def main():
     if a.cmd in ('scripts', 'all'): scripts(a.limit)
     if a.cmd in ('voices', 'all'): voices(a.limit)
     if a.cmd == 'status': status()
-    if a.cmd == 'rethumb':
+    if a.cmd in ('rethumb', 'reseo'):
         for x in (a.id or '').split(','):
-            if x.strip(): rethumb(x.strip())
+            if x.strip(): (rethumb if a.cmd == 'rethumb' else reseo)(x.strip())
 
 
 if __name__ == '__main__':

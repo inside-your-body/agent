@@ -100,7 +100,7 @@ def edit(prompt, refs, out, size='1536x1024', transparent=False, quality='medium
         data = {'prompt': soften(prompt), 'size': size, 'quality': quality, 'n': '1'}
         for a in range(retries):
             try:
-                files = [('image[]', (pathlib.Path(r).name, pathlib.Path(r).read_bytes(), 'image/jpeg' if str(r).lower().endswith(('.jpg', '.jpeg')) else 'image/png')) for r in refs]
+                files = [('image[]', (pathlib.Path(r).name, str(r), 'image/jpeg' if str(r).lower().endswith(('.jpg', '.jpeg')) else 'image/png')) for r in refs]
                 j, white = _post(EDIT_API, transparent, data=data, files=files)
                 from . import cost; cost.image(j.get('usage'), f"{pathlib.Path(out).name} {size} {quality} edit {_OK['model']}")
                 pathlib.Path(out).write_bytes(base64.b64decode(j['data'][0]['b64_json']))

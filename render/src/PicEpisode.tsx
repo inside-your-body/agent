@@ -11,7 +11,8 @@ export const faNum = (x: string) => String(x).replace(/[0-9]/g, (d) => FA_DIG[+d
 const enNum = (x: string) => String(x).replace(/[۰-۹]/g, (d) => String(FA_DIG.indexOf(d))).replace(/[٠-٩]/g, (d) => String('٠١٢٣٤٥٦٧٨٩'.indexOf(d)));
 type Fonts = {head: string; strong: string; body: string; tall: string; play: string; up: (x: string) => string; ls: number};
 const EN: Fonts = {head: 'F_anton', strong: 'F_anton', body: 'F_inter', tall: 'F_anton', play: 'F_anton', up: (x) => x.toUpperCase(), ls: 1};
-const FA: Fonts = {head: 'F_lalezar', strong: 'F_titr', body: 'F_yekan', tall: 'F_doran', play: 'F_lalezar', up: (x) => faNum(x), ls: 0};
+// owner (Nov 12): more modern, viral fonts — SF Arabic Black / Diodrum Bold, Lalezar kept for variety
+const FA: Fonts = {head: 'F_sfblack', strong: 'F_diodrum', body: 'F_sfbold', tall: 'F_lalezar', play: 'F_lalezar', up: (x) => faNum(x), ls: 0};
 
 const cl = {extrapolateLeft: 'clamp' as const, extrapolateRight: 'clamp' as const};
 const sp = (f: number, at: number, d = 12, s = 190) => spring({frame: f - at, fps: 30, config: {damping: d, stiffness: s}});
@@ -94,7 +95,7 @@ const Words: React.FC<{b: PicBeat; f: number; W: number; H: number; pal: Palette
   }
   if (tpl === 4 && rtl) {   // Persian: words drop in one by one on a card (letter-by-letter would break the joined script)
     return <div style={{position: 'absolute', left: vertical ? 60 : undefined, right: vertical ? 60 : 90, bottom, opacity: out, background: pal.card,
-      padding: '6px 30px 12px', borderRadius: 12, fontFamily: F.head, fontSize: base * 0.95, color: '#fff', boxShadow: shadow, direction: dir,
+      padding: '6px 30px 12px', borderRadius: 12, fontFamily: F.play, fontSize: base * 0.95, color: '#fff', boxShadow: shadow, direction: dir,
       textAlign: side, borderBottom: `6px solid ${pal.accent2}`}}>
       {ws.map((w, j) => <span key={j} style={{display: 'inline-block', marginLeft: base * 0.25, color: j === acc ? pal.accent : '#fff',
         opacity: f < at + j * 6 ? 0 : 1, transform: `translateY(${(1 - Math.min(1, sp(f, at + j * 6, 11, 260))) * -40}px)`}}>{w}</span>)}
@@ -139,9 +140,9 @@ const Stat: React.FC<{b: PicBeat; f: number; pal: Palette; vertical?: boolean; r
         boxShadow: `0 0 40px ${pal.accent}88, 0 18px 40px rgba(0,0,0,0.5)`}} />
       <div style={{position: 'absolute', inset: 16, borderRadius: '50%', background: `radial-gradient(circle at 35% 30%, ${pal.card.replace('0.88', '0.98')}, #000000ee)`,
         border: `3px solid ${pal.accent2}55`, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-        <div style={{fontFamily: 'F_lalezar', fontSize: shown.length > 4 ? S * 0.27 : S * 0.38, lineHeight: 1.15, color: '#fff',
+        <div style={{fontFamily: 'F_sfblack', fontSize: shown.length > 4 ? S * 0.26 : S * 0.36, lineHeight: 1.2, color: '#fff',
           textShadow: `0 0 18px ${pal.accent}, 0 4px 0 #000`}}>{shown}</div>
-        {b.stat.unit && <div style={{fontFamily: 'F_titr', fontSize: S * 0.12, color: pal.accent, direction: 'rtl', marginTop: -4,
+        {b.stat.unit && <div style={{fontFamily: 'F_diodrum', fontSize: S * 0.12, color: pal.accent, direction: 'rtl', marginTop: -4,
           textShadow: '0 2px 6px #000'}}>{faNum(String(b.stat.unit)).slice(0, 14)}</div>}
       </div>
     </div>;
@@ -172,7 +173,7 @@ const StageFA: React.FC<{text: string; at: number; f: number; W: number; H: numb
     {big > 0.01 && <div style={{position: 'absolute', inset: 0, background: `radial-gradient(ellipse at center, rgba(0,0,0,${0.35 * big}), rgba(0,0,0,${0.75 * big}))`}} />}
     {big > 0.01 && <div style={{position: 'absolute', left: 0, right: 0, top: H / 2 - (W < 1200 ? 150 : 170), textAlign: 'center', direction: 'rtl', opacity: big,
       transform: `scale(${Math.min(1.08, s)})`}}>
-      <div style={{display: 'inline-flex', alignItems: 'center', gap: 22, fontFamily: 'F_lalezar', fontSize: W < 1200 ? 150 : 200, lineHeight: 1.3, color: '#fff',
+      <div style={{display: 'inline-flex', alignItems: 'center', gap: 22, fontFamily: 'F_sfblack', fontSize: W < 1200 ? 140 : 185, lineHeight: 1.3, color: '#fff',
         textShadow: `0 0 30px ${pal.accent}aa, 0 6px 0 #000`}}>
         <Clock c={pal.accent} s={W < 1200 ? 110 : 140} f={f - at} />{t}</div>
       <div style={{margin: '0 auto', height: 10, borderRadius: 5, width: `${sweep * (W < 1200 ? 6 : 8)}px`,
@@ -183,7 +184,7 @@ const StageFA: React.FC<{text: string; at: number; f: number; W: number; H: numb
       background: 'rgba(10,12,20,0.62)', backdropFilter: 'blur(10px)', border: `2px solid ${pal.accent}88`, borderRight: `10px solid ${pal.accent}`,
       boxShadow: `0 10px 30px rgba(0,0,0,0.45), 0 0 18px ${pal.accent}44`}}>
       <Clock c={pal.accent} s={46} f={f - at} />
-      <span style={{fontFamily: 'F_lalezar', fontSize: 52, lineHeight: 1.35, color: '#fff'}}>{t}</span>
+      <span style={{fontFamily: 'F_sfblack', fontSize: 48, lineHeight: 1.4, color: '#fff'}}>{t}</span>
     </div>}
   </>;
 };
@@ -209,7 +210,7 @@ const Stage: React.FC<{text: string; at: number; f: number; W: number; H: number
 const Headline: React.FC<{text: string; f: number; pal: Palette; rtl?: boolean}> = ({text, f, pal, rtl}) => {
   const clean = text.replace(/#\S+/g, '').trim();
   const ws = (rtl ? faNum(clean) : clean.toUpperCase()).split(/\s+/).filter(Boolean);
-  const hf = rtl ? 'F_lalezar' : 'F_anton', dir = rtl ? 'rtl' as const : 'ltr' as const;
+  const hf = rtl ? 'F_sfblack' : 'F_anton', dir = rtl ? 'rtl' as const : 'ltr' as const;
   const intro = interpolate(f, [30, 40], [1, 0], cl);
   const size = ws.join(' ').length > 26 ? 78 : 92;
   const last = ws.length - 1;
