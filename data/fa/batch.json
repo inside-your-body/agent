@@ -399,8 +399,10 @@
     "title": "You Will Never Be Able To Drink Coca-Cola After This",
     "views": 39976746
    },
-   "status": "scripted",
-   "words": 1305
+   "status": "voiced",
+   "words": 1305,
+   "seconds": 523,
+   "chars": 205132
   },
   {
    "id": 28,
