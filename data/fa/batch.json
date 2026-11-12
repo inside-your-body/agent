@@ -251,7 +251,7 @@
   },
   {
    "id": 20,
-   "title": "اگر ناخن‌هایت را هرگز نگیری چه می‌شود؟",
+   "title": "اگر ناخن نگیریم چه می‌شود؟ سفر ۶ ساله زیر ناخن",
    "en": "What if you never cut your fingernails",
    "angle": "رشد ناخن، میکروب‌ها و شکستن؛ تا چه حد بلند می‌شود",
    "stamps": "۱ ماه ← ۶ ماه ← ۱ سال ← چند سال",
@@ -259,7 +259,8 @@
     "title": "What If You Never Cut Your Fingernails? | COLOSSAL QUESTIONS",
     "views": 18624820
    },
-   "status": "todo"
+   "status": "scripted",
+   "words": 1059
   },
   {
    "id": 21,
