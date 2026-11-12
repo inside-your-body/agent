@@ -238,7 +238,7 @@
   },
   {
    "id": 19,
-   "title": "اگر مسواک نزنی چه اتفاقی برای دندان‌هایت می‌افتد؟",
+   "title": "اگر مسواک نزنی چه می‌شود؟ ۳ هفته تا ورم لثه",
    "en": "What if you never brushed your teeth",
    "angle": "پلاک، جرم و پوسیدگی گام‌به‌گام تا جایی که لثه آسیب می‌بیند",
    "stamps": "۲۴ ساعت ← ۱ هفته ← ۱ ماه ← ۱ سال",
@@ -246,7 +246,8 @@
     "title": "What If You NEVER Brushed Your Teeth? | COLOSSAL QUESTIONS",
     "views": 19021174
    },
-   "status": "todo"
+   "status": "scripted",
+   "words": 1193
   },
   {
    "id": 20,
