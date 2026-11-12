@@ -147,7 +147,7 @@
   },
   {
    "id": 12,
-   "title": "اگر آب زیاد بنوشی چه اتفاقی در بدنت می‌افتد؟",
+   "title": "مسمومیت آبی: اگر آب زیاد بنوشی چه می‌شود؟",
    "en": "Can you die from drinking too much water",
    "angle": "مسمومیت آبی؛ رقیق شدن سدیم و ورم سلول‌ها",
    "stamps": "۱ ساعت ← ۳ ساعت ← ۶ ساعت ← عوارض",
@@ -155,7 +155,8 @@
     "title": "Can You Die From Drinking Too Much Water? 😨",
     "views": 57102953
    },
-   "status": "todo"
+   "status": "scripted",
+   "words": 1276
   },
   {
    "id": 13,
