@@ -342,7 +342,7 @@
   },
   {
    "id": 27,
-   "title": "اگر هر روز نوشابه بخوری در بدنت چه اتفاقی می‌افتد؟",
+   "title": "اگر هر روز نوشابه بخوری چه می‌شود؟ ۶۰ دقیقه بعد",
    "en": "What happens inside your body when you drink Coca-Cola",
    "angle": "قند، اسید و کافئین؛ ۶۰ دقیقه بعد از یک قوطی",
    "stamps": "۱۰ دقیقه ← ۴۰ دقیقه ← ۶۰ دقیقه ← ۱ ماه",
@@ -350,7 +350,8 @@
     "title": "You Will Never Be Able To Drink Coca-Cola After This",
     "views": 39976746
    },
-   "status": "todo"
+   "status": "scripted",
+   "words": 1305
   },
   {
    "id": 28,
