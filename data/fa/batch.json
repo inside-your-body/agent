@@ -277,7 +277,7 @@
   },
   {
    "id": 22,
-   "title": "وقتی دوش آب سرد می‌گیری بدنت چه واکنشی نشان می‌دهد؟",
+   "title": "دوش آب سرد با بدنت چه می‌کند؟ ثانیه‌به‌ثانیه",
    "en": "What cold showers do to your body",
    "angle": "شوک سرما؛ ضربان قلب، تنفس و رگ‌ها ثانیه به ثانیه",
    "stamps": "۵ ثانیه ← ۳۰ ثانیه ← ۲ دقیقه ← ۲ هفته",
@@ -285,7 +285,8 @@
     "title": "What Cold Showers Do to Your Body 🥶",
     "views": 17578418
    },
-   "status": "todo"
+   "status": "scripted",
+   "words": 1247
   },
   {
    "id": 23,
