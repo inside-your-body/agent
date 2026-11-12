@@ -369,7 +369,10 @@ def package(ep, ep_dir, track, short_track):
         si += len(sc['lines'])
     chap = '\n'.join(f'{_ts(t)} {n}' for t, n in chapters)
     desc = up.get('description') or ''
-    desc = desc.replace('{CHAPTERS}', 'فصل‌ها:\n' + chap) if '{CHAPTERS}' in desc else desc + '\n\nفصل‌ها:\n' + chap
+    if '{CHAPTERS}' in desc:
+        before = desc.split('{CHAPTERS}')[0][-40:]
+        desc = desc.replace('{CHAPTERS}', chap if 'فصل' in before else 'فصل‌ها:\n' + chap)
+    else: desc += '\n\nفصل‌ها:\n' + chap
     if ep.get('sources'): desc += '\n\nمنابع:\n' + '\n'.join(f"- {s.get('title')}: {s.get('url')}" for s in ep['sources'][:8])
     tags_h = ' '.join('#' + h.lstrip('#').replace(' ', '_') for h in up.get('hashtags', [])[:3])
     desc += '\n\n⚠️ این ویدیو فقط آموزشی است و جایگزین مشاوره با پزشک نیست.\n\n' + tags_h + '\n\n' + audio.credit(track)
