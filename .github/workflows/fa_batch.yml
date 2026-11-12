@@ -3,6 +3,10 @@ name: Persian batch (topics, scripts, voices)
 # Owner (Nov 2026): once a month, while the ElevenLabs plan is active: 30 viral topics -> Persian scripts -> Aran voices.
 # Resumable: every finished script / voice is committed right away, so a re-run continues where the last one stopped.
 on:
+  schedule:                    # keeps voicing the scripted episodes until all are done (each run stops at ~6 h; progress is committed)
+    - cron: '23 1 * * *'
+    - cron: '23 9 * * *'
+    - cron: '23 17 * * *'
   workflow_dispatch:
     inputs:
       step:
@@ -38,7 +42,7 @@ jobs:
           YT_TOKEN_JSON: ${{ secrets.YT_TOKEN_JSON }}
           GH_TOKEN: ${{ github.token }}
         run: |
-          ARGS="${{ inputs.step }} --n ${{ inputs.n }}"
+          ARGS="${{ inputs.step || 'voices' }} --n ${{ inputs.n || '30' }}"
           if [ -n "${{ inputs.limit }}" ]; then ARGS="$ARGS --limit ${{ inputs.limit }}"; fi
           python -m agent.fa $ARGS
           python -m agent.fa status
