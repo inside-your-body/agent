@@ -12,6 +12,7 @@ from . import llm
 
 FA_DIR = ROOT / 'data/fa'
 BATCH = FA_DIR / 'batch.json'
+SCHED = FA_DIR / 'schedule.json'     # written ONLY by the upload step (the batch job rewrites batch.json, so upload state lives apart)
 EPS = FA_DIR / 'eps'
 RELEASE = 'fa-voices'
 MAX_PER_DAY = 2                      # 2 x (long + Short + 2 thumbnails) ~ 6,600 of the 10,000 daily YouTube quota units
@@ -27,6 +28,10 @@ def batch():
 
 
 def save_batch(b): save(BATCH, b)
+
+
+def sched():
+    return load(SCHED, {'uploaded': {}, 'uploads': {}, 'next_slot': None})
 
 
 def git_commit(msg):
@@ -284,12 +289,12 @@ def _today(): return dt.datetime.utcnow().strftime('%Y-%m-%d')
 
 
 def next_episode():
-    b = batch()
+    b, sc = batch(), sched()
     if not b.get('approved'):        # the owner approves the first (sample) episode before the automatic uploads start
         print('batch not approved yet (sample first) -> nothing to build'); return None
-    if b['uploads'].get(_today(), 0) >= MAX_PER_DAY:
+    if sc['uploads'].get(_today(), 0) >= MAX_PER_DAY:
         print('daily upload limit reached -> tomorrow'); return None
-    return next((e for e in b['episodes'] if e['status'] == 'voiced'), None)
+    return next((e for e in b['episodes'] if e['status'] == 'voiced' and str(e['id']) not in sc['uploaded']), None)
 
 
 def build(e, ep_dir):
@@ -442,7 +447,7 @@ def package(ep, ep_dir, track, short_track):
 def _slot():
     """Next free publish day: every other day, never earlier than tomorrow."""
     if os.environ.get('PUBLISH_DATE'): return dt.date.fromisoformat(os.environ['PUBLISH_DATE'])
-    b = batch()
+    b = sched()
     tomorrow = (dt.datetime.utcnow() + dt.timedelta(days=1)).date()
     nxt = dt.date.fromisoformat(b['next_slot']) if b.get('next_slot') else tomorrow
     return max(nxt, tomorrow)
@@ -477,12 +482,12 @@ def finish(cur, dry_run=False):
             sids.append(youtube.upload(yt, f, pkg['short_title'], pkg['short_description'].replace('{FULL_URL}', 'https://youtu.be/' + vid),
                                        pkg['tags'][:10], cover if cover.exists() else None, publish_at=sat, synthetic=True, lang='fa'))
         except Exception as ex: print('short upload failed', ex)
-    b = batch()
-    for e in b['episodes']:
-        if e['id'] == eid: e.update(status='uploaded', video_id=vid, short_ids=sids, publish_at=at)
-    b['uploads'][_today()] = b['uploads'].get(_today(), 0) + 1
-    b['next_slot'] = (day + dt.timedelta(days=CFG['schedule'].get('every_days', 2))).isoformat()
-    save_batch(b)
+    sc = sched()
+    sc['uploaded'][str(eid)] = {'title': ep.get('title'), 'video_id': vid, 'short_ids': sids, 'publish_at': at}
+    sc['uploads'][_today()] = sc['uploads'].get(_today(), 0) + 1
+    nxt = (day + dt.timedelta(days=CFG['schedule'].get('every_days', 2))).isoformat()
+    sc['next_slot'] = max(nxt, sc.get('next_slot') or nxt)
+    save(SCHED, sc)
     h = load(ROOT / 'data/history.json', {'episodes': []})
     h['episodes'].append({'topic': ep.get('title'), 'video_id': vid, 'short_ids': sids, 'publish_at': at, 'format': 'fa', 'music': track,
                           'palette': ep.get('palette'), 'built_at': dt.datetime.utcnow().isoformat(timespec='seconds')})
@@ -493,10 +498,10 @@ def finish(cur, dry_run=False):
 
 
 def status():
-    b = batch()
+    b, sc = batch(), sched()
     from collections import Counter
-    print(Counter(e['status'] for e in b['episodes']), 'next slot', b.get('next_slot'))
-    for e in b['episodes']: print(e['id'], e['status'], e['title'], e.get('seconds', ''), e.get('publish_at', ''))
+    print(Counter(e['status'] for e in b['episodes']), 'uploaded', len(sc['uploaded']), 'next slot', sc.get('next_slot'))
+    for e in b['episodes']: print(e['id'], e['status'], e['title'], e.get('seconds', ''), (sc['uploaded'].get(str(e['id'])) or {}).get('publish_at', ''))
 
 
 def main():
