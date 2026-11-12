@@ -100,8 +100,10 @@
     "title": "This Happens Every Time You Eat Sugar #insulin #glucose",
     "views": 32889647
    },
-   "status": "scripted",
-   "words": 1212
+   "status": "voiced",
+   "words": 1212,
+   "seconds": 501,
+   "chars": 50148
   },
   {
    "id": 8,
