@@ -1,0 +1,44 @@
+I'll run several searches in parallel to cover the timeline, physiology, and myths.I'll do one more search for the metabolic and urination timeline, plus the hyponatremia and thermogenesis facts.**Research notes: water on an empty stomach, with a timeline.** I did not find direct WHO, CDC or NHS pages on this exact topic. Most sources are PubMed or journal papers, plus a few secondary sites, which I've flagged. Some figures are from small studies.
+
+## Timeline: what happens inside the body
+
+**0–2 minutes: the first sensor response**
+1. **A big drink gives a brief heart-rate spike.** In healthy young volunteers, drinking 500 ml over 2 minutes caused a transient rise in mean arterial pressure (+12.6 mmHg) and heart rate (+19.9 beats/min at the peak) immediately after drinking. Putting the same amount of water straight into the stomach through a tube had little or no effect, so the swallowing or throat/mouth route seems to matter. Source: https://pubmed.ncbi.nlm.nih.gov/12533246/
+
+**Minutes 0–20: the stomach clears it very fast**
+2. **The stomach acts as a short waiting room.** Studies using aspiration, scintigraphy and MRI show 240–800 mL of water empties rapidly from the fasted stomach, with a half-emptying time of about 8–18 minutes. In one MRI study the gastric water volume declined rapidly, with a half-emptying time of 13 ± 1 min. Source: https://pubs.acs.org/doi/10.1021/mp500210c
+3. **The small intestine fills with scattered water pockets.** Twelve minutes after ingestion, small bowel water rose to a maximum of 94 ± 24 mL, held in about 15 pockets of roughly 6 mL each. By 45 min the stomach had completely emptied the water. Same source: https://pubs.acs.org/doi/10.1021/mp500210c
+4. **Food changes the speed.** Complete gastric emptying takes about 1 hour for a glucose solution, 2 hours for a protein solution and 3 hours for a solid meal, which is why water on an empty stomach is the fastest case. Source (University of Pittsburgh trial description, not a peer-reviewed result): https://clinicaltrials.gov/study/NCT01672424
+
+**Minutes 5–40: blood pressure and the nervous system**
+5. **Your blood pressure rises, which surprises most people.** Seated blood pressure increases within 5 minutes, peaks after about 35 minutes, and stays up for more than 60 minutes. This is called the "osmopressor response". Source: https://www.ahajournals.org/doi/10.1161/01.hyp.0000070957.08219.c9
+6. **The trigger is water diluting your blood, not stomach stretch.** Compared with 50 mL, drinking 500 mL raised blood pressure, peripheral resistance and salivary amylase (a sympathetic marker) and lowered plasma osmolality at 25 min. Source: https://www.researchgate.net/publication/8047947_Effect_of_water_drinking_on_sympathetic_nervous_activity_and_blood_pressure
+7. **The liver is involved.** In liver-transplant patients (nerves to the liver cut), plasma norepinephrine changed by 0.01 nmol/l, versus 0.21 nmol/l in kidney-transplant controls after 30–40 minutes. This supports osmosensitive hepatic afferents (liver nerve sensors) driving the response. Source: https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0025898
+8. **It is a lifeline for people who faint.** Drinking 500 mL improved orthostatic tolerance (time before fainting on standing) by 5 ± 1 minutes. Source: https://www.researchgate.net/publication/270718621_Water_Drinking_Acutely_Improves_Orthostatic_Tolerance_in_Healthy_Subjects
+9. **Women may feel it more.** Women show a greater rise in resting blood pressure than men after a single 500 ml bolus. Source: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5293556/
+
+**Minutes 10–90: the metabolism claim (contested)**
+10. **A famous 2003 result says metabolism jumps 30%.** In 14 healthy adults, 500 ml of water raised metabolic rate by 30%, starting within 10 minutes and peaking at 30–40 minutes. Source (Boschmann, J Clin Endocrinol Metab): https://www.semanticscholar.org/paper/Water-induced-thermogenesis.-Boschmann-Steiniger/543c3d7252584422614fff5878befba4acab26c6
+11. **Much of that may just be your body warming the water.** The extra energy matched the energy needed to heat water from room temperature to body temperature (about 30 kJ for 500 ml). A later reassessment in Nature's *Nutrition & Diabetes* found only marginal increases in resting energy expenditure (under 3% above baseline). Use this as a "the internet claim is shakier than it looks" beat. Sources: https://www.researchgate.net/publication/6961864_Water-Induced_Thermogenesis_Reconsidered_The_Effects_of_Osmolality_and_Water_Temperature_on_Energy_Expenditure_after_Drinking and https://www.nature.com/articles/nutd201541
+
+**Hours (overnight context)**
+12. **Your body is already running a water-saving program when you wake up.** Vasopressin (antidiuretic hormone) is secreted toward the later part of sleep, but breathing and sweating still cause water loss. Source (secondary): https://biologyinsights.com/how-much-water-should-i-drink-after-waking-up/
+13. **Dark first-morning urine is normal.** Strongly yellow or amber urine after waking reflects the kidney's overnight water-conservation program, not necessarily dehydration all day. Source (secondary): https://mornbrief.com/morning-wellness/morning-hydration-what-to-drink-how-much-and-when
+14. **Short sleep may mean a drier morning.** Poor sleep quality and shorter sleep are associated with lower hydration on waking (Rosinger et al., 2019). Source (secondary summary): https://www.somnologymd.com/2024/06/hydration-and-sleep/
+
+**Weeks: habit-based effects**
+15. **Water before meals helped with weight loss in 12-week trials.** In a randomized trial of 84 adults with obesity, those drinking 500 ml 30 min before main meals lost 1.3 kg more than controls, and 27% lost more than 5% of body weight versus 5% in the comparator group. This is water before meals, not waking water. Source (Parretti et al., *Obesity* 2015): https://onlinelibrary.wiley.com/doi/10.1002/oby.21167. A related trial in adults aged 55–75 found about 2 kg more loss, but only because participants were already on a calorie-reduced diet (secondary source: https://calow.app/blog/drinking-water-before-meals).
+
+**Months to years**
+16. **Kidney stones are a mixed picture.** The 5-year Borghi trial cut recurrence from 27% to 12%, and a Cochrane review rated this low-certainty evidence (https://www.cochrane.org/evidence/CD004292_karduuemnaeephimkhuenphuuexpxngkanniwinrabbthangedinpassawa). A newer trial in *The Lancet* (PUSH, 1,658 patients) found that a behavioral program to increase fluid intake did not reduce symptomatic stone recurrence. Average urine volume peaked at 1.8 L at 6 months and fell to under 1.6 L by 24 months, so sustaining the habit was the problem (https://www.aafp.org/afp/afp-community-blog/does-advice-to-drink-more-fluids-prevent-recurrent-kidney-stones).
+
+## Myths and limits
+
+17. **Myth: water "flushes toxins" first thing in the morning.** A kidney specialist quoted by CBC said you don't increase toxin clearance, you just excrete the same toxins in a larger volume, meaning more urination. Source: https://www.cbc.ca/1.3155705. A fact-check also found no evidence that water on an empty stomach removes toxins better than water at other times (https://www.thip.media/health-news-fact-check/fact-check-can-drinking-warm-water-on-an-empty-stomach-remove-toxins/121110/).
+18. **Fact: your kidneys have a speed limit.** Kidneys can remove only 0.8 to 1.0 liters of water per hour, and very high intake can upset electrolyte balance. Hyponatremia means serum sodium below 135 mEq/L. One case report describes a man who drank about 8 liters in three hours. A normal glass or two on waking is far below this. Sources: https://www.medicalnewstoday.com/articles/318619 and https://www.cureus.com/articles/383958-acute-water-intoxication-leading-to-dilutional-hyponatremia-in-a-patient-with-urinary-tract-infection-a-case-report.pdf
+
+## Notes for the script
+- **Strongest "surprise" moments:** the blood pressure rise at 5–35 minutes with the liver as a sensor (items 5–7), and the 30% metabolism claim versus the under-3% rebuttal (items 10–11).
+- **Honest framing:** the "empty stomach" part has little specific evidence. Most effects come from drinking about 500 ml at any time. The empty stomach mainly makes the water move through faster.
+- **Weak spots:** items 12–14 rely on secondary or blog-level sources, so verify with a primary paper before putting them on screen. Several results (items 5–9) come from small studies of 10–20 people, some in patient groups.
+- **Not found:** I did not search for time-to-urination data, and no WHO, CDC, NHS or Mayo Clinic page turned up directly addressing waking water.
