@@ -290,7 +290,7 @@
   },
   {
    "id": 23,
-   "title": "وقتی چیز تازه یاد می‌گیری در مغزت چه اتفاقی می‌افتد؟",
+   "title": "یادگیری در مغز: ۱۲ ساعت بعد چه اتفاقی می‌افتد؟",
    "en": "What happens in your brain when you learn something new",
    "angle": "ساخته شدن سیناپس‌های تازه و تقویت آن با تکرار",
    "stamps": "ثانیه‌ها ← ساعت‌ها ← شب ← هفته‌ها",
@@ -298,7 +298,8 @@
     "title": "This Is What Happens in Your Brain When You Learn Something New 😳",
     "views": 35976304
    },
-   "status": "todo"
+   "status": "scripted",
+   "words": 1251
   },
   {
    "id": 24,
