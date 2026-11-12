@@ -303,7 +303,7 @@
   },
   {
    "id": 24,
-   "title": "تغییر عادت در مغز؛ مغز چطور خودش را دوباره سیم‌کشی می‌کند؟",
+   "title": "تغییر عادت در مغز چطور اتفاق می‌افتد؟ ۶ ماه سیم‌کشی",
    "en": "What change looks like in the brain: rewiring",
    "angle": "شکل‌گیری و ترک عادت در شبکه نورون‌ها",
    "stamps": "روز اول ← ۲ هفته ← ۲ ماه ← ۶ ماه",
@@ -311,7 +311,8 @@
     "title": "What change looks like in the brain: actual footage of the brain re-wiring itself",
     "views": 27078843
    },
-   "status": "todo"
+   "status": "scripted",
+   "words": 1301
   },
   {
    "id": 25,
