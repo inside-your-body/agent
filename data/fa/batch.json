@@ -339,8 +339,10 @@
     "title": "This Is What Happens in Your Brain When You Learn Something New 😳",
     "views": 35976304
    },
-   "status": "scripted",
-   "words": 1251
+   "status": "voiced",
+   "words": 1251,
+   "seconds": 516,
+   "chars": 172416
   },
   {
    "id": 24,
