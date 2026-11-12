@@ -134,7 +134,7 @@
   },
   {
    "id": 11,
-   "title": "اگر یک هفته قهوه نخوری چه اتفاقی در بدنت می‌افتد؟",
+   "title": "ترک قهوه: یک هفته بدون قهوه چه می‌شود؟",
    "en": "What happens when you quit caffeine",
    "angle": "ترک کافئین؛ سردرد، خواب‌آلودگی و تطبیق گیرنده‌های مغز",
    "stamps": "۱۲ ساعت ← ۲ روز ← ۵ روز ← ۲ هفته",
@@ -142,7 +142,8 @@
     "title": "How Too Much Caffeine Can Kill You 😨",
     "views": 56044965
    },
-   "status": "todo"
+   "status": "scripted",
+   "words": 1063
   },
   {
    "id": 12,
