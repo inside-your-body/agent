@@ -316,7 +316,7 @@
   },
   {
    "id": 25,
-   "title": "مسیر غذا در بدن؛ از دهان تا دفع چقدر طول می‌کشد؟",
+   "title": "مسیر غذا در بدن؛ ۷۲ ساعت سفر لقمه از دهان تا دفع",
    "en": "How your body turns food into poop (digestive journey)",
    "angle": "انیمیشن سفر لقمه در لوله گوارش و زمان هر مرحله",
    "stamps": "۱ دقیقه ← ۳ ساعت ← ۸ ساعت ← ۲۴ تا ۷۲ ساعت",
@@ -324,7 +324,8 @@
     "title": "How does your body turn food into the poop? Human digestive system(Animation)|Dandelion Team",
     "views": 28117010
    },
-   "status": "todo"
+   "status": "scripted",
+   "words": 1119
   },
   {
    "id": 26,
