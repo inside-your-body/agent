@@ -220,9 +220,8 @@
     "title": "Your Body ● After Smoking Cannabis for a Month",
     "views": 25723662
    },
-   "status": "skipped",
-   "words": 1298,
-   "note": "owner: no drug topics"
+   "status": "scripted",
+   "words": 1298
   },
   {
    "id": 18,
@@ -369,15 +368,16 @@
   },
   {
    "id": 29,
-   "title": "بدن بعد از مرگ چه تغییراتی می‌کند؟ دقیقه تا هفته",
+   "title": "بدن بعد از مرگ چه تغییراتی می‌کند؟ از ۱ دقیقه تا ۱ هفته",
    "en": "What changes will occur in the human body after death",
-   "angle": "توضیح علمی و بدون صحنه‌های ناراحت‌کننده از توقف اندام‌ها | لحن: کنجکاوی علمی و آرام، بدون صحنه‌ی خشن یا ترسناک؛ فقط فرایندهای طبیعی بدن (دما، سفتی عضلات، باکتری‌ها) به زبان ساده و محترمانه.",
+   "angle": "توضیح علمی و بدون صحنه‌های ناراحت‌کننده از توقف اندام‌ها",
    "stamps": "۱ دقیقه ← ۱ ساعت ← ۲۴ ساعت ← ۱ هفته",
    "ref": {
     "title": "What changes will occur in the human body after death #knowledge #science",
     "views": 20220529
    },
-   "status": "todo"
+   "status": "scripted",
+   "words": 1370
   }
  ],
  "uploads": {},
