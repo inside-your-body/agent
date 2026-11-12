@@ -145,8 +145,10 @@
     "title": "Your Brain Has A Menu | Eat for Your Brain",
     "views": 18705572
    },
-   "status": "scripted",
-   "words": 1362
+   "status": "voiced",
+   "words": 1362,
+   "seconds": 555,
+   "chars": 75856
   },
   {
    "id": 11,
