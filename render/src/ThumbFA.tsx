@@ -20,8 +20,11 @@ export const ThumbFA: React.FC<ThumbFAProps> = ({img, line1, line2, badge, accen
       justifyContent: 'center', alignItems: r ? 'flex-end' : 'flex-start', direction: 'rtl', gap: 0}}>
       <div style={{fontFamily: 'F_lalezar', fontSize: size, lineHeight: 1.3, color: '#fff', textShadow: stroke, textAlign: 'right', whiteSpace: 'nowrap'}}>{l1}</div>
       {l2 && <div style={{fontFamily: 'F_lalezar', fontSize: size * 1.08, lineHeight: 1.3, color: accent, textShadow: stroke, textAlign: 'right', whiteSpace: 'nowrap'}}>{l2}</div>}
-      {badge && <div style={{marginTop: 26, fontFamily: 'F_lalezar', fontSize: 78, lineHeight: 1.35, color: '#111', background: accent, padding: '0 34px 6px',
-        borderRadius: 18, border: '6px solid #000', boxShadow: '0 12px 28px rgba(0,0,0,0.6)'}}>{faNum(badge)}</div>}
+      {badge && <div style={{marginTop: 30, transform: 'rotate(-4deg)', position: 'relative', padding: '0 40px 8px',
+        background: `linear-gradient(135deg, ${accent}, #ffffff 160%)`, clipPath: 'polygon(4% 0, 100% 6%, 96% 100%, 0 92%)',
+        boxShadow: '0 14px 30px rgba(0,0,0,0.6)'}}>
+        <div style={{fontFamily: 'F_lalezar', fontSize: 92, lineHeight: 1.35, color: '#fff', textShadow: '0 0 0 #000, 4px 4px 0 #000, -4px 4px 0 #000, 4px -4px 0 #000, -4px -4px 0 #000'}}>{faNum(badge)}</div>
+      </div>}
     </div>
   </AbsoluteFill>;
 };

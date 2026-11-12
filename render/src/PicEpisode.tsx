@@ -129,6 +129,23 @@ const Stat: React.FC<{b: PicBeat; f: number; pal: Palette; vertical?: boolean; r
   const shown = rtl ? faNum(shown0) : shown0;
   const out = interpolate(f, [b.end - 6, b.end], [1, 0], cl);
   const size = vertical ? 260 : 300;
+  if (rtl) {
+    const ring = interpolate(f, [at, at + 28], [0, 360], {...cl, easing: (x) => 1 - Math.pow(1 - x, 3)});
+    const pulse = 1 + 0.03 * Math.sin((f - at) / 6);
+    const S = size * 1.05;
+    return <div style={{position: 'absolute', left: vertical ? 50 : 80, top: vertical ? 390 : 80, width: S, height: S, opacity: f < at ? 0 : out,
+      transform: `scale(${Math.min(1.06, p) * pulse}) rotate(${(1 - Math.min(1, p)) * 25}deg)`}}>
+      <div style={{position: 'absolute', inset: 0, borderRadius: '50%', background: `conic-gradient(${pal.accent} ${ring}deg, rgba(255,255,255,0.12) ${ring}deg)`,
+        boxShadow: `0 0 40px ${pal.accent}88, 0 18px 40px rgba(0,0,0,0.5)`}} />
+      <div style={{position: 'absolute', inset: 16, borderRadius: '50%', background: `radial-gradient(circle at 35% 30%, ${pal.card.replace('0.88', '0.98')}, #000000ee)`,
+        border: `3px solid ${pal.accent2}55`, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+        <div style={{fontFamily: 'F_lalezar', fontSize: shown.length > 4 ? S * 0.27 : S * 0.38, lineHeight: 1.15, color: '#fff',
+          textShadow: `0 0 18px ${pal.accent}, 0 4px 0 #000`}}>{shown}</div>
+        {b.stat.unit && <div style={{fontFamily: 'F_titr', fontSize: S * 0.12, color: pal.accent, direction: 'rtl', marginTop: -4,
+          textShadow: '0 2px 6px #000'}}>{faNum(String(b.stat.unit)).slice(0, 14)}</div>}
+      </div>
+    </div>;
+  }
   return <div style={{position: 'absolute', [rtl ? 'left' : 'right']: vertical ? 60 : 90, top: vertical ? 400 : 90, width: size, height: size, borderRadius: size / 2,
     background: pal.accent, opacity: f < at ? 0 : out, transform: `scale(${Math.min(1.08, p)}) rotate(${(1 - Math.min(1, p)) * -20}deg)`,
     display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
@@ -140,7 +157,39 @@ const Stat: React.FC<{b: PicBeat; f: number; pal: Palette; vertical?: boolean; r
 };
 
 // time stamp: big slam in the centre when a new stage starts, then it docks top-left
+const Clock: React.FC<{c: string; s: number; f: number}> = ({c, s, f}) => <svg width={s} height={s} viewBox="0 0 24 24">
+  <circle cx="12" cy="12" r="10" fill="none" stroke={c} strokeWidth="2.4" />
+  <line x1="12" y1="12" x2="12" y2="6.5" stroke={c} strokeWidth="2.4" strokeLinecap="round" transform={`rotate(${f * 6} 12 12)`} />
+  <line x1="12" y1="12" x2="16" y2="12" stroke={c} strokeWidth="2.4" strokeLinecap="round" transform={`rotate(${f * 0.5} 12 12)`} />
+</svg>;
+
+const StageFA: React.FC<{text: string; at: number; f: number; W: number; H: number; pal: Palette; top: number}> = ({text, at, f, W, H, pal, top}) => {
+  const p = interpolate(f - at, [0, 30, 42], [0, 0, 1], cl);
+  const big = 1 - p, s = sp(f, at, 9, 220);
+  const sweep = interpolate(f - at, [6, 20], [0, 100], cl);
+  const t = faNum(text);
+  return <>
+    {big > 0.01 && <div style={{position: 'absolute', inset: 0, background: `radial-gradient(ellipse at center, rgba(0,0,0,${0.35 * big}), rgba(0,0,0,${0.75 * big}))`}} />}
+    {big > 0.01 && <div style={{position: 'absolute', left: 0, right: 0, top: H / 2 - (W < 1200 ? 150 : 170), textAlign: 'center', direction: 'rtl', opacity: big,
+      transform: `scale(${Math.min(1.08, s)})`}}>
+      <div style={{display: 'inline-flex', alignItems: 'center', gap: 22, fontFamily: 'F_lalezar', fontSize: W < 1200 ? 150 : 200, lineHeight: 1.3, color: '#fff',
+        textShadow: `0 0 30px ${pal.accent}aa, 0 6px 0 #000`}}>
+        <Clock c={pal.accent} s={W < 1200 ? 110 : 140} f={f - at} />{t}</div>
+      <div style={{margin: '0 auto', height: 10, borderRadius: 5, width: `${sweep * (W < 1200 ? 6 : 8)}px`,
+        background: `linear-gradient(90deg, ${pal.accent2}, ${pal.accent})`, boxShadow: `0 0 20px ${pal.accent}`}} />
+    </div>}
+    {p > 0 && <div style={{position: 'absolute', right: 60, top, opacity: p, transform: `translateX(${(1 - p) * 60}px)`, direction: 'rtl',
+      display: 'flex', alignItems: 'center', gap: 14, padding: '6px 26px 10px 22px', borderRadius: 40,
+      background: 'rgba(10,12,20,0.62)', backdropFilter: 'blur(10px)', border: `2px solid ${pal.accent}88`, borderRight: `10px solid ${pal.accent}`,
+      boxShadow: `0 10px 30px rgba(0,0,0,0.45), 0 0 18px ${pal.accent}44`}}>
+      <Clock c={pal.accent} s={46} f={f - at} />
+      <span style={{fontFamily: 'F_lalezar', fontSize: 52, lineHeight: 1.35, color: '#fff'}}>{t}</span>
+    </div>}
+  </>;
+};
+
 const Stage: React.FC<{text: string; at: number; f: number; W: number; H: number; pal: Palette; top: number; rtl?: boolean}> = ({text, at, f, W, H, pal, top, rtl}) => {
+  if (rtl) return <StageFA text={text} at={at} f={f} W={W} H={H} pal={pal} top={top} />;
   const p = interpolate(f - at, [0, 26, 40], [0, 0, 1], cl);
   const s = sp(f, at, 9, 220);
   const big = 1 - p;

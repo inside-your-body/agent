@@ -15,8 +15,9 @@ BATCH = FA_DIR / 'batch.json'
 EPS = FA_DIR / 'eps'
 RELEASE = 'fa-voices'
 MAX_PER_DAY = 2                      # 2 x (long + Short + 2 thumbnails) ~ 6,600 of the 10,000 daily YouTube quota units
-PUBLISH_LONG, PUBLISH_SHORT = '17:00', '17:30'   # UTC = 20:30 / 21:00 Tehran, 20:00 / 20:30 Istanbul
-WORDS_MIN, WORDS_MAX = 1100, 1200       # measured Nov 11: Aran v4 at 1.2x reads ~2.1 Persian words/s -> 8:30-9:30
+PUBLISH_LONG, PUBLISH_SHORT = '14:00', '14:30'   # UTC = 17:00 / 17:30 Istanbul (owner, Nov 12)
+WORDS_MIN, WORDS_MAX = 1250, 1350       # owner Nov 12: voice at 1.4x (~2.45 Persian words/s) -> 8:30-9:15
+TTS_V = 2                                # full professional diacritics (owner, Nov 12)
 SECONDS_MIN = CFG['long_video']['min_seconds']    # 8:05 -> mid-rolls
 FA_DIGITS = str.maketrans('0123456789', '۰۱۲۳۴۵۶۷۸۹')
 
@@ -113,7 +114,7 @@ def write(ep, notes):
 ساختار: صحنه‌ی ۱ = قلاب (stage = null). بعد ۵ تا ۸ صحنه‌ی ایستگاه زمانی به ترتیب زمان؛ هر صحنه یک "stage" کوتاه فارسی (حداکثر ۱۲ حرف،
 مثلاً «۲۰ دقیقه اول»، «ساعت ۲۴»، «روز ۳»، «ماه اول») و ۱۰ تا ۱۸ جمله با یک غافلگیری. صحنه‌ی آخر (stage = null): جمع‌بندی بزرگ + یک
 سؤال برای کامنت‌ها. هر جمله باید «قابل نمایش» باشد (یک عدد، یک اندام، یک شیء یا یک تغییر). حداکثر ۱۲ عدد در کل متن.
-طول متن ویدیوی بلند: {WORDS_MIN} تا {WORDS_MAX} کلمه (≈ ۸ تا ۹ دقیقه با سرعت ۱.۲). با دقت بشمار؛ کمتر نباشد.
+طول متن ویدیوی بلند: {WORDS_MIN} تا {WORDS_MAX} کلمه (≈ ۸ تا ۹ دقیقه با سرعت ۱.۴). با دقت بشمار؛ کمتر نباشد.
 
 بعد یک SHORT (۶۵ تا ۸۵ کلمه، حداکثر ۴۰ ثانیه): جمله‌ی اول یک سؤال کنجکاوکننده یا ادعای شوکه‌کننده که در ثانیه‌ی اول کار کند؛ یک
 تایم‌لاین کوچک ۲-۳ ایستگاهی؛ جمله‌ی یکی‌مانده‌به‌آخر بیننده را به ویدیوی کامل می‌فرستد («نسخه‌ی کامل را در ویدیوی بالا ببین»)؛ جمله‌ی
@@ -152,15 +153,17 @@ def expand(ep, notes, target):
 
 
 def tts_prep(lines):
-    """A copy of every sentence for the voice: diacritics (اعراب) ONLY on words the TTS could misread, numbers and symbols spelled out as
-    Persian words, Latin letters/abbreviations written in Persian. The on-screen text stays the clean original."""
+    """A copy of every sentence for the voice, professionally diacritized (owner, Nov 12: the TTS misread words like «ترس»), numbers and
+    symbols spelled out as Persian words, Latin letters/abbreviations written in Persian. The on-screen text stays the clean original."""
     out = []
     for k in range(0, len(lines), 60):
         part = lines[k:k + 60]
         try:
             r = llm.ask_json(f"""این جمله‌ها را یک موتور تبدیل متن به گفتار فارسی (ElevenLabs) می‌خواند. برای هر جمله نسخه‌ی «آماده‌ی خواندن» بنویس:
-- فقط روی کلمه‌هایی اعراب (فتحه، کسره، ضمه، تشدید، سکون) بگذار که ممکن است اشتباه خوانده شوند (هم‌نویسه‌ها مثل مَرد/مُرد، کُشتی/کِشتی،
-  سِحر/سَحَر، کِرم/کَرَم، اسم‌های علمی و کلمه‌های کم‌کاربرد، کسره‌ی اضافه وقتی ابهام دارد). بقیه‌ی کلمه‌ها را دست نزن.
+- مثل یک ویراستار حرفه‌ای، متن را کامل اعراب‌گذاری کن تا هیچ کلمه‌ای اشتباه خوانده نشود: روی همه‌ی کلمه‌های اصلی (اسم، فعل، صفت،
+  قید) حرکت‌ها را بگذار (فتحه، کسره، ضمه، تشدید، سکون؛ مثل تَرس، خِرَد، دِرَخت، بِخوابی، مُرد/مَرد، کُشتی/کِشتی)، کسره‌ی اضافه را
+  همیشه بگذار (قَندِ خون، مَغزِ تو)، و تنوین‌ها را درست بنویس. حرف‌های خیلی ساده (و، که، از، به، در، این، آن، را) لازم نیست اعراب بگیرند.
+  تلفظ معیار تهرانی امروزی را ملاک بگذار.
 - همه‌ی عددها، درصدها، واحدها و نمادها را با حروف فارسی بنویس (۷۲ ← هفتاد و دو، ٪ ← درصد، ۲۰۲۴ ← دو هزار و بیست و چهار).
 - حروف و مخفف‌های لاتین را فارسی بنویس (DNA ← دی‌اِن‌اِی).
 - معنی، ترتیب و کلمه‌ها را عوض نکن؛ جمله‌ای را حذف یا اضافه نکن؛ نیم‌فاصله‌ها را نگه دار.
@@ -192,6 +195,7 @@ def scripts(limit=None):
             if _wc(long_texts(ep)) >= WORDS_MIN - 50: break
             print('script short:', _wc(long_texts(ep)), '-> expanding'); ep = expand(ep, notes, WORDS_MIN + 40)
         ep['tts'] = {'long': tts_prep(long_texts(ep)), 'shorts': [tts_prep(s['lines']) for s in ep.get('shorts', [])[:1]]}
+        ep['tts_v'] = TTS_V
         save(d / 'episode.json', ep)
         e.update(status='scripted', words=_wc(long_texts(ep)), title=(ep.get('upload') or {}).get('title') or e['title'])
         save_batch(b); git_commit(f"fa: script {e['id']}"); n += 1
@@ -218,6 +222,9 @@ def voices(limit=None):
         d = EPS / str(e['id']); ep = load(d / 'episode.json')
         tmp = WORK / f"fa_{e['id']}"; tmp.mkdir(parents=True, exist_ok=True)
         print('== voice', e['id'], e['title'], flush=True)
+        if ep.get('tts_v') != TTS_V:       # scripts written before the full-diacritics rule get a fresh voice copy
+            ep['tts'] = {'long': tts_prep(long_texts(ep)), 'shorts': [tts_prep(s['lines']) for s in ep.get('shorts', [])[:1]]}
+            ep['tts_v'] = TTS_V; save(d / 'episode.json', ep)
         groups = [len(s['lines']) for s in ep['scenes']]
         segs = eleven.synth(ep['tts']['long'], tmp / 'vo_long.wav', groups)
         dur = segs[-1]['end']
@@ -334,8 +341,52 @@ def build(e, ep_dir):
     return ep
 
 
+def _check_fa_thumb(img, want):
+    import base64
+    content = [{'type': 'image', 'source': {'type': 'base64', 'media_type': 'image/jpeg', 'data': base64.b64encode(img.read_bytes()).decode()}},
+               {'type': 'text', 'text': f"""این تامبنیل یوتیوب باید دقیقاً این متن فارسی را داشته باشد: «{want}». سخت‌گیرانه بررسی کن و فقط JSON بده:
+{{"text": "متنی که روی تصویر می‌بینی", "spelling_ok": bool, "readable": bool, "professional": bool, "problem": str}}
+spelling_ok=false اگر حتی یک حرف غلط، جابه‌جا، جدا یا ناخوانا باشد یا حروف فارسی به هم نچسبیده باشند. readable=false اگر متن بریده یا
+کوچک یا پوشیده باشد. professional=false اگر شلوغ یا آماتوری باشد."""}]
+    try: return llm._repair(llm.ask(content, max_tokens=800, retries=2)) or {}
+    except Exception as e: print('thumb check failed', e); return {}
+
+
+def thumb_gpt(ep, ep_dir, pal):
+    """Owner (Nov 12): the thumbnail is made by ChatGPT (image API) and must look professional: one clear subject, a big bold Persian
+    headline with a designed highlight word (no plain rectangles), not cluttered. Claude checks the Persian spelling; 3 tries."""
+    from . import images, tl
+    t = ep.get('thumbnail') or {}
+    l1, l2, badge = t.get('line1') or ep.get('title'), t.get('line2') or '', t.get('badge') or ''
+    want = ' '.join(x for x in (l1, l2) if x)
+    note = ''
+    for k in range(3):
+        raw = ep_dir / f'thumb_gpt{k}.png'
+        prompt = f"""Design ONE professional, viral YouTube thumbnail (16:9 landscape) for a Persian (Farsi) health-science channel.
+Video: {ep.get('title')}  |  subject idea: {t.get('subject') or ''}
+Layout: ONE striking, photo-real / glossy 3D medical subject with dramatic cinematic lighting and a glowing rim on the LEFT half; a clean dark
+background with the colour mood {pal['bg']} / accent {pal['accent']}; the RIGHT half holds a HUGE bold Persian headline (right-to-left) in two lines:
+line 1 in white: «{l1}»
+line 2 in the accent colour {pal['accent']}, slightly bigger: «{l2}»
+{('Plus one small designed sticker / ribbon (not a plain rectangle) with: «' + badge + '»') if badge else ''}
+Typography like top Persian YouTube channels: heavy display Persian font (Lalezar / Morabba style), thick dark outline and soft shadow, letters
+correctly joined, perfectly spelled, exactly these words and nothing else. Not cluttered: no extra text, no logos, no arrows overload, no faces
+of real people. High contrast, readable on a phone.{note}"""
+        if not images.gen(prompt, raw, size='1536x1024', quality='high'): continue
+        jpg = ep_dir / f'thumb_gpt{k}.jpg'; tl._to_16x9(raw, jpg)
+        r = _check_fa_thumb(jpg, want); print('thumb check', k, r)
+        if r.get('spelling_ok') and r.get('readable', True):
+            shutil.copy(jpg, ep_dir / 'thumbnail.jpg'); (ep_dir / 'thumb_v2').write_text('gpt'); return True
+        note = f"\nA previous attempt had this problem, avoid it: {r.get('problem') or 'misspelled Persian text'}."
+    return False
+
+
 def thumb(ep, ep_dir, pal):
-    """AI picture (no text, subject on the left) + the Persian headline set in code with the owner's fonts."""
+    """ChatGPT thumbnail first; if its Persian text fails the check: AI picture (no text) + the headline set in code with our fonts."""
+    try:
+        if thumb_gpt(ep, ep_dir, pal): return
+    except Exception as ex: print('gpt thumbnail failed', ex)
+    print('ChatGPT thumbnail failed the checks -> code-made thumbnail')
     from . import images
     t = ep.get('thumbnail') or {}
     raw = ep_dir / 'thumb_art.png'
@@ -352,6 +403,7 @@ is a dark, calm, empty background (for a big headline added later). Absolutely n
     save(ep_dir / 'thumb_props.json', props)
     sh(['npx', 'remotion', 'still', 'src/index.ts', 'ThumbFA', str(ep_dir / 'thumbnail.jpg'), f'--props={ep_dir / "thumb_props.json"}',
         '--jpeg-quality=90', '--log=warn'], cwd=ROOT / 'render')
+    (ep_dir / 'thumb_v2').write_text('code')
 
 
 def _ts(s):
@@ -389,6 +441,7 @@ def package(ep, ep_dir, track, short_track):
 
 def _slot():
     """Next free publish day: every other day, never earlier than tomorrow."""
+    if os.environ.get('PUBLISH_DATE'): return dt.date.fromisoformat(os.environ['PUBLISH_DATE'])
     b = batch()
     tomorrow = (dt.datetime.utcnow() + dt.timedelta(days=1)).date()
     nxt = dt.date.fromisoformat(b['next_slot']) if b.get('next_slot') else tomorrow
@@ -399,6 +452,10 @@ def finish(cur, dry_run=False):
     from . import tl, shard, audio, youtube
     ep_dir = WORK / cur['dir']; eid = cur['fa']
     ep = load(ep_dir / 'episode.json')
+    if not (ep_dir / 'thumb_v2').exists():          # built before the Nov 12 thumbnail rule -> make the ChatGPT one now
+        from . import pics
+        try: thumb(ep, ep_dir, pics.PALETTES[ep.get('palette') or 'navy'])
+        except Exception as ex: print('thumbnail redo failed', ex)
     shard.concat(ep_dir)
     long_final, shorts, track = tl.finish(ep, ep_dir)
     st = shorts[0][2] if shorts else track

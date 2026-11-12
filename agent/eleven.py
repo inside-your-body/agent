@@ -8,7 +8,8 @@ from .common import ROOT, load
 VC = load(ROOT / 'config/voice.json')
 API = 'https://api.elevenlabs.io/v1/text-to-speech/{}/with-timestamps?output_format=mp3_44100_128'
 SR = 44100
-SPEED = 1.2
+SPEED = 1.2            # the most ElevenLabs accepts
+TOTAL = 1.4            # owner, Nov 12: the finished voice runs at 1.4x -> the rest with ffmpeg atempo (pitch kept)
 _state = {'native_speed': True, 'chars': 0}
 
 
@@ -86,13 +87,14 @@ def synth(lines, out_wav, groups=None, gap=0.12, scene_gap=0.45):
             audio.append(np.zeros(int(g * SR), np.float32)); t += g
         print(f'  voice chunk {c + 1}/{len(chunks)}: {len(text)} chars, {len(a) / SR:.1f}s', flush=True)
     y = np.concatenate(audio)
-    if not _state['native_speed']:      # the API refused 'speed' -> speed the finished voice up with ffmpeg (pitch kept)
+    post = TOTAL / (SPEED if _state['native_speed'] else 1.0)
+    if post > 1.001:                    # speed the finished voice up the rest of the way with ffmpeg (pitch kept)
         with tempfile.TemporaryDirectory() as d:
             src, dst = pathlib.Path(d) / 's.wav', pathlib.Path(d) / 'd.wav'
             sf.write(src, y, SR)
-            subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', str(src), '-af', f'atempo={SPEED}', str(dst)], check=True)
+            subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', str(src), '-af', f'atempo={post:.4f}', str(dst)], check=True)
             y, _ = sf.read(dst, dtype='float32')
-        for s in segs: s['start'] = round(s['start'] / SPEED, 3); s['end'] = round(s['end'] / SPEED, 3)
+        for s in segs: s['start'] = round(s['start'] / post, 3); s['end'] = round(s['end'] / post, 3)
     y = y / max(1e-6, np.abs(y).max()) * 0.95
     sf.write(out_wav, y, SR)
     return segs
