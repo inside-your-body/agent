@@ -357,33 +357,71 @@ spelling_ok=false اگر حتی یک حرف غلط، جابه‌جا، جدا ی
     except Exception as e: print('thumb check failed', e); return {}
 
 
-def thumb_gpt(ep, ep_dir, pal):
-    """Owner (Nov 12): the thumbnail is made by ChatGPT (image API) and must look professional: one clear subject, a big bold Persian
-    headline with a designed highlight word (no plain rectangles), not cluttered. Claude checks the Persian spelling; 3 tries."""
-    from . import images, tl
+THUMB_REF = ROOT / 'assets/thumb_ref/fa_template.jpg'
+
+
+def thumb_text(ep):
+    """Owner (Nov 12): the cover must say what the viewer will see AND make them curious: one big topic word + the question they already
+    have in mind (like «تورم» + «چرا هیچ‌وقت پایین نمیاد؟»)."""
     t = ep.get('thumbnail') or {}
-    l1, l2, badge = t.get('line1') or ep.get('title'), t.get('line2') or '', t.get('badge') or ''
-    want = ' '.join(x for x in (l1, l2) if x)
+    if t.get('keyword') and t.get('question'): return t
+    lines = ' '.join(long_texts(ep))[:6000]
+    r = llm.ask_json(f"""برای تامبنیل یوتیوب این ویدیوی فارسی دو متن بنویس.
+عنوان: {ep.get('title')}
+متن: {lines}
+- keyword: موضوع اصلی در ۱ یا ۲ کلمه‌ی خیلی کوتاه و آشنا (مثلاً «بی‌خوابی»، «قند»، «چای»). بیننده با یک نگاه بفهمد ویدیو درباره‌ی چیست.
+- question: سؤالی که خود بیننده در ذهنش دارد و جوابش در ویدیو است؛ وسوسه‌کننده و کنجکاوکننده، محاوره‌ای، ۳ تا ۶ کلمه، با علامت ؟
+  (مثل «چرا هیچ‌وقت پایین نمیاد؟»، «۳ روز نخوابی چی میشه؟»، «با مغزت چیکار می‌کنه؟»). جواب را لو نده.
+- scene: توصیف ENGLISH یک صحنه‌ی ساده برای عکس: یک آدم ایرانی‌چهره با حالت چهره‌ی مرتبط با موضوع (کنجکاو، خسته، متعجب...) و ۲ یا ۳ شیء
+  مرتبط با موضوع در اطرافش.
+JSON: {{"keyword": str, "question": str, "scene": str}}""", max_tokens=1500)
+    t.update({k: r.get(k) for k in ('keyword', 'question', 'scene') if r.get(k)})
+    ep['thumbnail'] = t
+    return t
+
+
+def thumb_gpt(ep, ep_dir, pal=None):
+    """Owner (Nov 12): ONE fixed thumbnail template for the channel, made by ChatGPT, inspired by the owner's reference
+    (assets/thumb_ref/fa_template.jpg): off-white paper background, black-and-white photo-real person in the centre, a HUGE rough black brush
+    topic word on the left, a red box with a white curiosity question on the right, 2-3 related objects, one red accent. Claude checks the
+    Persian spelling; 3 tries."""
+    from . import images, tl
+    t = thumb_text(ep)
+    kw, q = t.get('keyword') or ep.get('title'), t.get('question') or ''
+    want = f'{kw} {q}'.strip()
     note = ''
     for k in range(3):
         raw = ep_dir / f'thumb_gpt{k}.png'
-        prompt = f"""Design ONE professional, viral YouTube thumbnail (16:9 landscape) for a Persian (Farsi) health-science channel.
-Video: {ep.get('title')}  |  subject idea: {t.get('subject') or ''}
-Layout: ONE striking, photo-real / glossy 3D medical subject with dramatic cinematic lighting and a glowing rim on the LEFT half; a clean dark
-background with the colour mood {pal['bg']} / accent {pal['accent']}; the RIGHT half holds a HUGE bold Persian headline (right-to-left) in two lines:
-line 1 in white: «{l1}»
-line 2 in the accent colour {pal['accent']}, slightly bigger: «{l2}»
-{('Plus one small designed sticker / ribbon (not a plain rectangle) with: «' + badge + '»') if badge else ''}
-Typography like top Persian YouTube channels: heavy display Persian font (Lalezar / Morabba style), thick dark outline and soft shadow, letters
-correctly joined, perfectly spelled, exactly these words and nothing else. Not cluttered: no extra text, no logos, no arrows overload, no faces
-of real people. High contrast, readable on a phone.{note}"""
-        if not images.gen(prompt, raw, size='1536x1024', quality='high'): continue
+        prompt = f"""Create a viral YouTube thumbnail (16:9) for a Persian (Farsi) health channel, in EXACTLY the same design template as the
+reference image (use it only for the LAYOUT and STYLE, never copy its words, money or objects):
+- background: warm off-white paper texture, very clean
+- centre: ONE black-and-white photo-real person, chest-up, strong emotion: {t.get('scene') or ep.get('title')}
+- around the person: 2-3 related objects in black-and-white, small, plus ONE red accent element (a red arrow, red line or red highlight)
+- LEFT: one HUGE Persian word in rough black brush / grunge display lettering: «{kw}»
+- RIGHT: a solid red box (slightly tilted is fine) with a bold white Persian question in 2 lines: «{q}»
+Persian text right-to-left, letters correctly joined, perfectly spelled, EXACTLY these words and nothing else (no other text, no logo, no
+watermark). High contrast, readable on a phone, uncluttered, professional.{note}"""
+        ok = images.edit(prompt, [THUMB_REF] if THUMB_REF.exists() else [], raw, size='1536x1024', quality='high')
+        if not ok: continue
         jpg = ep_dir / f'thumb_gpt{k}.jpg'; tl._to_16x9(raw, jpg)
         r = _check_fa_thumb(jpg, want); print('thumb check', k, r)
         if r.get('spelling_ok') and r.get('readable', True):
-            shutil.copy(jpg, ep_dir / 'thumbnail.jpg'); (ep_dir / 'thumb_v2').write_text('gpt'); return True
+            shutil.copy(jpg, ep_dir / 'thumbnail.jpg'); (ep_dir / 'thumb_v2').write_text('gpt3'); return True
         note = f"\nA previous attempt had this problem, avoid it: {r.get('problem') or 'misspelled Persian text'}."
     return False
+
+
+def rethumb(eid):
+    """Make the new-template thumbnail for an episode that is already uploaded and set it on YouTube."""
+    from . import youtube
+    sc = sched(); u = sc['uploaded'].get(str(eid))
+    if not u: print('not uploaded', eid); return
+    ep = load(EPS / str(eid) / 'episode.json'); d = WORK / f'rethumb{eid}'; d.mkdir(parents=True, exist_ok=True)
+    if thumb_gpt(ep, d):
+        from googleapiclient.http import MediaFileUpload
+        yt = youtube.client()
+        yt.thumbnails().set(videoId=u['video_id'], media_body=MediaFileUpload(str(d / 'thumbnail.jpg'))).execute()
+        print('thumbnail replaced on', u['video_id'])
 
 
 def thumb(ep, ep_dir, pal):
@@ -457,7 +495,7 @@ def finish(cur, dry_run=False):
     from . import tl, shard, audio, youtube
     ep_dir = WORK / cur['dir']; eid = cur['fa']
     ep = load(ep_dir / 'episode.json')
-    if not (ep_dir / 'thumb_v2').exists():          # built before the Nov 12 thumbnail rule -> make the ChatGPT one now
+    if not (ep_dir / 'thumb_v2').exists() or (ep_dir / 'thumb_v2').read_text() != 'gpt3':   # built before the current thumbnail template
         from . import pics
         try: thumb(ep, ep_dir, pics.PALETTES[ep.get('palette') or 'navy'])
         except Exception as ex: print('thumbnail redo failed', ex)
@@ -506,7 +544,8 @@ def status():
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('cmd', choices=['topics', 'scripts', 'voices', 'status', 'all'])
+    ap.add_argument('cmd', choices=['topics', 'scripts', 'voices', 'status', 'all', 'rethumb'])
+    ap.add_argument('--id', default=None)
     ap.add_argument('--n', type=int, default=30)
     ap.add_argument('--limit', type=int, default=None)
     a = ap.parse_args()
@@ -515,6 +554,9 @@ def main():
     if a.cmd in ('scripts', 'all'): scripts(a.limit)
     if a.cmd in ('voices', 'all'): voices(a.limit)
     if a.cmd == 'status': status()
+    if a.cmd == 'rethumb':
+        for x in (a.id or '').split(','):
+            if x.strip(): rethumb(x.strip())
 
 
 if __name__ == '__main__':
