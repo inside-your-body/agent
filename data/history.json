@@ -186,6 +186,18 @@
    "music": "fluidscape",
    "palette": "lavender",
    "built_at": "2026-11-12T07:24:41"
+  },
+  {
+   "topic": "چرا موقع خواب می‌پری؟",
+   "video_id": "LZczdJU-S9o",
+   "short_ids": [
+    "V5GuEIPo1-4"
+   ],
+   "publish_at": "2026-11-14T14:00:00Z",
+   "format": "fa",
+   "music": "floating_cities",
+   "palette": "navy",
+   "built_at": "2026-11-12T12:50:53"
   }
  ],
  "used_styles": [
@@ -277,13 +289,15 @@
   "inspired",
   "deliberate_thought",
   "clean_soul",
-  "fluidscape"
+  "fluidscape",
+  "floating_cities"
  ],
  "used_palettes": [
   "crimson",
   "sunset",
   "amber",
   "forest",
-  "lavender"
+  "lavender",
+  "navy"
  ]
 }
