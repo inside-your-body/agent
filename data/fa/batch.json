@@ -329,7 +329,7 @@
   },
   {
    "id": 26,
-   "title": "اگر بیش از حد ادرارت را نگه داری بدنت چه می‌کند؟",
+   "title": "نگه داشتن ادرار چه بلایی سر بدنت می‌آورد؟",
    "en": "What if you hold your urine for too long",
    "angle": "مثانه، کلیه و پیام عصبی؛ تا کجا می‌شود تحمل کرد",
    "stamps": "۱ ساعت ← ۳ ساعت ← ۶ ساعت ← بعد از آن",
@@ -337,7 +337,8 @@
     "title": "What If You Hold Your Urine For Too Long? | How Urinary System Works? | The Dr Binocs Show For Kids",
     "views": 30385894
    },
-   "status": "todo"
+   "status": "scripted",
+   "words": 1149
   },
   {
    "id": 27,
