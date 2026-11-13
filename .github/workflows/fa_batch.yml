@@ -19,7 +19,10 @@ on:
         description: 'optional: only this many scripts/voices in this run (e.g. 1 for a sample)'
         required: false
       ids:
-        description: 'for step rethumb: episode ids (comma separated) whose YouTube thumbnail is remade'
+        description: 'for step rethumb / reseo / ytdelete / ytmove: episode ids (comma separated)'
+        required: false
+      date:
+        description: 'for step ytmove: new publish day YYYY-MM-DD'
         required: false
 
 permissions:
@@ -50,6 +53,7 @@ jobs:
           ARGS="${{ inputs.step || 'voices' }} --n ${{ inputs.n || '30' }}"
           if [ -n "${{ inputs.limit }}" ]; then ARGS="$ARGS --limit ${{ inputs.limit }}"; fi
           if [ -n "${{ inputs.ids }}" ]; then ARGS="$ARGS --id ${{ inputs.ids }}"; fi
+          if [ -n "${{ inputs.date }}" ]; then ARGS="$ARGS --date ${{ inputs.date }}"; fi
           python -m agent.fa $ARGS
           python -m agent.fa status
       - uses: actions/upload-artifact@v4

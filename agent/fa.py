@@ -526,12 +526,41 @@ def package(ep, ep_dir, track, short_track, credit=None):
 
 
 def _slot():
-    """Next free publish day: every other day, never earlier than tomorrow."""
+    """First free publish day on the every-other-day grid (from the first episode), never earlier than tomorrow."""
     if os.environ.get('PUBLISH_DATE'): return dt.date.fromisoformat(os.environ['PUBLISH_DATE'])
-    b = sched()
+    sc = sched()
+    taken = {v['publish_at'][:10] for v in sc['uploaded'].values() if not v.get('deleted') and v.get('publish_at')}
+    every = CFG['schedule'].get('every_days', 2)
+    anchor = min((dt.date.fromisoformat(d) for d in taken), default=(dt.datetime.utcnow() + dt.timedelta(days=1)).date())
     tomorrow = (dt.datetime.utcnow() + dt.timedelta(days=1)).date()
-    nxt = dt.date.fromisoformat(b['next_slot']) if b.get('next_slot') else tomorrow
-    return max(nxt, tomorrow)
+    d = anchor
+    while d < tomorrow or d.isoformat() in taken: d += dt.timedelta(days=every)
+    return d
+
+
+def ytdelete(eid):
+    """Owner-approved only: delete an uploaded episode (long + Shorts) from YouTube and free its publish day."""
+    from . import youtube
+    sc = sched(); u = sc['uploaded'].get(str(eid))
+    if not u or u.get('deleted'): print('nothing to delete', eid); return
+    yt = youtube.client()
+    for vid in [u['video_id']] + list(u.get('short_ids') or []):
+        try: yt.videos().delete(id=vid).execute(); print('deleted', vid)
+        except Exception as e: print('delete failed', vid, e)
+    u['deleted'] = True; save(SCHED, sc)
+
+
+def ytmove(eid, day):
+    """Move an uploaded (still private, scheduled) episode to another publish day: long at PUBLISH_LONG, Shorts at PUBLISH_SHORT (UTC)."""
+    from . import youtube
+    sc = sched(); u = sc['uploaded'].get(str(eid))
+    if not u: print('not uploaded', eid); return
+    yt = youtube.client()
+    for vid, hm in [(u['video_id'], PUBLISH_LONG)] + [(x, PUBLISH_SHORT) for x in (u.get('short_ids') or [])]:
+        v = yt.videos().list(part='status', id=vid).execute()['items'][0]
+        st = v['status']; st.update(privacyStatus='private', publishAt=f'{day}T{hm}:00Z')
+        yt.videos().update(part='status', body={'id': vid, 'status': st}).execute(); print('moved', vid, day, hm)
+    u['publish_at'] = f'{day}T{PUBLISH_LONG}:00Z'; save(SCHED, sc)
 
 
 def finish(cur, dry_run=False):
@@ -566,8 +595,6 @@ def finish(cur, dry_run=False):
     sc = sched()
     sc['uploaded'][str(eid)] = {'title': ep.get('title'), 'video_id': vid, 'short_ids': sids, 'publish_at': at}
     sc['uploads'][_today()] = sc['uploads'].get(_today(), 0) + 1
-    nxt = (day + dt.timedelta(days=CFG['schedule'].get('every_days', 2))).isoformat()
-    sc['next_slot'] = max(nxt, sc.get('next_slot') or nxt)
     save(SCHED, sc)
     h = load(ROOT / 'data/history.json', {'episodes': []})
     h['episodes'].append({'topic': ep.get('title'), 'video_id': vid, 'short_ids': sids, 'publish_at': at, 'format': 'fa', 'music': track,
@@ -581,14 +608,15 @@ def finish(cur, dry_run=False):
 def status():
     b, sc = batch(), sched()
     from collections import Counter
-    print(Counter(e['status'] for e in b['episodes']), 'uploaded', len(sc['uploaded']), 'next slot', sc.get('next_slot'))
+    print(Counter(e['status'] for e in b['episodes']), 'uploaded', len(sc['uploaded']), 'next free day', _slot())
     for e in b['episodes']: print(e['id'], e['status'], e['title'], e.get('seconds', ''), (sc['uploaded'].get(str(e['id'])) or {}).get('publish_at', ''))
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('cmd', choices=['topics', 'scripts', 'voices', 'status', 'all', 'rethumb', 'reseo'])
+    ap.add_argument('cmd', choices=['topics', 'scripts', 'voices', 'status', 'all', 'rethumb', 'reseo', 'ytdelete', 'ytmove'])
     ap.add_argument('--id', default=None)
+    ap.add_argument('--date', default=None)
     ap.add_argument('--n', type=int, default=30)
     ap.add_argument('--limit', type=int, default=None)
     a = ap.parse_args()
@@ -597,6 +625,10 @@ def main():
     if a.cmd in ('scripts', 'all'): scripts(a.limit)
     if a.cmd in ('voices', 'all'): voices(a.limit)
     if a.cmd == 'status': status()
+    if a.cmd == 'ytdelete':
+        for x in (a.id or '').split(','):
+            if x.strip(): ytdelete(x.strip())
+    if a.cmd == 'ytmove': ytmove(a.id, a.date)
     if a.cmd in ('rethumb', 'reseo'):
         for x in (a.id or '').split(','):
             if x.strip(): (rethumb if a.cmd == 'rethumb' else reseo)(x.strip())
