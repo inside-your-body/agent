@@ -79,7 +79,9 @@ Most-viewed Persian videos for similar searches (title, channel, views):
 
 Already made (do not repeat closely): {json.dumps(done, ensure_ascii=False)}
 
-Pick the {n} strongest ideas. Mix: habits, foods & drinks Iranians love (tea, rice, bread, sugar, salt, nuts, dates...), fasting, sleep,
+Pick the {n} strongest ideas. EVERY topic must be about a DIFFERENT subject: never two topics on the same phenomenon even if
+the angle differs (e.g. «پرش در خواب» and «حس سقوط در خواب» are the SAME subject; «نوشابه ۶۰ دقیقه بعد» twice is a duplicate); at most
+2 topics about the same food/drink (e.g. water). Mix: habits, foods & drinks Iranians love (tea, rice, bread, sugar, salt, nuts, dates...), fasting, sleep,
 stress, quitting (smoking, sugar, caffeine), common illnesses, body mysteries. Skip music, pranks, kids, religion, gore, sexual content,
 dangerous challenges and medical-advice topics. Prefer huge view counts and high outliers.
 Each topic: "title" = the Persian YouTube title the way Iranians SEARCH (≤ 70 characters, main keyword first, a number or time span when it
