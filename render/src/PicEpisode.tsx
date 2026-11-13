@@ -134,7 +134,7 @@ const Stat: React.FC<{b: PicBeat; f: number; pal: Palette; vertical?: boolean; r
     const ring = interpolate(f, [at, at + 28], [0, 360], {...cl, easing: (x) => 1 - Math.pow(1 - x, 3)});
     const pulse = 1 + 0.03 * Math.sin((f - at) / 6);
     const S = size * 1.05;
-    return <div style={{position: 'absolute', left: vertical ? 60 : 80, top: vertical ? 760 : 80, width: S, height: S, opacity: f < at ? 0 : out,
+    return <div style={{position: 'absolute', left: vertical ? 60 : 80, top: vertical ? 880 : 80, width: S, height: S, opacity: f < at ? 0 : out,
       transform: `scale(${Math.min(1.06, p) * pulse}) rotate(${(1 - Math.min(1, p)) * 25}deg)`}}>
       <div style={{position: 'absolute', inset: 0, borderRadius: '50%', background: `conic-gradient(${pal.accent} ${ring}deg, rgba(255,255,255,0.12) ${ring}deg)`,
         boxShadow: `0 0 40px ${pal.accent}88, 0 18px 40px rgba(0,0,0,0.5)`}} />
@@ -214,7 +214,7 @@ const Headline: React.FC<{text: string; f: number; pal: Palette; rtl?: boolean}>
   const intro = interpolate(f, [30, 40], [1, 0], cl);
   const size = ws.join(' ').length > 26 ? 78 : 92;
   const last = ws.length - 1;
-  const band = <div style={{position: 'absolute', left: 60, right: 140, top: 290, padding: '18px 24px', borderRadius: 26, background: pal.card,
+  const band = <div style={{position: 'absolute', left: 70, right: 150, top: 400, padding: '18px 24px', borderRadius: 26, background: pal.card,
     border: `5px solid ${pal.accent}`, textAlign: 'center', fontFamily: hf, fontSize: size, lineHeight: rtl ? 1.4 : 1.08, color: '#fff', direction: dir}}>
     {ws.map((w, j) => <span key={j} style={{color: j === last ? pal.accent : '#fff'}}>{w}{j < last ? ' ' : ''}</span>)}
   </div>;
@@ -243,7 +243,7 @@ export const PicEpisode: React.FC<PicProps> = ({beats, vertical, palette, title,
     <Picture key={i} b={b} i={i} f={f} pal={pal} />
     <div style={{position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.45) 100%)'}} />
     <div style={{position: 'absolute', left: 0, right: 0, bottom: 0, height: H * 0.4, background: 'linear-gradient(transparent, rgba(0,0,0,0.55))'}} />
-    {b.stage && !(vertical && title && f < 40) && <Stage key={'s' + b.stage} text={b.stage} at={stAt} f={f} W={W} H={H} pal={pal} top={vertical ? 640 : 70} rtl={rtl} />}
+    {b.stage && !(vertical && title && f < 40) && <Stage key={'s' + b.stage} text={b.stage} at={stAt} f={f} W={W} H={H} pal={pal} top={vertical ? 760 : 70} rtl={rtl} />}
     {!(vertical && title && f < 40) && <>     {/* Shorts: nothing competes with the title slam in the first 1.3 s (= the cover) */}
       <Stat key={'n' + i} b={b} f={f} pal={pal} vertical={vertical} rtl={rtl} />
       <Words key={'w' + i} b={b} f={f} W={W} H={H} pal={pal} vertical={vertical} rtl={rtl} />

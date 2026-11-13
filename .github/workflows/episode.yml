@@ -1,9 +1,8 @@
 name: Make episode
 
 on:
-  schedule:                  # Persian channel (Nov 2026): every run builds + uploads ONE pre-voiced episode, scheduled for its own
-    - cron: '7 4 * * *'        # publish day (every other day, 17:00 UTC); max 2 per day (YouTube quota) -> a 30-episode batch is
-    - cron: '7 13 * * *'       # uploaded in ~15 days; runs with nothing to build stop after a minute
+  schedule:                  # GitHub often starts scheduled runs hours late or skips them -> try every 2 hours; the bot itself
+    - cron: '7 */2 * * *'      # builds at most 2 episodes per day (YouTube quota) and each one is scheduled for its own publish day
   workflow_dispatch:
     inputs:
       dry_run:
