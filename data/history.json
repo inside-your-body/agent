@@ -198,6 +198,18 @@
    "music": "floating_cities",
    "palette": "navy",
    "built_at": "2026-11-12T12:50:53"
+  },
+  {
+   "topic": "چرا موقع خواب حس سقوط می‌کنیم؟",
+   "video_id": "5JR5L1r2mPQ",
+   "short_ids": [
+    "j_j9iIH33L4"
+   ],
+   "publish_at": "2026-11-16T14:00:00Z",
+   "format": "fa",
+   "music": "inspired",
+   "palette": "sunset",
+   "built_at": "2026-11-13T08:28:10"
   }
  ],
  "used_styles": [
@@ -290,7 +302,8 @@
   "deliberate_thought",
   "clean_soul",
   "fluidscape",
-  "floating_cities"
+  "floating_cities",
+  "inspired"
  ],
  "used_palettes": [
   "crimson",
@@ -298,6 +311,7 @@
   "amber",
   "forest",
   "lavender",
-  "navy"
+  "navy",
+  "sunset"
  ]
 }
