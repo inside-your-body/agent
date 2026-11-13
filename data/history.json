@@ -210,6 +210,18 @@
    "music": "inspired",
    "palette": "sunset",
    "built_at": "2026-11-13T08:28:10"
+  },
+  {
+   "topic": "اگر شام بخوری و بلافاصله بخوابی چه اتفاقی می‌افتد؟",
+   "video_id": "ozZt6NshMfc",
+   "short_ids": [
+    "pZ2M_u6Ludc"
+   ],
+   "publish_at": "2026-11-18T14:00:00Z",
+   "format": "fa",
+   "music": "deliberate_thought",
+   "palette": "amber",
+   "built_at": "2026-11-13T17:57:28"
   }
  ],
  "used_styles": [
@@ -303,7 +315,8 @@
   "clean_soul",
   "fluidscape",
   "floating_cities",
-  "inspired"
+  "inspired",
+  "deliberate_thought"
  ],
  "used_palettes": [
   "crimson",
@@ -312,6 +325,7 @@
   "forest",
   "lavender",
   "navy",
-  "sunset"
+  "sunset",
+  "amber"
  ]
 }
