@@ -222,6 +222,18 @@
    "music": "deliberate_thought",
    "palette": "amber",
    "built_at": "2026-11-13T17:57:28"
+  },
+  {
+   "topic": "چرا نمک زیاد برای بدن بد است؟",
+   "video_id": "w8Rb1BzCsF8",
+   "short_ids": [
+    "mq3lvRfS9l4"
+   ],
+   "publish_at": "2026-11-20T14:00:00Z",
+   "format": "fa",
+   "music": "clean_soul",
+   "palette": "crimson",
+   "built_at": "2026-11-14T06:23:25"
   }
  ],
  "used_styles": [
@@ -316,7 +328,8 @@
   "fluidscape",
   "floating_cities",
   "inspired",
-  "deliberate_thought"
+  "deliberate_thought",
+  "clean_soul"
  ],
  "used_palettes": [
   "crimson",
@@ -326,6 +339,7 @@
   "lavender",
   "navy",
   "sunset",
-  "amber"
+  "amber",
+  "crimson"
  ]
 }
