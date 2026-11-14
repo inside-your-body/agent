@@ -234,6 +234,18 @@
    "music": "clean_soul",
    "palette": "crimson",
    "built_at": "2026-11-14T06:23:25"
+  },
+  {
+   "topic": "وقتی دوش آب سرد می‌گیری بدنت چه واکنشی نشان می‌دهد؟",
+   "video_id": "YNGkbQbmiAQ",
+   "short_ids": [
+    "4bSn0MXK_Y4"
+   ],
+   "publish_at": "2026-11-22T14:00:00Z",
+   "format": "fa",
+   "music": "fluidscape",
+   "palette": "ocean",
+   "built_at": "2026-11-14T15:14:59"
   }
  ],
  "used_styles": [
@@ -329,7 +341,8 @@
   "floating_cities",
   "inspired",
   "deliberate_thought",
-  "clean_soul"
+  "clean_soul",
+  "fluidscape"
  ],
  "used_palettes": [
   "crimson",
@@ -340,6 +353,7 @@
   "navy",
   "sunset",
   "amber",
-  "crimson"
+  "crimson",
+  "ocean"
  ]
 }
