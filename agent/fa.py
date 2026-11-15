@@ -547,7 +547,7 @@ def ytdelete(eid):
     for vid in [u['video_id']] + list(u.get('short_ids') or []):
         try: yt.videos().delete(id=vid).execute(); print('deleted', vid)
         except Exception as e: print('delete failed', vid, e)
-    u['deleted'] = True; save(SCHED, sc)
+    u['deleted'] = True; save(SCHED, sc); git_commit(f'fa: deleted episode {eid} (owner-approved)')
 
 
 def ytmove(eid, day):
@@ -560,7 +560,7 @@ def ytmove(eid, day):
         v = yt.videos().list(part='status', id=vid).execute()['items'][0]
         st = v['status']; st.update(privacyStatus='private', publishAt=f'{day}T{hm}:00Z')
         yt.videos().update(part='status', body={'id': vid, 'status': st}).execute(); print('moved', vid, day, hm)
-    u['publish_at'] = f'{day}T{PUBLISH_LONG}:00Z'; save(SCHED, sc)
+    u['publish_at'] = f'{day}T{PUBLISH_LONG}:00Z'; save(SCHED, sc); git_commit(f'fa: episode {eid} moved to {day}')
 
 
 def finish(cur, dry_run=False):

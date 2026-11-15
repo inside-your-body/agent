@@ -1,6 +1,6 @@
 """YouTube Data API v3 upload (scheduled publish, thumbnail, playlist).
 Credentials: env YT_TOKEN_JSON = authorized-user JSON {client_id, client_secret, refresh_token, token_uri}."""
-import json, os, datetime as dt
+import json, os, re, datetime as dt
 from .common import CFG
 
 SCOPES = ['https://www.googleapis.com/auth/youtube.upload', 'https://www.googleapis.com/auth/youtube']
@@ -30,18 +30,39 @@ def upload(yt, video, title, description, tags, thumb=None, publish_at=None, syn
     body = {'snippet': {'title': title[:100], 'description': description[:4900], 'tags': tags[:30],
                         'categoryId': CFG['channel']['category_id'], 'defaultLanguage': lang, 'defaultAudioLanguage': lang},
             'status': status}
-    req = yt.videos().insert(part='snippet,status', body=body,
-                             media_body=MediaFileUpload(str(video), chunksize=-1, resumable=True, mimetype='video/mp4'))
+    body['snippet']['tags'] = clean_tags(tags)
     resp = None
-    while resp is None:
-        st, resp = req.next_chunk()
-        if st: print(f'  upload {int(st.progress() * 100)}%')
+    for tries in range(3):       # YouTube rejects some tag lists ('invalidTags'): retry with fewer, then none
+        try:
+            req = yt.videos().insert(part='snippet,status', body=body,
+                                     media_body=MediaFileUpload(str(video), chunksize=-1, resumable=True, mimetype='video/mp4'))
+            resp = None
+            while resp is None:
+                st, resp = req.next_chunk()
+                if st: print(f'  upload {int(st.progress() * 100)}%')
+            break
+        except Exception as e:
+            if 'invalidTags' not in str(e) or tries == 2: raise
+            body['snippet']['tags'] = body['snippet']['tags'][:8] if tries == 0 else []
+            print('  tags rejected -> retry with', len(body['snippet']['tags']), 'tags')
     vid = resp['id']; print('  uploaded https://youtu.be/' + vid)
     if thumb:
         try:
             yt.thumbnails().set(videoId=vid, media_body=MediaFileUpload(str(thumb))).execute(); print('  thumbnail set')
         except Exception as e: print('  thumbnail error', e)
     return vid
+
+def clean_tags(tags, limit=450):
+    """YouTube's tag rules: no < > , # characters, each tag <= 30 chars, total <= 500 counting quotes around multi-word tags."""
+    out, total = [], 0
+    for t in tags or []:
+        t = re.sub(r'[<>,#"\n\r\t]', ' ', str(t)); t = re.sub(r'\s+', ' ', t).strip()
+        if not t or len(t) > 30 or t in out: continue
+        cost = len(t) + (2 if ' ' in t else 0) + 1
+        if total + cost > limit: break
+        out.append(t); total += cost
+    return out
+
 
 def add_to_playlist(yt, vid, name=None):
     name = name or CFG['channel']['playlist_name']
