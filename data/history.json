@@ -258,6 +258,18 @@
    "music": "floating_cities",
    "palette": "amber",
    "built_at": "2026-11-15T16:27:52"
+  },
+  {
+   "topic": "وقتی آب سرد می‌نوشی در بدنت چه اتفاقی می‌افتد؟",
+   "video_id": "AUFeYY_2Lrc",
+   "short_ids": [
+    "GSoEjYlSpvc"
+   ],
+   "publish_at": "2026-11-24T14:00:00Z",
+   "format": "fa",
+   "music": "inspired",
+   "palette": "navy",
+   "built_at": "2026-11-15T17:14:53"
   }
  ],
  "used_styles": [
@@ -355,7 +367,8 @@
   "deliberate_thought",
   "clean_soul",
   "fluidscape",
-  "floating_cities"
+  "floating_cities",
+  "inspired"
  ],
  "used_palettes": [
   "crimson",
@@ -368,6 +381,7 @@
   "amber",
   "crimson",
   "ocean",
-  "amber"
+  "amber",
+  "navy"
  ]
 }
