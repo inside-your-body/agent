@@ -246,6 +246,18 @@
    "music": "fluidscape",
    "palette": "ocean",
    "built_at": "2026-11-14T15:14:59"
+  },
+  {
+   "topic": "اگر یک ماه قند نخوری بدنت چه تغییری می‌کند؟",
+   "video_id": "i551wnAMkH4",
+   "short_ids": [
+    "84pziiUWlkA"
+   ],
+   "publish_at": "2026-11-22T14:00:00Z",
+   "format": "fa",
+   "music": "floating_cities",
+   "palette": "amber",
+   "built_at": "2026-11-15T16:27:52"
   }
  ],
  "used_styles": [
@@ -342,7 +354,8 @@
   "inspired",
   "deliberate_thought",
   "clean_soul",
-  "fluidscape"
+  "fluidscape",
+  "floating_cities"
  ],
  "used_palettes": [
   "crimson",
@@ -354,6 +367,7 @@
   "sunset",
   "amber",
   "crimson",
-  "ocean"
+  "ocean",
+  "amber"
  ]
 }
