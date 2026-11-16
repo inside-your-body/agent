@@ -282,6 +282,18 @@
    "music": "deliberate_thought",
    "palette": "crimson",
    "built_at": "2026-11-16T06:28:02"
+  },
+  {
+   "topic": "اگر هر روز تخم‌مرغ بخوری در بدنت چه اتفاقی می‌افتد؟",
+   "video_id": "nMWYV8qvRU8",
+   "short_ids": [
+    "x66WchwQShI"
+   ],
+   "publish_at": "2026-11-28T14:00:00Z",
+   "format": "fa",
+   "music": "clean_soul",
+   "palette": "amber",
+   "built_at": "2026-11-16T19:17:43"
   }
  ],
  "used_styles": [
@@ -381,7 +393,8 @@
   "fluidscape",
   "floating_cities",
   "inspired",
-  "deliberate_thought"
+  "deliberate_thought",
+  "clean_soul"
  ],
  "used_palettes": [
   "crimson",
@@ -396,6 +409,7 @@
   "ocean",
   "amber",
   "navy",
-  "crimson"
+  "crimson",
+  "amber"
  ]
 }
