@@ -270,6 +270,18 @@
    "music": "inspired",
    "palette": "navy",
    "built_at": "2026-11-15T17:14:53"
+  },
+  {
+   "topic": "اگر مسواک نزنی چه اتفاقی برای دندان‌هایت می‌افتد؟",
+   "video_id": "aCKRPavXCA8",
+   "short_ids": [
+    "pOqlASynZLE"
+   ],
+   "publish_at": "2026-11-26T14:00:00Z",
+   "format": "fa",
+   "music": "deliberate_thought",
+   "palette": "crimson",
+   "built_at": "2026-11-16T06:28:02"
   }
  ],
  "used_styles": [
@@ -368,7 +380,8 @@
   "clean_soul",
   "fluidscape",
   "floating_cities",
-  "inspired"
+  "inspired",
+  "deliberate_thought"
  ],
  "used_palettes": [
   "crimson",
@@ -382,6 +395,7 @@
   "crimson",
   "ocean",
   "amber",
-  "navy"
+  "navy",
+  "crimson"
  ]
 }
