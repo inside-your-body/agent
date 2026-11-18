@@ -318,6 +318,18 @@
    "music": "floating_cities",
    "palette": "ocean",
    "built_at": "2026-11-17T13:59:42"
+  },
+  {
+   "topic": "اگر سیگار را ترک کنی بدنت چه می‌کند؟ ۲۰ دقیقه تا ۱ سال",
+   "video_id": "6khwHgJSgvk",
+   "short_ids": [
+    "jEyfsQQtcSk"
+   ],
+   "publish_at": "2026-12-04T14:00:00Z",
+   "format": "fa",
+   "music": "inspired",
+   "palette": "forest",
+   "built_at": "2026-11-18T08:01:25"
   }
  ],
  "used_styles": [
@@ -420,7 +432,8 @@
   "deliberate_thought",
   "clean_soul",
   "fluidscape",
-  "floating_cities"
+  "floating_cities",
+  "inspired"
  ],
  "used_palettes": [
   "crimson",
@@ -438,6 +451,7 @@
   "crimson",
   "amber",
   "electric",
-  "ocean"
+  "ocean",
+  "forest"
  ]
 }
