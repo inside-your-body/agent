@@ -89,10 +89,12 @@ Rules: the picture literally shows what the beat says; never two pictures of the
 close-ups of the same organ in a row); vary framing (close-up, wide shot, over-the-shoulder, cut-away diagram, split before/after);
 charts/graphs at most 1 in 8 beats; the accent colour marks the one thing that matters.
 For each beat return: "style": "ink"|"flat"; "picture": the visual idea (composition, what carries the accent colour);
+"query": 2-4 simple ENGLISH stock-photo search words for a real photo/illustration that shows the beat (concrete nouns, e.g. "man sleeping bed",
+"human brain illustration", "glass of water", "salt shaker"); never the same query twice in a row;
 "words": 2-4 punchy key words from the beat; "accent": index of the word to highlight; "stat": {{"value": "9", "unit": "DAYS"}} if the beat
 says a number, else null; "sfx": one of whoosh, pop, ding, tick, heartbeat, bubble, impact, sparkle, reveal, bong, click, drip.
 Beats: {json.dumps({offset + i: t for i, t in enumerate(texts)}, ensure_ascii=False)}
-Return JSON {{"beats": [{{"i": int, "style": str, "picture": str, "words": [str], "accent": int, "stat": object|null, "sfx": str}}]}}""",
+Return JSON {{"beats": [{{"i": int, "style": str, "picture": str, "query": str, "words": [str], "accent": int, "stat": object|null, "sfx": str}}]}}""",
                         max_tokens=9000)
 
 
@@ -120,7 +122,28 @@ def _slot():
     if t > now: time.sleep(t - now)
 
 
+def draw_stock(plan_beats, texts, folder, vertical=False):
+    """Free pictures from Pexels / Pixabay (owner, Nov 18)."""
+    from . import stock
+    folder.mkdir(parents=True, exist_ok=True)
+    used = set()
+    def one(i):
+        f = folder / f'p{i:03d}.jpg'
+        if f.exists(): return f
+        b = plan_beats[i] or {}
+        q = b.get('query') or ' '.join((b.get('picture') or '').split()[:4])
+        url = stock.find(q, vertical, inside=b.get('style') == 'flat', used=used)
+        if not url: return None
+        try: return stock.fetch(url, f, vertical)
+        except Exception as e: print('stock fetch failed', e); return None
+    with ThreadPoolExecutor(3) as ex: return list(ex.map(one, range(len(texts))))
+
+
 def draw(plan_beats, texts, pal, folder, vertical=False):
+    from .common import CFG
+    from . import stock
+    if CFG.get('images') == 'stock' and stock.available():
+        return draw_stock(plan_beats, texts, folder, vertical)
     folder.mkdir(parents=True, exist_ok=True)
     size = '1024x1536' if vertical else '1536x1024'
     def one(i):

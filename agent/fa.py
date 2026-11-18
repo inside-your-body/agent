@@ -296,7 +296,8 @@ def next_episode():
         print('batch not approved yet (sample first) -> nothing to build'); return None
     if sc['uploads'].get(_today(), 0) >= MAX_PER_DAY:
         print('daily upload limit reached -> tomorrow'); return None
-    return next((e for e in b['episodes'] if e['status'] == 'voiced' and str(e['id']) not in sc['uploaded']), None)
+    up = {k for k, v in sc['uploaded'].items() if not v.get('deleted')}          # deleted (owner-approved) episodes are rebuilt
+    return next((e for e in b['episodes'] if e['status'] == 'voiced' and str(e['id']) not in up), None)
 
 
 def build(e, ep_dir):
@@ -444,8 +445,30 @@ def rethumb(eid):
         print('thumbnail replaced on', u['video_id'])
 
 
+def thumb_paper(ep, ep_dir):
+    """Free version of the owner's thumbnail template (no image AI): paper background, a black-and-white photo of a person from Pexels /
+    Pixabay in the centre, the huge topic word on the left, the red box with the curiosity question on the right — set in code."""
+    from . import stock
+    t = thumb_text(ep)
+    pub = ROOT / 'render/public/ep'; pub.mkdir(parents=True, exist_ok=True)
+    q = ' '.join((t.get('scene') or 'thoughtful man portrait').replace(',', ' ').split()[:3])
+    url = stock.find(q + ' portrait', vertical=True) or stock.find('thoughtful man portrait', vertical=True) if stock.available() else None
+    props = {'keyword': t.get('keyword') or ep.get('title'), 'question': t.get('question') or ''}
+    if url:
+        stock.fetch(url, pub / f'{ep_dir.name}_person.jpg', vertical=True); props['img'] = f'ep/{ep_dir.name}_person.jpg'
+    save(ep_dir / 'thumb_props.json', props)
+    sh(['npx', 'remotion', 'still', 'src/index.ts', 'ThumbPaper', str(ep_dir / 'thumbnail.jpg'), f'--props={ep_dir / "thumb_props.json"}',
+        '--jpeg-quality=90', '--log=warn'], cwd=ROOT / 'render')
+    (ep_dir / 'thumb_v2').write_text('paper')
+    return True
+
+
 def thumb(ep, ep_dir, pal):
-    """ChatGPT thumbnail first; if its Persian text fails the check: AI picture (no text) + the headline set in code with our fonts."""
+    """ChatGPT thumbnail (owner's template) when image credit exists; otherwise the same template made free in code."""
+    if CFG.get('images') == 'stock':
+        try:
+            if thumb_paper(ep, ep_dir): return
+        except Exception as ex: print('paper thumbnail failed', ex)
     try:
         if thumb_gpt(ep, ep_dir, pal): return
     except Exception as ex: print('gpt thumbnail failed', ex)
@@ -567,7 +590,7 @@ def finish(cur, dry_run=False):
     from . import tl, shard, audio, youtube
     ep_dir = WORK / cur['dir']; eid = cur['fa']
     ep = load(ep_dir / 'episode.json')
-    if not (ep_dir / 'thumb_v2').exists() or (ep_dir / 'thumb_v2').read_text() != 'gpt3':   # built before the current thumbnail template
+    if not (ep_dir / 'thumb_v2').exists() or (ep_dir / 'thumb_v2').read_text() not in ('gpt3', 'paper'):   # built before the current thumbnail template
         from . import pics
         try: thumb(ep, ep_dir, pics.PALETTES[ep.get('palette') or 'navy'])
         except Exception as ex: print('thumbnail redo failed', ex)
