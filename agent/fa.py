@@ -345,6 +345,9 @@ def build(e, ep_dir):
             sh(['npx', 'remotion', 'still', 'src/index.ts', 'PicShort', str(ep_dir / f'short{k}_cover.jpg'), f'--props={ep_dir / f"props_short{k}.json"}',
                 '--frame=12', '--jpeg-quality=88', '--log=warn'], cwd=ROOT / 'render')
     except Exception as ex: print('short cover failed', ex)
+    own = EPS / str(e['id']) / 'thumbnail.jpg'          # owner (Nov 18): rebuilt episodes keep the thumbnail they already had
+    if own.exists() and not (ep_dir / 'thumbnail.jpg').exists():
+        shutil.copy(own, ep_dir / 'thumbnail.jpg'); (ep_dir / 'thumb_v2').write_text('owner')
     if not (ep_dir / 'thumbnail.jpg').exists():
         try: thumb(ep, ep_dir, pal)
         except Exception as ex: print('thumbnail failed:', ex)
@@ -594,7 +597,7 @@ def finish(cur, dry_run=False):
     from . import tl, shard, audio, youtube
     ep_dir = WORK / cur['dir']; eid = cur['fa']
     ep = load(ep_dir / 'episode.json')
-    if not (ep_dir / 'thumb_v2').exists() or (ep_dir / 'thumb_v2').read_text() not in ('gpt3', 'paper'):   # built before the current thumbnail template
+    if not (ep_dir / 'thumb_v2').exists() or (ep_dir / 'thumb_v2').read_text() not in ('gpt3', 'paper', 'owner'):   # built before the current thumbnail template
         from . import pics
         try: thumb(ep, ep_dir, pics.PALETTES[ep.get('palette') or 'navy'])
         except Exception as ex: print('thumbnail redo failed', ex)
@@ -604,7 +607,9 @@ def finish(cur, dry_run=False):
     pkg = package(ep, ep_dir, track, st); save(ep_dir / 'package.json', pkg)
     if dry_run:
         print('dry run: outputs in', ep_dir); return
-    day = _slot()
+    old = sched()['uploaded'].get(str(eid)) or {}
+    day = dt.date.fromisoformat(old['publish_at'][:10]) if old.get('deleted') and old.get('publish_at') and \
+        old['publish_at'][:10] > dt.datetime.utcnow().date().isoformat() else _slot()      # a rebuilt episode keeps its publish day
     at = f'{day.isoformat()}T{PUBLISH_LONG}:00Z'; sat = f'{day.isoformat()}T{PUBLISH_SHORT}:00Z'
     yt = youtube.client()
     thumb_f = ep_dir / 'thumbnail.jpg'
