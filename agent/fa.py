@@ -379,8 +379,10 @@ def thumb_text(ep):
   (مثل «چرا هیچ‌وقت پایین نمیاد؟»، «۳ روز نخوابی چی میشه؟»، «با مغزت چیکار می‌کنه؟»). جواب را لو نده.
 - scene: توصیف ENGLISH یک صحنه‌ی ساده برای عکس: یک آدم ایرانی‌چهره با حالت چهره‌ی مرتبط با موضوع (کنجکاو، خسته، متعجب...) و ۲ یا ۳ شیء
   مرتبط با موضوع در اطرافش.
-JSON: {{"keyword": str, "question": str, "scene": str}}""", max_tokens=1500)
-    t.update({k: r.get(k) for k in ('keyword', 'question', 'scene') if r.get(k)})
+- photo_query: ۳ یا ۴ کلمه‌ی ENGLISH برای جست‌وجوی عکس استوک از یک آدم که کاری مرتبط با موضوع می‌کند و حالت چهره‌اش پیداست
+  (مثلاً "man eating boiled egg"، "tired woman awake night"، "man drinking cold water"، "woman holding cigarette").
+JSON: {{"keyword": str, "question": str, "scene": str, "photo_query": str}}""", max_tokens=1500)
+    t.update({k: r.get(k) for k in ('keyword', 'question', 'scene', 'photo_query') if r.get(k)})
     ep['thumbnail'] = t
     return t
 
@@ -451,8 +453,10 @@ def thumb_paper(ep, ep_dir):
     from . import stock
     t = thumb_text(ep)
     pub = ROOT / 'render/public/ep'; pub.mkdir(parents=True, exist_ok=True)
-    q = ' '.join((t.get('scene') or 'thoughtful man portrait').replace(',', ' ').split()[:3])
-    url = stock.find(q + ' portrait', vertical=True) or stock.find('thoughtful man portrait', vertical=True) if stock.available() else None
+    if not t.get('photo_query'): t.pop('keyword', None); t = thumb_text(ep)
+    q = t.get('photo_query') or 'thoughtful man portrait'
+    url = (stock.find(q, vertical=True) or stock.find(' '.join(q.split()[:2]) + ' portrait', vertical=True)
+           or stock.find('thoughtful man portrait', vertical=True)) if stock.available() else None
     props = {'keyword': t.get('keyword') or ep.get('title'), 'question': t.get('question') or ''}
     if url:
         stock.fetch(url, pub / f'{ep_dir.name}_person.jpg', vertical=True); props['img'] = f'ep/{ep_dir.name}_person.jpg'
