@@ -342,6 +342,18 @@
    "music": "deliberate_thought",
    "palette": "amber",
    "built_at": "2026-11-19T03:31:47"
+  },
+  {
+   "topic": "وقتی چیز تازه یاد می‌گیری در مغزت چه اتفاقی می‌افتد؟",
+   "video_id": "hAExVRCwB8M",
+   "short_ids": [
+    "LoafX9LCN18"
+   ],
+   "publish_at": "2026-11-30T14:00:00Z",
+   "format": "fa",
+   "music": "clean_soul",
+   "palette": "electric",
+   "built_at": "2026-11-19T13:05:05"
   }
  ],
  "used_styles": [
@@ -446,7 +458,8 @@
   "fluidscape",
   "floating_cities",
   "inspired",
-  "deliberate_thought"
+  "deliberate_thought",
+  "clean_soul"
  ],
  "used_palettes": [
   "crimson",
@@ -466,6 +479,7 @@
   "electric",
   "ocean",
   "forest",
-  "amber"
+  "amber",
+  "electric"
  ]
 }
