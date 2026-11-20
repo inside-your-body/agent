@@ -354,6 +354,18 @@
    "music": "clean_soul",
    "palette": "electric",
    "built_at": "2026-11-19T13:05:05"
+  },
+  {
+   "topic": "اگر آب زیاد بنوشی چه اتفاقی در بدنت می‌افتد؟",
+   "video_id": "hxJwdxqlNbs",
+   "short_ids": [
+    "qjU8xc4Ca9k"
+   ],
+   "publish_at": "2026-12-02T14:00:00Z",
+   "format": "fa",
+   "music": "fluidscape",
+   "palette": "ocean",
+   "built_at": "2026-11-20T03:25:51"
   }
  ],
  "used_styles": [
@@ -459,7 +471,8 @@
   "floating_cities",
   "inspired",
   "deliberate_thought",
-  "clean_soul"
+  "clean_soul",
+  "fluidscape"
  ],
  "used_palettes": [
   "crimson",
@@ -480,6 +493,7 @@
   "ocean",
   "forest",
   "amber",
-  "electric"
+  "electric",
+  "ocean"
  ]
 }
