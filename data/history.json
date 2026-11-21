@@ -378,6 +378,18 @@
    "music": "floating_cities",
    "palette": "forest",
    "built_at": "2026-11-20T13:19:07"
+  },
+  {
+   "topic": "بعد از قورت دادن قرص در بدنت چه اتفاقی می‌افتد؟",
+   "video_id": "GSZE9jNZfJo",
+   "short_ids": [
+    "P5DfFacbuNY"
+   ],
+   "publish_at": "2026-12-06T14:00:00Z",
+   "format": "fa",
+   "music": "inspired",
+   "palette": "crimson",
+   "built_at": "2026-11-21T03:18:40"
   }
  ],
  "used_styles": [
@@ -485,7 +497,8 @@
   "deliberate_thought",
   "clean_soul",
   "fluidscape",
-  "floating_cities"
+  "floating_cities",
+  "inspired"
  ],
  "used_palettes": [
   "crimson",
@@ -508,6 +521,7 @@
   "amber",
   "electric",
   "ocean",
-  "forest"
+  "forest",
+  "crimson"
  ]
 }
