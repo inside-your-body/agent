@@ -402,6 +402,18 @@
    "music": "deliberate_thought",
    "palette": "ocean",
    "built_at": "2026-11-22T16:06:08"
+  },
+  {
+   "topic": "نوشیدن آب ناشتا با معده خالی چه اثری دارد؟",
+   "video_id": "PLndLwUDst8",
+   "short_ids": [
+    "o44UszK2Pq0"
+   ],
+   "publish_at": "2026-12-10T14:00:00Z",
+   "format": "fa",
+   "music": "clean_soul",
+   "palette": "navy",
+   "built_at": "2026-11-22T17:57:10"
   }
  ],
  "used_styles": [
@@ -511,7 +523,8 @@
   "fluidscape",
   "floating_cities",
   "inspired",
-  "deliberate_thought"
+  "deliberate_thought",
+  "clean_soul"
  ],
  "used_palettes": [
   "crimson",
@@ -536,6 +549,7 @@
   "ocean",
   "forest",
   "crimson",
-  "ocean"
+  "ocean",
+  "navy"
  ]
 }
