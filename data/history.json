@@ -390,6 +390,18 @@
    "music": "inspired",
    "palette": "crimson",
    "built_at": "2026-11-21T03:18:40"
+  },
+  {
+   "topic": "اگر هر روز چیا بخوری در معده‌ات چه می‌شود؟",
+   "video_id": "72NyFD3lQeg",
+   "short_ids": [
+    "N9Ca_41i1JA"
+   ],
+   "publish_at": "2026-12-08T14:00:00Z",
+   "format": "fa",
+   "music": "deliberate_thought",
+   "palette": "ocean",
+   "built_at": "2026-11-22T16:06:08"
   }
  ],
  "used_styles": [
@@ -498,7 +510,8 @@
   "clean_soul",
   "fluidscape",
   "floating_cities",
-  "inspired"
+  "inspired",
+  "deliberate_thought"
  ],
  "used_palettes": [
   "crimson",
@@ -522,6 +535,7 @@
   "electric",
   "ocean",
   "forest",
-  "crimson"
+  "crimson",
+  "ocean"
  ]
 }
