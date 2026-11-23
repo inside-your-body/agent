@@ -414,6 +414,18 @@
    "music": "clean_soul",
    "palette": "navy",
    "built_at": "2026-11-22T17:57:10"
+  },
+  {
+   "topic": "اگر ناخن‌هایت را هرگز نگیری چه می‌شود؟",
+   "video_id": "BHzB_vNprzs",
+   "short_ids": [
+    "QvsD269P2mw"
+   ],
+   "publish_at": "2026-12-12T14:00:00Z",
+   "format": "fa",
+   "music": "fluidscape",
+   "palette": "crimson",
+   "built_at": "2026-11-23T07:32:54"
   }
  ],
  "used_styles": [
@@ -524,7 +536,8 @@
   "floating_cities",
   "inspired",
   "deliberate_thought",
-  "clean_soul"
+  "clean_soul",
+  "fluidscape"
  ],
  "used_palettes": [
   "crimson",
@@ -550,6 +563,7 @@
   "forest",
   "crimson",
   "ocean",
-  "navy"
+  "navy",
+  "crimson"
  ]
 }
