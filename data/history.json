@@ -426,6 +426,18 @@
    "music": "fluidscape",
    "palette": "crimson",
    "built_at": "2026-11-23T07:32:54"
+  },
+  {
+   "topic": "اگر هر روز چای بخوری در بدنت چه اتفاقی می‌افتد؟",
+   "video_id": "VWM-2-fTauc",
+   "short_ids": [
+    "VM-ymqNa5qs"
+   ],
+   "publish_at": "2026-12-14T14:00:00Z",
+   "format": "fa",
+   "music": "floating_cities",
+   "palette": "amber",
+   "built_at": "2026-11-23T20:23:43"
   }
  ],
  "used_styles": [
@@ -537,7 +549,8 @@
   "inspired",
   "deliberate_thought",
   "clean_soul",
-  "fluidscape"
+  "fluidscape",
+  "floating_cities"
  ],
  "used_palettes": [
   "crimson",
@@ -564,6 +577,7 @@
   "crimson",
   "ocean",
   "navy",
-  "crimson"
+  "crimson",
+  "amber"
  ]
 }
