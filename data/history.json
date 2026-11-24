@@ -450,6 +450,18 @@
    "music": "inspired",
    "palette": "electric",
    "built_at": "2026-11-24T05:04:55"
+  },
+  {
+   "topic": "آب خوردن بعد از غذا؛ در معده چه اتفاقی می‌افتد؟",
+   "video_id": "HL86H6iYRpI",
+   "short_ids": [
+    "_dxQUBddbto"
+   ],
+   "publish_at": "2026-12-18T14:00:00Z",
+   "format": "fa",
+   "music": "deliberate_thought",
+   "palette": "ocean",
+   "built_at": "2026-11-24T17:42:59"
   }
  ],
  "used_styles": [
@@ -563,7 +575,8 @@
   "clean_soul",
   "fluidscape",
   "floating_cities",
-  "inspired"
+  "inspired",
+  "deliberate_thought"
  ],
  "used_palettes": [
   "crimson",
@@ -592,6 +605,7 @@
   "navy",
   "crimson",
   "amber",
-  "electric"
+  "electric",
+  "ocean"
  ]
 }
