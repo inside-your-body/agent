@@ -438,6 +438,18 @@
    "music": "floating_cities",
    "palette": "amber",
    "built_at": "2026-11-23T20:23:43"
+  },
+  {
+   "topic": "تغییر عادت در مغز؛ مغز چطور خودش را دوباره سیم‌کشی می‌کند؟",
+   "video_id": "gmMQKtpkCsw",
+   "short_ids": [
+    "rEplmLZ54Es"
+   ],
+   "publish_at": "2026-12-16T14:00:00Z",
+   "format": "fa",
+   "music": "inspired",
+   "palette": "electric",
+   "built_at": "2026-11-24T05:04:55"
   }
  ],
  "used_styles": [
@@ -550,7 +562,8 @@
   "deliberate_thought",
   "clean_soul",
   "fluidscape",
-  "floating_cities"
+  "floating_cities",
+  "inspired"
  ],
  "used_palettes": [
   "crimson",
@@ -578,6 +591,7 @@
   "ocean",
   "navy",
   "crimson",
-  "amber"
+  "amber",
+  "electric"
  ]
 }
