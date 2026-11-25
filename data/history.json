@@ -474,6 +474,18 @@
    "music": "clean_soul",
    "palette": "crimson",
    "built_at": "2026-11-25T02:28:33"
+  },
+  {
+   "topic": "اگر یک هفته قهوه نخوری چه اتفاقی در بدنت می‌افتد؟",
+   "video_id": "4spMdevO_pI",
+   "short_ids": [
+    "y1z5RzHmRng"
+   ],
+   "publish_at": "2026-12-22T14:00:00Z",
+   "format": "fa",
+   "music": "fluidscape",
+   "palette": "amber",
+   "built_at": "2026-11-25T14:20:51"
   }
  ],
  "used_styles": [
@@ -589,7 +601,8 @@
   "floating_cities",
   "inspired",
   "deliberate_thought",
-  "clean_soul"
+  "clean_soul",
+  "fluidscape"
  ],
  "used_palettes": [
   "crimson",
@@ -620,6 +633,7 @@
   "amber",
   "electric",
   "ocean",
-  "crimson"
+  "crimson",
+  "amber"
  ]
 }
