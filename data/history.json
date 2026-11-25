@@ -462,6 +462,18 @@
    "music": "deliberate_thought",
    "palette": "ocean",
    "built_at": "2026-11-24T17:42:59"
+  },
+  {
+   "topic": "اگر پلک نزنی چه اتفاقی برای چشمت می‌افتد؟",
+   "video_id": "4AGvvbbnlZg",
+   "short_ids": [
+    "62M6ZsWUAkU"
+   ],
+   "publish_at": "2026-12-20T14:00:00Z",
+   "format": "fa",
+   "music": "clean_soul",
+   "palette": "crimson",
+   "built_at": "2026-11-25T02:28:33"
   }
  ],
  "used_styles": [
@@ -576,7 +588,8 @@
   "fluidscape",
   "floating_cities",
   "inspired",
-  "deliberate_thought"
+  "deliberate_thought",
+  "clean_soul"
  ],
  "used_palettes": [
   "crimson",
@@ -606,6 +619,7 @@
   "crimson",
   "amber",
   "electric",
-  "ocean"
+  "ocean",
+  "crimson"
  ]
 }
