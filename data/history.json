@@ -498,6 +498,18 @@
    "music": "floating_cities",
    "palette": "sunset",
    "built_at": "2026-11-26T00:22:31"
+  },
+  {
+   "topic": "سیگار در برابر شیر؛ داخل بدنت چه می‌گذرد؟",
+   "video_id": "ZECNKAqeVLU",
+   "short_ids": [
+    "c1bMrFdk5oc"
+   ],
+   "publish_at": "2026-12-26T14:00:00Z",
+   "format": "fa",
+   "music": "inspired",
+   "palette": "crimson",
+   "built_at": "2026-11-26T11:01:11"
   }
  ],
  "used_styles": [
@@ -615,7 +627,8 @@
   "deliberate_thought",
   "clean_soul",
   "fluidscape",
-  "floating_cities"
+  "floating_cities",
+  "inspired"
  ],
  "used_palettes": [
   "crimson",
@@ -648,6 +661,7 @@
   "ocean",
   "crimson",
   "amber",
-  "sunset"
+  "sunset",
+  "crimson"
  ]
 }
