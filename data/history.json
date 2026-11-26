@@ -486,6 +486,18 @@
    "music": "fluidscape",
    "palette": "amber",
    "built_at": "2026-11-25T14:20:51"
+  },
+  {
+   "topic": "مسیر غذا در بدن؛ از دهان تا دفع چقدر طول می‌کشد؟",
+   "video_id": "QogfF9xGDY8",
+   "short_ids": [
+    "CeC7ubDX7cA"
+   ],
+   "publish_at": "2026-12-24T14:00:00Z",
+   "format": "fa",
+   "music": "floating_cities",
+   "palette": "sunset",
+   "built_at": "2026-11-26T00:22:31"
   }
  ],
  "used_styles": [
@@ -602,7 +614,8 @@
   "inspired",
   "deliberate_thought",
   "clean_soul",
-  "fluidscape"
+  "fluidscape",
+  "floating_cities"
  ],
  "used_palettes": [
   "crimson",
@@ -634,6 +647,7 @@
   "electric",
   "ocean",
   "crimson",
-  "amber"
+  "amber",
+  "sunset"
  ]
 }
