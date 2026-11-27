@@ -522,6 +522,18 @@
    "music": "deliberate_thought",
    "palette": "amber",
    "built_at": "2026-11-27T04:18:17"
+  },
+  {
+   "topic": "وقتی نوشیدنی شیرین می‌خوری در بدنت چه می‌گذرد؟",
+   "video_id": "BXvqxy3R2cc",
+   "short_ids": [
+    "6AZKu3F6qLo"
+   ],
+   "publish_at": "2026-12-30T14:00:00Z",
+   "format": "fa",
+   "music": "clean_soul",
+   "palette": "sunset",
+   "built_at": "2026-11-27T16:42:55"
   }
  ],
  "used_styles": [
@@ -641,7 +653,8 @@
   "fluidscape",
   "floating_cities",
   "inspired",
-  "deliberate_thought"
+  "deliberate_thought",
+  "clean_soul"
  ],
  "used_palettes": [
   "crimson",
@@ -676,6 +689,7 @@
   "amber",
   "sunset",
   "crimson",
-  "amber"
+  "amber",
+  "sunset"
  ]
 }
