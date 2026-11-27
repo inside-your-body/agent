@@ -510,6 +510,18 @@
    "music": "inspired",
    "palette": "crimson",
    "built_at": "2026-11-26T11:01:11"
+  },
+  {
+   "topic": "اگر بیش از حد ادرارت را نگه داری بدنت چه می‌کند؟",
+   "video_id": "eN-aHMjz1sU",
+   "short_ids": [
+    "_uV6voHJmMs"
+   ],
+   "publish_at": "2026-12-28T14:00:00Z",
+   "format": "fa",
+   "music": "deliberate_thought",
+   "palette": "amber",
+   "built_at": "2026-11-27T04:18:17"
   }
  ],
  "used_styles": [
@@ -628,7 +640,8 @@
   "clean_soul",
   "fluidscape",
   "floating_cities",
-  "inspired"
+  "inspired",
+  "deliberate_thought"
  ],
  "used_palettes": [
   "crimson",
@@ -662,6 +675,7 @@
   "crimson",
   "amber",
   "sunset",
-  "crimson"
+  "crimson",
+  "amber"
  ]
 }
