@@ -534,6 +534,18 @@
    "music": "clean_soul",
    "palette": "sunset",
    "built_at": "2026-11-27T16:42:55"
+  },
+  {
+   "topic": "بدن بعد از مرگ چه تغییراتی می‌کند؟ از دقیقه تا هفته",
+   "video_id": "3nufrwmMT1A",
+   "short_ids": [
+    "hVIvVTpKiic"
+   ],
+   "publish_at": "2027-01-01T14:00:00Z",
+   "format": "fa",
+   "music": "fluidscape",
+   "palette": "crimson",
+   "built_at": "2026-11-28T01:34:31"
   }
  ],
  "used_styles": [
@@ -654,7 +666,8 @@
   "floating_cities",
   "inspired",
   "deliberate_thought",
-  "clean_soul"
+  "clean_soul",
+  "fluidscape"
  ],
  "used_palettes": [
   "crimson",
@@ -690,6 +703,7 @@
   "sunset",
   "crimson",
   "amber",
-  "sunset"
+  "sunset",
+  "crimson"
  ]
 }
